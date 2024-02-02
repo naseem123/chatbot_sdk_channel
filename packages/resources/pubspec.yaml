@@ -1,0 +1,44 @@
+name: resources
+description: Set of resources for Altro App like assets, illustrations, themings, etc.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: '>=2.17.0 <3.0.0'
+  flutter: '>=3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/icons/
+    - assets/flags.json
+
+  fonts:
+    - family: SFPro
+      fonts:
+        - asset: fonts/san_francisco_pro/regular.ttf
+        - asset: fonts/san_francisco_pro/medium.ttf
+          weight: 500
+        - asset: fonts/san_francisco_pro/semibold.ttf
+          weight: 600
+        - asset: fonts/san_francisco_pro/bold.ttf
+          weight: 700
+    - family: Telegraf
+      fonts:
+        - asset: fonts/telegraf/regular.otf
+        - asset: fonts/telegraf/medium.otf
+          weight: 500
+        - asset: fonts/telegraf/semibold.otf
+          weight: 600
+        - asset: fonts/telegraf/bold.otf
+          weight: 700
