@@ -38,8 +38,6 @@ Icon?
 .tags*
 pubspec.lock
 build/
-.android/
-.ios/
 .flutter-plugins
 .flutter-plugins-dependencies
 
