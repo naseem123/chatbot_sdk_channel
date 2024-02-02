@@ -1,28 +1,26 @@
-import 'package:chatbot/core/extensions/string_extensions.dart';
-import 'package:chatbot/features/chatbot/model/app_configuration_model.dart';
 import 'package:flutter/material.dart';
 
-class ChatbotAppbar extends StatelessWidget implements PreferredSizeWidget {
-  const ChatbotAppbar({super.key, required this.appSettingg});
+class ChatBotAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const ChatBotAppBar({
+    super.key,
+    required this.appBarColor,
+    required this.title,
+  });
 
-  final AppSettings appSettingg;
+  final Color appBarColor;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
-    final appBarColors = [
-      appSettingg.app.customizationColors.primary.toColor,
-      appSettingg.app.customizationColors.secondary.toColor
-    ];
-    print(appBarColors);
     return Container(
-      decoration: BoxDecoration(gradient: LinearGradient(colors: appBarColors)),
+      color: appBarColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(appSettingg.app.name),
+            child: Text(title),
           ),
         ],
       ),

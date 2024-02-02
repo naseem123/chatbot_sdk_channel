@@ -36,9 +36,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - .stag.env
-    - .prod.env
-    - .development.env
     - assets/icons/
   module:
     androidX: true

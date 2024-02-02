@@ -15,7 +15,6 @@ class ConversationItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final chatIsOpen = chatData.isOpen;
-
     return Column(
       children: [
         Container(
@@ -33,7 +32,6 @@ class ConversationItem extends StatelessWidget {
                       height: 40,
                       width: 40,
                       errorWidget: (context, url, error) {
-                        print(error);
                         return defaultIcon();
                       },
                     ),

@@ -15,7 +15,7 @@ class ChatBotViewModel extends ViewModel {
 
   final List<Conversation> chatList;
   final ChatBotUiState uiState;
-  final AppSettings appSettings;
+  final AppSettings? appSettings;
 
   final VoidCallback onRetry;
   final AsyncCallback onRefresh;

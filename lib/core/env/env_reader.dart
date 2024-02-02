@@ -1,5 +1,4 @@
 import 'package:chatbot/core/flavor/flavor.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final envReaderProvider = Provider<EnvReader>((ref) {
@@ -21,6 +20,6 @@ class EnvReader {
   }
 
   String getBaseUrl() {
-    return dotenv.get('BASE_URL');
+    return 'https://test.ca.digital-front-door.stg.gcp.trchq.com/api/graphql';
   }
 }

@@ -63,7 +63,7 @@ class ChatBotUIOutputTransformer
     return ChatBotUIOutput(
       chatBotUiState: entity.chatBotUiState,
       chatList: entity.chatList?.conversations ?? [],
-      appSettings: entity.appSettings!,
+      appSettings: entity.appSettings,
     );
   }
 }

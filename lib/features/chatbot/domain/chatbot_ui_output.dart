@@ -6,7 +6,7 @@ import 'package:clean_framework/clean_framework.dart';
 class ChatBotUIOutput extends Output {
   final ChatBotUiState chatBotUiState;
   final List<Conversation> chatList;
-  final AppSettings appSettings;
+  final AppSettings? appSettings;
 
   const ChatBotUIOutput({
     required this.chatBotUiState,
