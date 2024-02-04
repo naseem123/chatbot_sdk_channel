@@ -22,4 +22,8 @@ class EnvReader {
   String getBaseUrl() {
     return 'https://test.ca.digital-front-door.stg.gcp.trchq.com/api/graphql';
   }
+
+  String getWebsocketBaseUrl() {
+    return 'wss://test.ca.digital-front-door.stg.gcp.trchq.com/cable';
+  }
 }

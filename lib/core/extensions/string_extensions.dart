@@ -6,9 +6,9 @@ extension StringExtensionEmpty on String? {
 
 extension StringExtension on String {
   Color get toColor {
-    int colorValue = int.parse(replaceAll('#', ''), radix: 16);
-    colorValue = 0xFF000000 + colorValue;
-
-    return Color(colorValue);
+    final buffer = StringBuffer();
+    if (length == 6 || length == 7) buffer.write('FF');
+    buffer.write(replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
   }
 }

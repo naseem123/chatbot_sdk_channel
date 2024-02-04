@@ -89,13 +89,14 @@ class LastMessage {
   });
 
   factory LastMessage.fromJson(Map<String, dynamic> json) {
+    final data = Deserializer(json);
     return LastMessage(
-      createdAt: json['createdAt'],
-      stepId: json['stepId'],
-      triggerId: json['triggerId'],
-      fromBot: json['fromBot'],
-      key: json['key'],
-      message: Message.fromJson(json['message']),
+      createdAt: data.getString('createdAt'),
+      stepId: data.getString('stepId'),
+      triggerId: data.getString('triggerId'),
+      fromBot: data.getBool('fromBot'),
+      key: data.getString('key'),
+      message: Message.fromJson(data.getMap('message')),
     );
   }
 }
@@ -111,8 +112,9 @@ class Message {
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
+    final data = Deserializer(json);
     return Message(
-      blocks: json['blocks'],
+      blocks: data.getMap('blocks'),
       // Add other properties as needed
     );
   }

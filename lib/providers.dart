@@ -1,6 +1,5 @@
 import 'package:chatbot/chatbot_app.dart';
-import 'package:chatbot/providers/src/api_providers.dart';
-import 'package:chatbot/providers/src/usecase_providers.dart';
+import 'package:chatbot/providers/prodviders.dart';
 import 'package:riverpod/riverpod.dart';
 
 import 'core/utils/shared_pref.dart';
@@ -12,5 +11,6 @@ late Preference preference;
 void loadProviders() {
   chatBotUseCaseProvider.getUseCaseFromContext(providersContext);
   apiExternalInterfaceProvider.getExternalInterface(providersContext);
+  websocketExternalInterfaceProvider.getExternalInterface(providersContext);
   preference = providersContext().read(preferenceProvider);
 }

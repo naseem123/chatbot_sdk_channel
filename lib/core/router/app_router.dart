@@ -1,5 +1,6 @@
 import 'package:chatbot/core/router/named_route.dart';
-import 'package:chatbot/features/chatbot/presentation/chatbot_ui.dart';
+import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_ui.dart';
+import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -27,6 +28,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => NoTransitionPage(
           key: state.pageKey,
           child: ChatBotUI(
+            key: state.pageKey,
+          ),
+        ),
+      ),
+      GoRoute(
+        parentNavigatorKey: navigatorKey,
+        path: '/chatDetail',
+        name: chatDetail,
+        pageBuilder: (context, state) => NoTransitionPage(
+          key: state.pageKey,
+          child: ChatDetailsUI(
             key: state.pageKey,
           ),
         ),

@@ -9,15 +9,16 @@ class Button extends StatelessWidget {
     required this.child,
     required this.onPressed,
     this.icon,
+    this.primaryColor,
     this.state = ButtonState.active,
   });
 
-  const factory Button.accent({
-    Key? key,
-    required Widget child,
-    required VoidCallback onPressed,
-    ButtonState state,
-  }) = _AccentButton;
+  const factory Button.accent(
+      {Key? key,
+        required Widget child,
+        required VoidCallback onPressed,
+        ButtonState state,
+        Color? primaryColor}) = _AccentButton;
 
   const factory Button.destructive({
     Key? key,
@@ -46,6 +47,7 @@ class Button extends StatelessWidget {
   final VoidCallback onPressed;
   final Widget? icon;
   final ButtonState state;
+  final Color? primaryColor;
 
   ButtonStyle get _style {
     return ElevatedButton.styleFrom(
@@ -109,13 +111,13 @@ class Button extends StatelessWidget {
         return icon == null
             ? child
             : Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  icon!,
-                  const SizedBox(width: 12),
-                  Flexible(child: child)
-                ],
-              );
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            icon!,
+            const SizedBox(width: 12),
+            Flexible(child: child)
+          ],
+        );
       case ButtonState.loading:
         return SizedBox.square(
           dimension: 16,
@@ -126,12 +128,12 @@ class Button extends StatelessWidget {
 }
 
 class _AccentButton extends Button {
-  const _AccentButton({
-    super.key,
-    required super.child,
-    required super.onPressed,
-    super.state,
-  });
+  const _AccentButton(
+      {super.key,
+        required super.child,
+        required super.onPressed,
+        super.state,
+        super.primaryColor});
 
   @override
   Widget build(BuildContext context) {
@@ -143,17 +145,20 @@ class _AccentButton extends Button {
       );
     } else {
       style = ElevatedButton.styleFrom(
-        backgroundColor: context.colorScheme.secondary,
+        backgroundColor: primaryColor ?? context.colorScheme.primary,
         foregroundColor: context.theme.brightness == Brightness.dark
             ? context.colorScheme.primary
             : context.colorScheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
       );
     }
 
     return IgnorePointer(
       ignoring: isInactive,
       child: ElevatedButton(
-        style: _style.merge(style),
+        style: style.merge(_style),
         onPressed: onPressed,
         child: _child(context.colorScheme.surface),
       ),

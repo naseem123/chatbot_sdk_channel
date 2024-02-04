@@ -17,16 +17,11 @@ class APIExternalInterface extends GraphQLExternalInterface {
   APIExternalInterface({
     required super.link,
     required super.gatewayConnections,
-    required GraphQLToken super.token,
-  })  : _token = token,
-        super(
+  }) : super(
           persistence: APIPersistence(),
           headers: _headers,
           timeout: const Duration(seconds: 90),
         );
-
-  //TODO use token for authentication
-  final GraphQLToken _token;
 
   @override
   void handleRequest() {

@@ -1,6 +1,6 @@
 import 'package:chatbot/chatbot_app.dart';
 import 'package:chatbot/core/dependency/graphql/api_gateway.dart';
-import 'package:chatbot/features/chatbot/model/app_configuration_model.dart';
+import 'package:chatbot/features/chatbot/model/app_settings_model.dart';
 import 'package:clean_framework/clean_framework_legacy.dart';
 import 'package:clean_framework_graphql/clean_framework_graphql.dart';
 
