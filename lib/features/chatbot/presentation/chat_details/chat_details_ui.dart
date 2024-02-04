@@ -11,6 +11,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
   ChatDetailsUI({super.key});
 
   final messageController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context, ChatDetailsViewModel viewModel) {
@@ -23,6 +24,13 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
         body: Center(
           child: CircularProgressIndicator(),
         ),
+      );
+    }
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 300),
       );
     }
 
@@ -43,6 +51,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
               Expanded(
                 child: ListView.builder(
                   itemCount: messages.length,
+                  controller: _scrollController,
                   itemBuilder: (context, index) {
                     final message = messages[index];
                     const showImage = true;
