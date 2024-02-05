@@ -5,3 +5,8 @@ import 'package:clean_framework/clean_framework_legacy.dart';
 final chatBotUseCaseProvider = UseCaseProvider<ChatBotEntity, ChatBotUseCase>(
   (_) => ChatBotUseCase(),
 );
+
+final chatDetailsUseCaseProvider =
+    UseCaseProvider<ChatBotEntity, ChatBotUseCase>(
+  (_) => ChatBotUseCase(),
+);

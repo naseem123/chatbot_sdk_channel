@@ -2,6 +2,7 @@ import 'package:chatbot/features/chatbot/model/conversation_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/widgets/conversation_item.dart';
 import 'package:components/components.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'delete_recent_conversations.dart';
 
@@ -48,7 +49,12 @@ class ConversationWidget extends StatelessWidget {
             child: ListView.builder(
               itemBuilder: (context, index) {
                 final chatData = chatList[index];
-                return ConversationItem(chatData: chatData);
+                return ConversationItem(
+                  chatData: chatData,
+                  onPressed: () {
+                    context.push("/chatDetail");
+                  },
+                );
               },
               itemCount: chatList.length,
             ),

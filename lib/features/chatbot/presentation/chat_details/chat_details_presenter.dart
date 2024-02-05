@@ -14,7 +14,7 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
 
   @override
   void onLayoutReady(BuildContext context, ChatBotUseCase useCase) {
-    useCase.initialiseWebSocket();
+    useCase.loadPreviousChatDetails();
   }
 
   @override

@@ -16,6 +16,7 @@ class ChatBotViewModel extends ViewModel {
     required this.introText,
     required this.logo,
     required this.inBusinessHours,
+   
   });
 
   final List<Conversation> chatList;
@@ -29,6 +30,7 @@ class ChatBotViewModel extends ViewModel {
   final VoidCallback onRetry;
   final AsyncCallback onRefresh;
 
+ 
   @override
   List<Object?> get props => [
         chatList,

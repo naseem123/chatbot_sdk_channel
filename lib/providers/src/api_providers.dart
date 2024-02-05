@@ -11,6 +11,7 @@ final apiExternalInterfaceProvider = ExternalInterfaceProvider(
     gatewayConnections: [
       () => chatBotGatewayProvider.getGateway(providersContext),
       () => configurationGatewayProvider.getGateway(providersContext),
+      () => chatDetailsGatewayProvider.getGateway(providersContext),
     ],
   ),
 );

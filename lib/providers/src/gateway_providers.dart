@@ -1,4 +1,5 @@
 import 'package:chatbot/chatbot_app.dart';
+import 'package:chatbot/features/chatbot/gateway/chat_details/chat_details_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/chatbot_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/configuration_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_connect_gateway.dart';
@@ -42,3 +43,12 @@ final sendWebsocketGatewayProvider = GatewayProvider(
     provider: chatBotUseCaseProvider,
   ),
 );
+
+
+final chatDetailsGatewayProvider = GatewayProvider(
+  (_) => ChatDetailsGateway(
+    context: providersContext,
+    useCaseProvider: chatBotUseCaseProvider,
+  ),
+);
+

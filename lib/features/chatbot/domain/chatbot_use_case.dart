@@ -1,6 +1,10 @@
+import 'package:chatbot/core/extensions/string_extensions.dart';
+import 'package:chatbot/core/utils/misc.dart';
+import 'package:chatbot/core/utils/shared_pref.dart';
 import 'package:chatbot/features/chatbot/domain/chat_details_ui_output.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_entity.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_ui_output.dart';
+import 'package:chatbot/features/chatbot/gateway/chat_details/chat_details_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/chatbot_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/configuration_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_connect_gateway.dart';
@@ -9,6 +13,7 @@ import 'package:chatbot/features/chatbot/gateway/websocket/websocket_send_messag
 import 'package:chatbot/features/chatbot/model/websocket_message_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_presenter.dart';
+import 'package:chatbot/providers.dart';
 import 'package:clean_framework/clean_framework.dart';
 
 class ChatBotUseCase extends UseCase<ChatBotEntity> {
@@ -109,6 +114,36 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
 
   void disconnectMessageChannel() {
     //TODO disconnect websocket
+  }
+
+  /* ************************************* / 
+  //  LOAD CHAT DETAILS 
+  
+  /// 
+ / ************************************* */
+  void loadPreviousChatDetails({int page = 1, String id = "zmJCb8HTLKPaSMYp4RBtPgJa"}) {
+    state = state.merge(
+      chatDetailsUiState: ChatDetailsUiState.loading,
+    );
+    String? sessionId = preference.get<String>(PreferenceKey.sessionId);
+
+    if (sessionId.isNullOrEmpty) {
+      sessionId = getRandomString();
+    }
+    sessionId =
+        'eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCem9LWlcxaGFXeEpJaEYwWlhOMFFIUmxjM1F1WTJ3R09nWkZWRG9KZEhsd1pUQT0iLCJleHAiOm51bGwsInB1ciI6ImxvZ2luIn19--8eb78acd4acda60d78a3c17059a4297312469ccb93444d789e64deac0890952f';
+    request(ChatDetailsGatewayOutput(page: page, id: id),
+        onSuccess: (ChatDetailsSuccessInput input) {
+      return entity.merge(
+        chatDetailsUiState: ChatDetailsUiState.success,
+        // chatHistoryData: input.chatHistoryData,
+        
+      );
+    }, onFailure: (_) {
+      return entity.merge(
+        chatBotUiState: ChatBotUiState.conversationFailure,
+      );
+    });
   }
 }
 

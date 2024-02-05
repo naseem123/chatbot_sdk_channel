@@ -35,6 +35,7 @@ class ChatBotGateway extends APIGateway<ChatBotGatewayOutput,
   FailureInput onFailure(FailureResponse failureResponse) {
     if (failureResponse is GraphQLFailureResponse) {
       return FailureInput(message: failureResponse.message);
+
     } else {
       return const FailureInput(
         message: 'Unknown Error',

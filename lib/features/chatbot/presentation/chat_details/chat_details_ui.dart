@@ -3,6 +3,7 @@ import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/avatar.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/message_item_widget.dart';
 import 'package:clean_framework/clean_framework_legacy.dart';
+import 'package:components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:resources/resources.dart';
@@ -35,9 +36,90 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Chat Details"),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(
+          70,
+        ),
+        child: AppBar(
+          backgroundColor: const Color(0xff142542),
+          leading: Container(
+            padding: const EdgeInsets.only(
+              left: 20,
+              top: 10,
+            ),
+            color: const Color(0xff142542),
+            child: const Icon(
+              Icons.arrow_back_ios,
+              size: 35,
+              color: Colors.white,
+            ),
+          ),
+          // actions: [
+          //   Padding(
+          //     padding: const EdgeInsets.only(right: 20),
+          //     child: IconButton(
+          //         onPressed: () {},
+          //         icon: Icon(
+          //           Icons.close,
+          //           size: 50,
+          //           color: Colors.white,
+          //         )),
+          //   )
+          // ],
+          title: Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.only(top: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(
+                    top: 2,
+                  ),
+                  child: ImageIcons(
+                    path: 'assets/icons/message_icon.svg',
+                  ),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                const Expanded(
+                  flex: 4,
+                  child: SizedBox(
+                    child: Text(
+                      "Chat with us!",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    padding: const EdgeInsets.only(right: 0),
+                    child: const Icon(
+                      Icons.close,
+                      size: 50,
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          centerTitle: true,
+          titleTextStyle: context.textTheme.captionRegular.copyWith(
+            color: context.colorScheme.primary,
+          ),
+        ),
       ),
+      // appBar: AppBar(
+      //   // title: const Text("Chat Details"),
+      // ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.only(

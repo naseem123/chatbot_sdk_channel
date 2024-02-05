@@ -23,6 +23,7 @@ class ChatBotPresenter
   ChatBotViewModel createViewModel(
       ChatBotUseCase useCase, ChatBotUIOutput output) {
     return ChatBotViewModel(
+   
       chatList: output.chatList,
       onRefresh: () async {},
       onRetry: () {},

@@ -1,3 +1,4 @@
+import 'package:chatbot/features/chatbot/model/chat_details_models/chat_history_success_input.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_presenter.dart';
 import 'package:clean_framework/clean_framework.dart';
@@ -14,12 +15,15 @@ class ChatBotEntity extends Entity {
   final ChatDetailsUiState chatDetailsUiState;
   final List<String> chatDetailList;
 
+  final ChatHistorySuccessInput? chatHistoryData;
+
   const ChatBotEntity({
     this.chatBotUiState = ChatBotUiState.conversationLoading,
     this.chatList,
     this.appSettings = const AppSettings(),
     this.chatDetailsUiState = ChatDetailsUiState.idle,
     this.chatDetailList = const [],
+    this.chatHistoryData,
   });
 
   ChatBotEntity merge({
