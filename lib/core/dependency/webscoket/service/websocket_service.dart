@@ -44,8 +44,8 @@ class WebsocketService {
   }
 
   String transformURL({required Map<String, String> headers}) {
-    return "$_webSocketURL?enc=[object%20Object]&app=${headers['app']}&session_id=${headers['session-id']}&"
-        "user_data=eyJlbWFpbCI6InRlc3RAdGVzdC5jbCIsInByb3BlcnRpZXMiOnsibmFtZSI6IkFsZXgiLCJsYW5nIjoiZW4iLCJpZCI6ImxvY2FsaG9zdCIsImNvdW50cnkiOiJDYW5hZGEiLCJyb2xlIjoiYWRtaW4iLCJwcm8iOm51bGwsIm51bV9kZXZpY2VzIjoyLCJsYXN0X3NpZ25faW4iOiIyMDI0LTAyLTAyVDE4OjUyOjU3LjY2NloifSwiaWRlbnRpZmllcl9rZXkiOiIzYzU5ZDdjZDIxM2UyMGE1Y2JkN2JhYWQzYTA3M2I2MThlMmI2OTQxNTFiMTFkZmJiNWJlODBiNzFmNGRjMTQzIn0=&";
+    return "$_webSocketURL?app=${headers['app']}&session_id=${headers['session-id']}&"
+        "user_data=e30=";
   }
 
   void send(String data) {

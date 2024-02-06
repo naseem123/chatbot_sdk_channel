@@ -15,15 +15,14 @@ class ChatBotPresenter
 
   @override
   void onLayoutReady(BuildContext context, ChatBotUseCase useCase) {
-    useCase.loadConfigurations();
-    useCase.loadRecentConversationList();
+    useCase.initUserSession();
+    // useCase.loadRecentConversationList();
   }
 
   @override
   ChatBotViewModel createViewModel(
       ChatBotUseCase useCase, ChatBotUIOutput output) {
     return ChatBotViewModel(
-   
       chatList: output.chatList,
       onRefresh: () async {},
       onRetry: () {},

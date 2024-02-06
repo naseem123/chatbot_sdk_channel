@@ -41,7 +41,6 @@ class ConversationItem extends StatelessWidget {
                         height: 40,
                         width: 40,
                         errorWidget: (context, url, error) {
-                          print(error);
                           return defaultIcon();
                         },
                       ),

@@ -1,12 +1,10 @@
-import 'package:chatbot/core/extensions/string_extensions.dart';
-import 'package:chatbot/core/utils/misc.dart';
 import 'package:chatbot/core/utils/shared_pref.dart';
 import 'package:chatbot/features/chatbot/domain/chat_details_ui_output.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_entity.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_ui_output.dart';
-import 'package:chatbot/features/chatbot/gateway/chat_details/chat_details_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/chatbot_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/configuration_gateway.dart';
+import 'package:chatbot/features/chatbot/gateway/init_guest_user_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_connect_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_message_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_send_message_gateway.dart';
@@ -29,17 +27,26 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
           ],
         );
 
-  void loadConfigurations() {
-    // TODO after we done session implimentation
-    // String? sessionId = preference.get<String>(PreferenceKey.sessionId);
-    //
-    // if (sessionId.isNullOrEmpty) {
-    //   sessionId = getRandomString();
-    // }
-
+  void initUserSession() {
     state = state.merge(
       chatBotUiState: ChatBotUiState.setupLoading,
     );
+
+    request(InitGuestUserGatewayOutput(),
+        onSuccess: (InitGuestUserSuccessInput input) {
+      preference.put(PreferenceKey.sessionId, input.initData.user.sessionId);
+      loadConfigurations();
+      return entity.merge(
+        chatBotUiState: ChatBotUiState.setupSuccess,
+      );
+    }, onFailure: (_) {
+      return entity.merge(
+        chatBotUiState: ChatBotUiState.setupFailure,
+      );
+    });
+  }
+
+  void loadConfigurations() {
     request(const ConfigurationGatewayOutput(),
         onSuccess: (SDKConfigurationSuccessInput input) {
       return entity.merge(
@@ -121,7 +128,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
   
   /// 
  / ************************************* */
-  void loadPreviousChatDetails({int page = 1, String id = "zmJCb8HTLKPaSMYp4RBtPgJa"}) {
+/*  void loadPreviousChatDetails({int page = 1, String id = "zmJCb8HTLKPaSMYp4RBtPgJa"}) {
     state = state.merge(
       chatDetailsUiState: ChatDetailsUiState.loading,
     );
@@ -144,7 +151,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         chatBotUiState: ChatBotUiState.conversationFailure,
       );
     });
-  }
+  }*/
 }
 
 class ChatBotUIOutputTransformer

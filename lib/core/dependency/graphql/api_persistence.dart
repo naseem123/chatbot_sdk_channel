@@ -1,4 +1,4 @@
-import 'package:clean_framework_graphql/clean_framework_graphql.dart';
+import 'package:chatbot/core/dependency/graphql/chatbot_graphql_service.dart';
 import 'package:graphql/client.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';

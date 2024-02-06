@@ -1,9 +1,9 @@
 import 'package:chatbot/chatbot_app.dart';
 import 'package:chatbot/core/dependency/graphql/api_gateway.dart';
+import 'package:chatbot/core/dependency/graphql/chatbot_graphql_success_response.dart';
 import 'package:chatbot/features/chatbot/gateway/chatbot_request.dart';
 import 'package:chatbot/features/chatbot/model/conversation_model.dart';
 import 'package:clean_framework/clean_framework_legacy.dart';
-import 'package:clean_framework_graphql/clean_framework_graphql.dart';
 
 class ChatBotGateway extends APIGateway<ChatBotGatewayOutput,
     ChatBotConversationRequest, ChatBotSuccessInput> {
@@ -25,7 +25,7 @@ class ChatBotGateway extends APIGateway<ChatBotGatewayOutput,
 
   @override
   ChatBotSuccessInput onSuccess(
-    GraphQLSuccessResponse response,
+    ChatBotGraphQLSuccessResponse response,
   ) {
     return ChatBotSuccessInput(
         chatList: ChatConversationSuccessInput.fromJson(response.data));
@@ -35,7 +35,6 @@ class ChatBotGateway extends APIGateway<ChatBotGatewayOutput,
   FailureInput onFailure(FailureResponse failureResponse) {
     if (failureResponse is GraphQLFailureResponse) {
       return FailureInput(message: failureResponse.message);
-
     } else {
       return const FailureInput(
         message: 'Unknown Error',
