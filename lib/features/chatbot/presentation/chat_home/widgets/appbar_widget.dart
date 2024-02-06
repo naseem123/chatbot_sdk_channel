@@ -33,10 +33,16 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
                   fontSize: 22,
                 ),
               ),
-              trailing: const Icon(
-                Icons.close,
-                size: 38,
-                color: Colors.white,
+              trailing: IconButton(
+                onPressed: () {
+                  //TODO(naseem) : need to exit from the bot once SDK setup is complete
+                 // Navigator.of(context).pop();
+                },
+                icon: const Icon(
+                  Icons.close,
+                  size: 38,
+                  color: Colors.white,
+                ),
               ),
               subtitle: Text(
                 subtitle,

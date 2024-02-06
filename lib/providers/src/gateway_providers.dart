@@ -1,7 +1,7 @@
 import 'package:chatbot/chatbot_app.dart';
-import 'package:chatbot/features/chatbot/gateway/chat_details/chat_details_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/chatbot_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/configuration_gateway.dart';
+import 'package:chatbot/features/chatbot/gateway/init_guest_user_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_connect_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_message_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_send_message_gateway.dart';
@@ -17,6 +17,13 @@ final chatBotGatewayProvider = GatewayProvider(
 
 final configurationGatewayProvider = GatewayProvider(
   (_) => SDKConfigurationGateway(
+    context: providersContext,
+    useCaseProvider: chatBotUseCaseProvider,
+  ),
+);
+
+final initGuestUserGatewayProvider = GatewayProvider(
+  (_) => InitGuestUserGateway(
     context: providersContext,
     useCaseProvider: chatBotUseCaseProvider,
   ),
@@ -43,12 +50,3 @@ final sendWebsocketGatewayProvider = GatewayProvider(
     provider: chatBotUseCaseProvider,
   ),
 );
-
-
-final chatDetailsGatewayProvider = GatewayProvider(
-  (_) => ChatDetailsGateway(
-    context: providersContext,
-    useCaseProvider: chatBotUseCaseProvider,
-  ),
-);
-

@@ -19,8 +19,14 @@ class EnvReader {
     }
   }
 
+  //TODO(naseem): need to refactor. Once the SDK has been setup these values needs to come from the main dynamic arguments
+
+  String getAppID() {
+    return 'yB9BJmrcH3bM4CShtMKB5qrw';
+  }
+
   String getBaseUrl() {
-    return 'https://test.ca.digital-front-door.stg.gcp.trchq.com/api/graphql';
+    return 'https://test.ca.digital-front-door.stg.gcp.trchq.com';
   }
 
   String getWebsocketBaseUrl() {

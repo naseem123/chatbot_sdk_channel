@@ -1,8 +1,10 @@
+import 'package:chatbot/core/dependency/graphql/chatbot_graphql_request.dart';
+import 'package:chatbot/core/dependency/graphql/chatbot_graphql_success_response.dart';
 import 'package:clean_framework/clean_framework_legacy.dart';
-import 'package:clean_framework_graphql/clean_framework_graphql.dart';
 
-abstract class APIGateway<O extends Output, R extends GraphQLRequest,
-    S extends SuccessInput> extends Gateway<O, R, GraphQLSuccessResponse, S> {
+abstract class APIGateway<O extends Output, R extends ChatBotGraphQLRequest,
+        S extends SuccessInput>
+    extends Gateway<O, R, ChatBotGraphQLSuccessResponse, S> {
   APIGateway({
     super.context,
     super.provider,
