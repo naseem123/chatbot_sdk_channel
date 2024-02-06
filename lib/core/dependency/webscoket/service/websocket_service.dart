@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:clean_framework/clean_framework_legacy.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 
@@ -32,7 +33,13 @@ class WebsocketService {
     channel.stream.listen(
       (event) {
         Map<String, dynamic> message = jsonDecode(event);
-        messageController.add(map);
+        if (messageController.isClosed) {
+          return;
+        }
+        _MessageLogger(endpoint: _webSocketURL, message: message);
+        if (message['type'] != "ping" && message['type'] != "welcome") {
+          messageController.add(message);
+        }
       },
       onDone: () {
         debugPrint('Connection closed');
@@ -44,8 +51,7 @@ class WebsocketService {
   }
 
   String transformURL({required Map<String, String> headers}) {
-    return "$_webSocketURL?app=${headers['app']}&session_id=${headers['session-id']}&"
-        "user_data=e30=";
+    return "$_webSocketURL?app=${headers['app']}&session_id=${headers['session-id']}&user_data=e30=";
   }
 
   void send(String data) {
@@ -66,9 +72,31 @@ class WebsocketService {
       return;
     }
     channel.sink.close();
-
     messageController.close();
-    initializeControllers();
+  }
+}
+
+class _MessageLogger extends NetworkLogger {
+  _MessageLogger({
+    required this.endpoint,
+    required this.message,
+  });
+
+  final String endpoint;
+  final Map<String, dynamic> message;
+
+  @override
+  void initialize() {
+    printHeader('RESPONSE', endpoint);
+
+    _printData();
+    printFooter();
+  }
+
+  void _printData() {
+    final data = message;
+    printCategory('Data');
+    printInLines(prettyMap(data));
   }
 }
 

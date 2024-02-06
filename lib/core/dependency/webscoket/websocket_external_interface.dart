@@ -23,8 +23,8 @@ class WebsocketExternalInterface
     required String baseURL,
     required List<GatewayConnection<Gateway>> gatewayConnections,
     WebsocketService? websocketService,
-  })  :_appId = appId,
-      _origin = baseURL,
+  })  : _appId = appId,
+        _origin = baseURL,
         _websocketService =
             websocketService ?? WebsocketService(webSocketURL: link),
         super(gatewayConnections);
@@ -62,6 +62,13 @@ class WebsocketExternalInterface
         send(_successResponse);
       },
     );
+
+    on<DisconnectWebsocketRequest>(
+      (request, send) async {
+        _websocketService.disconnect();
+        send(_successResponse);
+      },
+    );
   }
 
   Future<void> _transformHeader() async {
@@ -77,7 +84,7 @@ class WebsocketExternalInterface
     _headers = {
       'app': _appId,
       'session-id': sessionId,
-      'origin' : _origin,
+      'origin': _origin,
       'content-type': "application/json"
     };
   }

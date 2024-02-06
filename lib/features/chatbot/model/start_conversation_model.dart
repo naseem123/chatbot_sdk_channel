@@ -1,13 +1,16 @@
-import 'package:equatable/equatable.dart';
+import 'package:clean_framework/clean_framework.dart';
 
-class MessengerSettings extends Equatable {
+class StartConversationModel extends Equatable {
   final AppSettings app;
 
-  MessengerSettings({required this.app});
+  const StartConversationModel({required this.app});
 
-  factory MessengerSettings.fromJson(Map<String, dynamic> json) {
-    return MessengerSettings(
-      app: AppSettings.fromJson(json['messenger']['app']),
+  factory StartConversationModel.fromJson(Map<String, dynamic> json) {
+    final data = Deserializer(json);
+    final dataMessenger = Deserializer(data.getMap('messenger'));
+
+    return StartConversationModel(
+      app: AppSettings.fromJson(dataMessenger.getMap('app')),
     );
   }
 
@@ -18,12 +21,13 @@ class MessengerSettings extends Equatable {
 class AppSettings extends Equatable {
   final NewConversationBotsSettings newConversationBots;
 
-  AppSettings({required this.newConversationBots});
+  const AppSettings({required this.newConversationBots});
 
   factory AppSettings.fromJson(Map<String, dynamic> json) {
+    final data = Deserializer(json);
     return AppSettings(
       newConversationBots: NewConversationBotsSettings.fromJson(
-          json['newConversationBots']),
+          data.getMap('newConversationBots')),
     );
   }
 
@@ -37,23 +41,33 @@ class NewConversationBotsSettings extends Equatable {
   final String? scheduledAt;
   final BotSettings settings;
 
-  NewConversationBotsSettings(
-      {required this.id,
-        required this.name,
-        required this.scheduledAt,
-        required this.settings});
+  const NewConversationBotsSettings({
+    required this.id,
+    required this.name,
+    required this.scheduledAt,
+    required this.settings,
+  });
 
   factory NewConversationBotsSettings.fromJson(Map<String, dynamic> json) {
+    final data = Deserializer(json);
+
     return NewConversationBotsSettings(
-      id: json['id'],
-      name: json['name'],
-      scheduledAt: json['scheduled_at'],
-      settings: BotSettings.fromJson(json['settings']),
+      id: data.getString('id'),
+      name: data.getString('name'),
+      scheduledAt: data.getString('scheduled_at'),
+      settings: BotSettings.fromJson(
+        data.getMap('settings'),
+      ),
     );
   }
 
   @override
-  List<Object?> get props => [id, name, scheduledAt, settings];
+  List<Object?> get props => [
+        id,
+        name,
+        scheduledAt,
+        settings,
+      ];
 }
 
 class BotSettings extends Equatable {
@@ -63,51 +77,95 @@ class BotSettings extends Equatable {
   final String scheduleTrigger;
   final String scheduleTriggerHoliday;
 
-  BotSettings(
-      {required this.paths,
-        required this.botType,
-        required this.scheduling,
-        required this.scheduleTrigger,
-        required this.scheduleTriggerHoliday});
+  const BotSettings({
+    required this.paths,
+    required this.botType,
+    required this.scheduling,
+    required this.scheduleTrigger,
+    required this.scheduleTriggerHoliday,
+  });
 
   factory BotSettings.fromJson(Map<String, dynamic> json) {
+    final data = Deserializer(json);
+
     return BotSettings(
-      paths: (json['paths'] as List)
-          .map((pathJson) => Path.fromJson(pathJson))
-          .toList(),
-      botType: json['bot_type'],
-      scheduling: json['scheduling'],
-      scheduleTrigger: json['schedule_trigger'],
-      scheduleTriggerHoliday: json['schedule_trigger_holiday'],
+      paths: data.getList('paths', converter: Path.fromJson),
+      botType: data.getString('bot_type'),
+      scheduling: data.getString('scheduling'),
+      scheduleTrigger: data.getString('schedule_trigger'),
+      scheduleTriggerHoliday: data.getString('schedule_trigger_holiday'),
     );
   }
 
   @override
-  List<Object?> get props =>
-      [paths, botType, scheduling, scheduleTrigger, scheduleTriggerHoliday];
+  List<Object?> get props => [
+        paths,
+        botType,
+        scheduling,
+        scheduleTrigger,
+        scheduleTriggerHoliday,
+      ];
 }
 
 class Path extends Equatable {
   final String id;
   final List<Step> steps;
   final String title;
-  final List<dynamic>? followActions;
+  final List<FollowAction> followActions;
 
-  Path({required this.id, required this.steps, required this.title, this.followActions});
+  const Path({
+    required this.id,
+    required this.steps,
+    required this.title,
+    required this.followActions,
+  });
 
   factory Path.fromJson(Map<String, dynamic> json) {
+    final data = Deserializer(json);
+
     return Path(
-      id: json['id'],
-      steps: (json['steps'] as List)
-          .map((stepJson) => Step.fromJson(stepJson))
-          .toList(),
-      title: json['title'],
-      followActions: json['follow_actions'] as List?,
+      id: data.getString('id'),
+      steps: data.getList('step', converter: Step.fromJson),
+      title: data.getString('title'),
+      followActions: data.getList('schema', converter: FollowAction.fromJson),
     );
   }
 
   @override
-  List<Object?> get props => [id, steps, title, followActions];
+  List<Object?> get props => [
+        id,
+        steps,
+        title,
+        followActions,
+      ];
+}
+
+class FollowAction extends Equatable {
+  final String key;
+  final String name;
+  final String value;
+
+  const FollowAction({
+    required this.key,
+    required this.name,
+    required this.value,
+  });
+
+  factory FollowAction.fromJson(Map<String, dynamic> json) {
+    final data = Deserializer(json);
+    return FollowAction(
+      key: data.getString('key'),
+      name: data.getString('name'),
+      value: data.getString('value'),
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+        key,
+        name,
+        value,
+      ];
 }
 
 class Step extends Equatable {
@@ -116,19 +174,31 @@ class Step extends Equatable {
   final List<dynamic> messages;
   final String stepUid;
 
-  Step({required this.type, this.controls, required this.messages, required this.stepUid});
+  const Step({
+    required this.type,
+    this.controls,
+    required this.messages,
+    required this.stepUid,
+  });
 
   factory Step.fromJson(Map<String, dynamic> json) {
+    final data = Deserializer(json);
+
     return Step(
-      type: json['type'],
-      controls: json['controls'] != null ? Controls.fromJson(json['controls']) : null,
+      type: data.getString('type'),
+      controls: Controls.fromJson(data.getMap('controls')),
       messages: json['messages'],
-      stepUid: json['step_uid'],
+      stepUid: data.getString('step_uid'),
     );
   }
 
   @override
-  List<Object?> get props => [type, controls, messages, stepUid];
+  List<Object?> get props => [
+        type,
+        controls,
+        messages,
+        stepUid,
+      ];
 }
 
 class Controls extends Equatable {
@@ -136,15 +206,18 @@ class Controls extends Equatable {
   final List<Schema> schema;
   final bool? waitForInput;
 
-  Controls({required this.type, required this.schema, this.waitForInput});
+  const Controls({
+    required this.type,
+    required this.schema,
+    this.waitForInput,
+  });
 
   factory Controls.fromJson(Map<String, dynamic> json) {
+    final data = Deserializer(json);
     return Controls(
-      type: json['type'],
-      schema: (json['schema'] as List)
-          .map((schemaJson) => Schema.fromJson(schemaJson))
-          .toList(),
-      waitForInput: json['wait_for_input'],
+      type: data.getString('type'),
+      schema: data.getList('schema', converter: Schema.fromJson),
+      waitForInput: data.getBool('wait_for_input'),
     );
   }
 
@@ -159,18 +232,31 @@ class Schema extends Equatable {
   final String? pathId;
   final String? nextStepUuid;
 
-  Schema({required this.id, required this.label, required this.element, this.pathId, this.nextStepUuid});
+  const Schema({
+    required this.id,
+    required this.label,
+    required this.element,
+    this.pathId,
+    this.nextStepUuid,
+  });
 
   factory Schema.fromJson(Map<String, dynamic> json) {
+    final data = Deserializer(json);
     return Schema(
-      id: json['id'],
-      label: json['label'],
-      element: json['element'],
-      pathId: json['path_id'],
-      nextStepUuid: json['next_step_uuid'],
+      id: data.getString('id'),
+      label: data.getString('label'),
+      element: data.getString('element'),
+      pathId: data.getString('path_id'),
+      nextStepUuid: data.getString('next_step_uuid'),
     );
   }
 
   @override
-  List<Object?> get props => [id, label, element, pathId, nextStepUuid];
+  List<Object?> get props => [
+        id,
+        label,
+        element,
+        pathId,
+        nextStepUuid,
+      ];
 }

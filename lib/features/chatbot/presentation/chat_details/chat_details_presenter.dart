@@ -10,10 +10,16 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
   ChatDetailsPresenter({
     super.key,
     required super.builder,
+    required this.conversationID,
   }) : super(provider: chatBotUseCaseProvider);
+
+  final String conversationID;
 
   @override
   void onLayoutReady(BuildContext context, ChatBotUseCase useCase) {
+    if (conversationID.isEmpty) {
+      useCase.startNewConversation();
+    }
     useCase.initialiseWebSocket();
   }
 

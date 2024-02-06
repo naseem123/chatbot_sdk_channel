@@ -5,14 +5,24 @@ import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/messa
 import 'package:clean_framework/clean_framework_legacy.dart';
 import 'package:components/components.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:resources/resources.dart';
 
 class ChatDetailsUI extends UI<ChatDetailsViewModel> {
-  ChatDetailsUI({super.key});
+  ChatDetailsUI({
+    super.key,
+    this.conversationID = "",
+  });
 
+  final String conversationID;
   final messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+
+  @override
+  ChatDetailsPresenter create(PresenterBuilder<ChatDetailsViewModel> builder) {
+    return ChatDetailsPresenter(
+      builder: builder,
+      conversationID: conversationID,
+    );
+  }
 
   @override
   Widget build(BuildContext context, ChatDetailsViewModel viewModel) {
@@ -54,18 +64,6 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
               color: Colors.white,
             ),
           ),
-          // actions: [
-          //   Padding(
-          //     padding: const EdgeInsets.only(right: 20),
-          //     child: IconButton(
-          //         onPressed: () {},
-          //         icon: Icon(
-          //           Icons.close,
-          //           size: 50,
-          //           color: Colors.white,
-          //         )),
-          //   )
-          // ],
           title: Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.only(top: 10),
@@ -117,9 +115,6 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
           ),
         ),
       ),
-      // appBar: AppBar(
-      //   // title: const Text("Chat Details"),
-      // ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.only(
@@ -195,13 +190,6 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
           ),
         ),
       ),
-    );
-  }
-
-  @override
-  ChatDetailsPresenter create(PresenterBuilder<ChatDetailsViewModel> builder) {
-    return ChatDetailsPresenter(
-      builder: builder,
     );
   }
 

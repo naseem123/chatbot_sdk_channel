@@ -2,7 +2,9 @@ import 'package:chatbot/chatbot_app.dart';
 import 'package:chatbot/features/chatbot/gateway/chatbot_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/configuration_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/init_guest_user_gateway.dart';
+import 'package:chatbot/features/chatbot/gateway/start_conversation_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_connect_gateway.dart';
+import 'package:chatbot/features/chatbot/gateway/websocket/websocket_disconnect_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_message_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_send_message_gateway.dart';
 import 'package:chatbot/providers/src/usecase_providers.dart';
@@ -29,6 +31,13 @@ final initGuestUserGatewayProvider = GatewayProvider(
   ),
 );
 
+final startConversationGatewayProvider = GatewayProvider(
+  (_) => StartConversationGateway(
+    context: providersContext,
+    useCaseProvider: chatBotUseCaseProvider,
+  ),
+);
+
 // region websocket connection gateways
 final connectWebsocketGatewayProvider = GatewayProvider(
   (_) => WebsocketConnectGateway(
@@ -46,6 +55,13 @@ final listenWebsocketGatewayProvider = GatewayProvider(
 
 final sendWebsocketGatewayProvider = GatewayProvider(
   (_) => WebsocketSendMessageGateway(
+    context: providersContext,
+    provider: chatBotUseCaseProvider,
+  ),
+);
+
+final disconnectWebsocketGatewayProvider = GatewayProvider(
+  (_) => WebsocketDisconnectGateway(
     context: providersContext,
     provider: chatBotUseCaseProvider,
   ),
