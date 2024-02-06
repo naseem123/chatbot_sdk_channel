@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:chatbot/chatbot_app.dart';
+import 'package:chatbot/core/env/env_reader.dart';
 import 'package:chatbot/core/utils/shared_pref.dart';
+import 'package:chatbot/core/utils/websocket_constants.dart';
 import 'package:chatbot/features/chatbot/domain/chat_details_ui_output.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_entity.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_ui_output.dart';
@@ -8,8 +13,10 @@ import 'package:chatbot/features/chatbot/gateway/init_guest_user_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/start_conversation_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_connect_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_disconnect_gateway.dart';
+import 'package:chatbot/features/chatbot/gateway/websocket/websocket_init_command_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_message_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_send_message_gateway.dart';
+import 'package:chatbot/features/chatbot/model/websocket/init_command_model.dart';
 import 'package:chatbot/features/chatbot/model/websocket_message_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_presenter.dart';
@@ -89,6 +96,9 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
 
     request(StartConversationGatewayOutput(),
         onSuccess: (StartConversationSuccessInput input) {
+      entity =
+          entity.merge(chatTriggerId: input.data.app.newConversationBots.id);
+      initWebsocketCommand(state.chatTriggerId);
       return entity.merge(
         chatDetailsUiState: ChatDetailsUiState.success,
       );
@@ -128,6 +138,10 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     }, onFailure: (_) {
       return entity;
     });
+    Future.delayed(const Duration(seconds: 2), () {
+      subscribeToPresenceChannel();
+      subscribeToMessengerChannel();
+    });
   }
 
   void sendMessage({required String messageData}) {
@@ -150,35 +164,90 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     });
   }
 
-  /* ************************************* / 
-  //  LOAD CHAT DETAILS 
-  
-  /// 
- / ************************************* */
-/*  void loadPreviousChatDetails({int page = 1, String id = "zmJCb8HTLKPaSMYp4RBtPgJa"}) {
-    state = state.merge(
-      chatDetailsUiState: ChatDetailsUiState.loading,
-    );
-    String? sessionId = preference.get<String>(PreferenceKey.sessionId);
-
-    if (sessionId.isNullOrEmpty) {
-      sessionId = getRandomString();
-    }
-    sessionId =
-        'eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCem9LWlcxaGFXeEpJaEYwWlhOMFFIUmxjM1F1WTJ3R09nWkZWRG9KZEhsd1pUQT0iLCJleHAiOm51bGwsInB1ciI6ImxvZ2luIn19--8eb78acd4acda60d78a3c17059a4297312469ccb93444d789e64deac0890952f';
-    request(ChatDetailsGatewayOutput(page: page, id: id),
-        onSuccess: (ChatDetailsSuccessInput input) {
-      return entity.merge(
-        chatDetailsUiState: ChatDetailsUiState.success,
-        // chatHistoryData: input.chatHistoryData,
-        
-      );
+  void initWebsocketCommand(String chatTriggerId) {
+    request(
+        WebsocketInitCommandGatewayOutput(
+            messageToSend: getInitWebsocketCommandData(chatTriggerId)),
+        onSuccess: (WebsocketSendMessageSuccessInput input) {
+      return entity;
     }, onFailure: (_) {
-      return entity.merge(
-        chatBotUiState: ChatBotUiState.conversationFailure,
-      );
+      return entity;
     });
-  }*/
+  }
+
+  InitCommandModel getInitWebsocketCommandData(String chatTriggerId) {
+    final sessionId = preference.get<String>(PreferenceKey.sessionId, "");
+    return InitCommandModel(
+      command: socketMessage,
+      identifier: jsonEncode(Identifier(
+              app: providersContext().read(envReaderProvider).getAppID(),
+              channel: socketMessageChannel,
+              sessionId: sessionId ?? "",
+              encData: "{}",
+              sessionValue: null,
+              userData: "{}")
+          .toJson()),
+      data: jsonEncode(Data(
+        action: socketActionTrigger,
+        conversation: null,
+        trigger: chatTriggerId,
+      ).toJson()),
+    );
+  }
+
+  InitCommandModel getInitSubscribePresenceChannel() {
+    final sessionId = preference.get<String>(PreferenceKey.sessionId, "");
+    return InitCommandModel(
+      command: socketSubscribe,
+      identifier: jsonEncode(Identifier(
+              app: providersContext().read(envReaderProvider).getAppID(),
+              channel: socketPresenceChannel,
+              sessionId: sessionId ?? "",
+              encData: "{}",
+              sessionValue: null,
+              userData: "{}")
+          .toJson()),
+      data: null,
+    );
+  }
+
+  InitCommandModel getInitSubscribeMessengerChannel() {
+    final sessionId = preference.get<String>(PreferenceKey.sessionId, "");
+    return InitCommandModel(
+      command: socketSubscribe,
+      identifier: jsonEncode(Identifier(
+              app: providersContext().read(envReaderProvider).getAppID(),
+              channel: socketMessageChannel,
+              sessionId: sessionId ?? "",
+              encData: "{}",
+              sessionValue: null,
+              userData: "{}")
+          .toJson()),
+      data: null,
+    );
+  }
+
+  void subscribeToPresenceChannel() {
+    request(
+        WebsocketInitCommandGatewayOutput(
+            messageToSend: getInitSubscribePresenceChannel()),
+        onSuccess: (WebsocketSendMessageSuccessInput input) {
+      return entity;
+    }, onFailure: (_) {
+      return entity;
+    });
+  }
+
+  void subscribeToMessengerChannel() {
+    request(
+        WebsocketInitCommandGatewayOutput(
+            messageToSend: getInitSubscribeMessengerChannel()),
+        onSuccess: (WebsocketSendMessageSuccessInput input) {
+      return entity;
+    }, onFailure: (_) {
+      return entity;
+    });
+  }
 }
 
 class ChatBotUIOutputTransformer
@@ -227,8 +296,10 @@ class ChatDetailsGetMessageInputTransformer
   @override
   ChatBotEntity transform(
       ChatBotEntity entity, WebsocketMessageSuccessInput input) {
-    return entity.merge(
-        chatDetailList: [...entity.chatDetailList, input.message.reply.label]);
+    return entity.merge(chatDetailList: [
+      ...entity.chatDetailList,
+      input.message.data.message.blocks.label!
+    ]);
   }
 }
 

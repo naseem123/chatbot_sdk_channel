@@ -16,6 +16,7 @@ class ChatBotPresenter
   @override
   void onLayoutReady(BuildContext context, ChatBotUseCase useCase) {
     useCase.initUserSession();
+    useCase.initialiseWebSocket();
     // useCase.loadRecentConversationList();
   }
 
@@ -35,6 +36,11 @@ class ChatBotPresenter
       introText: output.appSettings.app.intro,
       inBusinessHours: output.appSettings.app.inBusinessHours,
     );
+  }
+
+  @override
+  void onDestroy(ChatBotUseCase useCase) {
+    useCase.disconnectMessageChannel();
   }
 }
 

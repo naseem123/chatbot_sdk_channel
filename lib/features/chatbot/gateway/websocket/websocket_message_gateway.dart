@@ -1,7 +1,7 @@
 import 'package:chatbot/core/dependency/webscoket/websocket_gateway.dart';
 import 'package:chatbot/core/dependency/webscoket/websocket_requests.dart';
 import 'package:chatbot/core/dependency/webscoket/websocket_responses.dart';
-import 'package:chatbot/features/chatbot/model/websocket_message_model.dart';
+import 'package:chatbot/features/chatbot/model/websocket/init_command_response_model.dart';
 import 'package:clean_framework/clean_framework_legacy.dart';
 
 class WebsocketMessageGateway extends WebsocketGateway<
@@ -25,7 +25,7 @@ class WebsocketMessageGateway extends WebsocketGateway<
     WebsocketSuccessResponse response,
   ) {
     return WebsocketMessageSuccessInput(
-      message: WebsocketMessageModel.fromJson(response.data),
+      message: InitCommandResponseModel.fromJson(response.data["message"]),
     );
   }
 }
@@ -36,6 +36,6 @@ class WebsocketMessageGatewayOutput extends Output {
 }
 
 class WebsocketMessageSuccessInput extends SuccessInput {
-  final WebsocketMessageModel message;
+  final InitCommandResponseModel message;
   WebsocketMessageSuccessInput({required this.message});
 }

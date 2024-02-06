@@ -20,7 +20,6 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
     if (conversationID.isEmpty) {
       useCase.startNewConversation();
     }
-    useCase.initialiseWebSocket();
   }
 
   @override
@@ -33,11 +32,6 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
         useCase.sendMessage(messageData: message);
       },
     );
-  }
-
-  @override
-  void onDestroy(ChatBotUseCase useCase) {
-    useCase.disconnectMessageChannel();
   }
 }
 

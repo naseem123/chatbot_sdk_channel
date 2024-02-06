@@ -87,7 +87,7 @@ class _MessageLogger extends NetworkLogger {
 
   @override
   void initialize() {
-    printHeader('RESPONSE', endpoint);
+    printHeader('****CHATBOT RESPONSE*****', endpoint);
 
     _printData();
     printFooter();

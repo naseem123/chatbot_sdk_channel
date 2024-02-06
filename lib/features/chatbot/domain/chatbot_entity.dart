@@ -14,12 +14,16 @@ class ChatBotEntity extends Entity {
   final ChatDetailsUiState chatDetailsUiState;
   final List<String> chatDetailList;
 
+  //Chat conversation fields
+  final String chatTriggerId;
+
   const ChatBotEntity({
     this.chatBotUiState = ChatBotUiState.conversationLoading,
     this.chatList,
     this.appSettings = const AppSettings(),
     this.chatDetailsUiState = ChatDetailsUiState.idle,
     this.chatDetailList = const [],
+    this.chatTriggerId = "",
   });
 
   ChatBotEntity merge({
@@ -28,6 +32,7 @@ class ChatBotEntity extends Entity {
     AppSettings? appSettings,
     ChatDetailsUiState? chatDetailsUiState,
     List<String>? chatDetailList,
+    String? chatTriggerId,
   }) {
     return ChatBotEntity(
       chatBotUiState: chatBotUiState ?? this.chatBotUiState,
@@ -35,6 +40,7 @@ class ChatBotEntity extends Entity {
       appSettings: appSettings ?? this.appSettings,
       chatDetailsUiState: chatDetailsUiState ?? this.chatDetailsUiState,
       chatDetailList: chatDetailList ?? this.chatDetailList,
+      chatTriggerId: chatTriggerId ?? this.chatTriggerId,
     );
   }
 

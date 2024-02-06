@@ -28,6 +28,7 @@ final websocketExternalInterfaceProvider = ExternalInterfaceProvider(
       () => listenWebsocketGatewayProvider.getGateway(providersContext),
       () => sendWebsocketGatewayProvider.getGateway(providersContext),
       () => disconnectWebsocketGatewayProvider.getGateway(providersContext),
+      () => websocketInitCommandGatewayProvider.getGateway(providersContext),
     ],
   ),
 );
