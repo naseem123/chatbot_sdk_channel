@@ -12,3 +12,5 @@ class SendMessageToSocketRequest extends WebsocketRequest {
   });
   final String messageData;
 }
+
+class DisconnectWebsocketRequest extends WebsocketRequest {}

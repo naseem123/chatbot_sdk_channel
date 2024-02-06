@@ -5,7 +5,9 @@ import 'package:chatbot/features/chatbot/domain/chatbot_ui_output.dart';
 import 'package:chatbot/features/chatbot/gateway/chatbot_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/configuration_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/init_guest_user_gateway.dart';
+import 'package:chatbot/features/chatbot/gateway/start_conversation_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_connect_gateway.dart';
+import 'package:chatbot/features/chatbot/gateway/websocket/websocket_disconnect_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_message_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_send_message_gateway.dart';
 import 'package:chatbot/features/chatbot/model/websocket_message_model.dart';
@@ -24,6 +26,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
             ChatDetailsConnectMessageInputTransformer(),
             ChatDetailsGetMessageInputTransformer(),
             ChatDetailsSendMessageInputTransformer(),
+            ChatDetailsDisconnectMessageInputTransformer(),
           ],
         );
 
@@ -77,6 +80,25 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     });
   }
 
+  //region chat conversation starts
+  void startNewConversation() {
+    state = state.merge(
+      chatDetailsUiState: ChatDetailsUiState.loading,
+      chatDetailList: [],
+    );
+
+    request(StartConversationGatewayOutput(),
+        onSuccess: (StartConversationSuccessInput input) {
+      return entity.merge(
+        chatDetailsUiState: ChatDetailsUiState.success,
+      );
+    }, onFailure: (_) {
+      return entity.merge(
+        chatDetailsUiState: ChatDetailsUiState.failure,
+      );
+    });
+  }
+
   // region realtime data requests
   void initialiseWebSocket() {
     state = state.merge(
@@ -120,7 +142,12 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
   }
 
   void disconnectMessageChannel() {
-    //TODO disconnect websocket
+    request(WebsocketDisconnectGatewayOutput(),
+        onSuccess: (WebsocketDisconnectSuccessInput input) {
+      return entity;
+    }, onFailure: (_) {
+      return entity;
+    });
   }
 
   /* ************************************* / 
@@ -210,6 +237,15 @@ class ChatDetailsSendMessageInputTransformer
   @override
   ChatBotEntity transform(
       ChatBotEntity entity, WebsocketSendMessageSuccessInput input) {
+    return entity;
+  }
+}
+
+class ChatDetailsDisconnectMessageInputTransformer
+    extends InputTransformer<ChatBotEntity, WebsocketDisconnectSuccessInput> {
+  @override
+  ChatBotEntity transform(
+      ChatBotEntity entity, WebsocketDisconnectSuccessInput input) {
     return entity;
   }
 }

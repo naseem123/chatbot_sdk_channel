@@ -40,6 +40,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           key: state.pageKey,
           child: ChatDetailsUI(
             key: state.pageKey,
+            conversationID: state.params['conversationId'] ?? "",
           ),
         ),
       )
