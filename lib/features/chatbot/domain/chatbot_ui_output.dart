@@ -5,19 +5,23 @@ import 'package:clean_framework/clean_framework.dart';
 
 class ChatBotUIOutput extends Output {
   final ChatBotUiState chatBotUiState;
+  final OutBondUiState outBondUiState;
   final List<Conversation> chatList;
   final AppSettings appSettings;
 
   const ChatBotUIOutput({
     required this.chatBotUiState,
     required this.chatList,
+    required this.outBondUiState,
     required this.appSettings,
   });
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props =>
+      [
         chatBotUiState,
         chatList,
         appSettings,
+        outBondUiState,
       ];
 }

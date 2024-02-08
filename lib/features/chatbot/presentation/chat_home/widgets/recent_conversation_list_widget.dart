@@ -42,7 +42,7 @@ class RecentConversationListWidget extends StatelessWidget {
               ),
               IconButtons(
                   onPressed: () =>
-                      showDeleteConversationConfirmationPopup(context),
+                      showDeleteConversationConfirmationPopup(context, () {}),
                   path: 'assets/icons/reload_icon.svg'),
             ],
           ),
@@ -50,15 +50,21 @@ class RecentConversationListWidget extends StatelessWidget {
             child: ListView.builder(
               itemBuilder: (context, index) {
                 final chatData = chatList[index];
-                return ConversationItem(chatData: chatData);
+                return ConversationItem(
+                  chatData: chatData,
+                  isLastItem: false,
+                );
               },
               itemCount: chatList.length,
             ),
           ),
-          Text(
-            'view all conversations',
-            style: context.textTheme.captionBold
-                .copyWith(color: const Color(0xFF4D4C4C), fontSize: 12),
+
+          InkWell(
+            child: Text(
+              'view all conversations',
+              style: context.textTheme.captionBold.copyWith(
+                  color: context.secondaryColor.matterhorn, fontSize: 12),
+            ),
           )
         ],
       ),

@@ -7,14 +7,23 @@ import 'package:go_router/go_router.dart';
 import 'delete_recent_conversations.dart';
 
 class ConversationWidget extends StatelessWidget {
-  const ConversationWidget({super.key, required this.chatList});
+  const ConversationWidget({
+    super.key,
+    required this.chatList,
+    required this.onDeleteConversationPressed,
+    required this.onSeeConvesationListPressed,
+    required this.showViewAllConversation,
+  });
 
+  final bool showViewAllConversation;
+  final VoidCallback onSeeConvesationListPressed;
+  final VoidCallback onDeleteConversationPressed;
   final List<Conversation> chatList;
 
   @override
   Widget build(BuildContext context) {
+    final hasChatList = chatList.isNotEmpty;
     return Container(
-      height: 380,
       margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -39,31 +48,36 @@ class ConversationWidget extends StatelessWidget {
                   fontSize: 19,
                 ),
               ),
-              IconButtons(
-                  onPressed: () =>
-                      showDeleteConversationConfirmationPopup(context),
-                  path: 'assets/icons/reload_icon.svg'),
+              if (hasChatList)
+                IconButtons(
+                    onPressed: () => showDeleteConversationConfirmationPopup(
+                        context, onDeleteConversationPressed),
+                    path: 'assets/icons/reload_icon.svg'),
             ],
           ),
-          Expanded(
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                final chatData = chatList[index];
-                return ConversationItem(
-                  chatData: chatData,
-                  onPressed: () {
-                    context.push("/chatDetail");
-                  },
-                );
-              },
-              itemCount: chatList.length,
-            ),
+          ListView.builder(
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final chatData = chatList[index];
+              return ConversationItem(
+                chatData: chatData,
+                onPressed: () {
+                  context.push("/chatDetail");
+                },
+                isLastItem:chatList.length-1==index
+              );
+            },
+            itemCount: chatList.length,
           ),
-          Text(
-            'view all conversations',
-            style: context.textTheme.captionBold
-                .copyWith(color: const Color(0xFF4D4C4C), fontSize: 12),
-          )
+          if (showViewAllConversation && hasChatList)
+            InkWell(
+              onTap: onSeeConvesationListPressed,
+              child: Text(
+                'view all conversations',
+                style: context.textTheme.captionBold.copyWith(
+                    color: context.secondaryColor.matterhorn, fontSize: 12),
+              ),
+            )
         ],
       ),
     );

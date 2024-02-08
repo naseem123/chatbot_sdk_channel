@@ -1,7 +1,9 @@
+import 'package:chatbot/features/chatbot/model/conversation_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_presenter.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_view_model.dart';
-import 'package:chatbot/features/chatbot/presentation/chat_home/widgets/appbar_widget.dart';
+import 'package:chatbot/features/chatbot/presentation/chat_home/conversation_list.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/widgets/chat_closed_widget.dart';
+import 'package:chatbot/features/chatbot/presentation/chat_home/widgets/chat_home_appbar.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/widgets/conversation_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/widgets/loading_failed_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/widgets/start_new_conversation_widget.dart';
@@ -20,7 +22,8 @@ class ChatBotUI extends UI<ChatBotViewModel> {
   @override
   Widget build(BuildContext context, ChatBotViewModel viewModel) {
     Widget child;
-    if (viewModel.uiState == ChatBotUiState.conversationLoading) {
+    if ([ChatBotUiState.conversationLoading, ChatBotUiState.setupLoading]
+        .contains(viewModel.uiState)) {
       return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
@@ -31,22 +34,42 @@ class ChatBotUI extends UI<ChatBotViewModel> {
       child = LoadingFailed(onRetry: viewModel.onRetry);
     } else {
       bool inBusinessHours = viewModel.inBusinessHours;
+      bool showPreviousChatList = viewModel.chatList.length > 3;
+
       child = RefreshIndicator(
         onRefresh: viewModel.onRefresh,
         child: Container(
           color: const Color(0xFFfbf9f9),
           child: Column(
             children: [
-              ConversationWidget(chatList: viewModel.chatList),
-              if (inBusinessHours)
-                StartNewConversationWidget(
-                  buttonColor: viewModel.colorSecondary,
-                  onStartConversationPressed: () {
-                    context.push("/chatDetail");
+              ConversationWidget(
+                  chatList: viewModel.chatList.take(3).toList(),
+                  onSeeConvesationListPressed: () {
+                    showConversationListPage(context,
+                        chatList: viewModel.chatList,
+                        color: viewModel.colorPrimary,
+                        taglineText: viewModel.tagline);
                   },
-                )
-              else
-                const ChatClosedWidget()
+                  onDeleteConversationPressed: () {
+                    viewModel.onDeleteConversationPressed();
+                  },
+                  showViewAllConversation: showPreviousChatList),
+              if (viewModel.outputState != OutBondUiState.outBondStateIdle)
+                if (inBusinessHours)
+                  StartNewConversationWidget(
+                    buttonColor: viewModel.colorSecondary,
+                    onStartConversationPressed: () {
+                      context.push("/chatDetail");
+                    },
+                    onSeePreviousPressed: () {
+                      showConversationListPage(context,
+                          chatList: viewModel.chatList,
+                          color: viewModel.colorPrimary,
+                          taglineText: viewModel.tagline);
+                    },
+                  )
+                else
+                  const ChatClosedWidget()
             ],
           ),
         ),
@@ -61,5 +84,15 @@ class ChatBotUI extends UI<ChatBotViewModel> {
       ),
       body: child,
     );
+  }
+
+  void showConversationListPage(BuildContext context,
+      {required List<Conversation> chatList,
+      required Color color,
+      required String taglineText}) {
+    showConversationPage(context,
+        conversationList: chatList,
+        colorPrimary: color,
+        taglineText: taglineText);
   }
 }

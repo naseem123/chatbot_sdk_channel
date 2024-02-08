@@ -40,6 +40,7 @@ class _Color {
           whiteRock: Color(0xFFEDEFE0),
           gray52: Color(0xFF858585),
           gray87: Color(0xFFDEDEDE),
+          matterhorn: Color(0xFF4D4C4C),
         ),
       );
 
@@ -93,6 +94,7 @@ class _SecondaryColor {
     required this.whiteRock,
     required this.gray52,
     required this.gray87,
+    required this.matterhorn,
   });
 
   final _Yellow yellow;
@@ -123,6 +125,7 @@ class _SecondaryColor {
   final Color whiteRock;
   final Color gray52;
   final Color gray87;
+  final Color matterhorn;
 }
 
 class _Yellow {

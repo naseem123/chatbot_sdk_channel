@@ -12,22 +12,28 @@ class ChatBotViewModel extends ViewModel {
     required this.onRefresh,
     required this.colorPrimary,
     required this.colorSecondary,
+    required this.outputState,
     required this.title,
     required this.introText,
     required this.logo,
     required this.inBusinessHours,
+    required this.tagline,
+    required this.onDeleteConversationPressed,
   });
 
   final List<Conversation> chatList;
   final ChatBotUiState uiState;
+  final OutBondUiState outputState;
   final Color colorPrimary;
   final Color colorSecondary;
   final String title;
   final String introText;
   final String logo;
+  final String tagline;
   final bool inBusinessHours;
   final VoidCallback onRetry;
   final AsyncCallback onRefresh;
+  final VoidCallback onDeleteConversationPressed;
 
   @override
   List<Object?> get props => [
@@ -39,5 +45,7 @@ class ChatBotViewModel extends ViewModel {
         introText,
         logo,
         inBusinessHours,
+        outputState,
+        tagline,
       ];
 }
