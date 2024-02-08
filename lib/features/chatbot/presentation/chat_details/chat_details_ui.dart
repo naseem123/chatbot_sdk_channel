@@ -1,10 +1,14 @@
+import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_view_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/avatar.dart';
+import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_user_input_editor_widget.dart';
+import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_wait_for_input_button_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/message_item_widget.dart';
 import 'package:clean_framework/clean_framework_legacy.dart';
 import 'package:components/components.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ChatDetailsUI extends UI<ChatDetailsViewModel> {
   ChatDetailsUI({
@@ -29,6 +33,10 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
     final viewInsets = MediaQuery.viewInsetsOf(context);
     final messages = viewModel.chatList;
     final isLoading = viewModel.uiState == ChatDetailsUiState.loading;
+
+    final chatMessageType = viewModel.chatMessageType;
+    final chatBotUserState = viewModel.chatBotUserState;
+    final userInputOptions = viewModel.userInputOptions;
 
     if (isLoading) {
       return const Scaffold(
@@ -58,10 +66,15 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
               top: 10,
             ),
             color: const Color(0xff142542),
-            child: const Icon(
-              Icons.arrow_back_ios,
-              size: 35,
-              color: Colors.white,
+            child: IconButton(
+              onPressed: (){
+                context.pop();
+              },
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                size: 35,
+                color: Colors.white,
+              ),
             ),
           ),
           title: Container(
@@ -131,61 +144,26 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                   controller: _scrollController,
                   itemBuilder: (context, index) {
                     final message = messages[index];
-                    const showImage = true;
-                    return Row(
-                      //Change Alignment after checking whether the message is from the user
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        if (showImage)
-                          const Avatar(
-                            imageUrl:
-                                "https://test.ca.digital-front-door.stg.gcp.trchq.com/assets/icons8-bot-50-ccd9ed66d2850c1bd0737308082e76890d697c8e.png",
-                            radius: 12,
-                          ),
-                        MessageItemWidget(message: message),
-                      ],
-                    );
+                    return MessageItemWidget(message: message);
                   },
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        // TODO: Send an image
-                      },
-                      icon: const Icon(Icons.attach_file),
-                    ),
-                    Expanded(
-                      child: TextFormField(
-                        controller: messageController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor:
-                              context.secondaryColor.gainsboro.withAlpha(100),
-                          hintText: 'Type a message',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16.0),
-                            borderSide: BorderSide.none,
-                          ),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              if (messageController.text.trim().isNotEmpty) {
-                                viewModel
-                                    .onMessageEntered(messageController.text);
-                                messageController.clear();
-                              }
-                            },
-                            icon: const Icon(Icons.send),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+          if(chatBotUserState == ChatBotUserState.waitForInput && chatMessageType == ChatMessageType.askForInputButton)
+            ChatWaitForInputButtonWidget(
+              buttons : userInputOptions,
+              onUserInputTriggered : (blockData){
+                viewModel.onUserInputTriggered(blockData);
+              }
+            ),
+          if(viewModel.chatMessageType == ChatMessageType.enterMessage)
+          ChatUserInputEditorWidget(
+            textEditingController: messageController,
+            onMessageEntered: (message){
+              viewModel
+                  .onMessageEntered(messageController.text);
+              messageController.clear();
+            },
+          )
             ],
           ),
         ),

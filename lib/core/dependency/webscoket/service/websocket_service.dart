@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:clean_framework/clean_framework_legacy.dart';
 import 'package:flutter/material.dart';
@@ -30,15 +31,18 @@ class WebsocketService {
       pingInterval: const Duration(seconds: 1),
     );
 
+    print(headers);
+
     channel.stream.listen(
       (event) {
         Map<String, dynamic> message = jsonDecode(event);
         if (messageController.isClosed) {
           return;
         }
+        log(event);
         _MessageLogger(endpoint: _webSocketURL, message: message);
-        if (message['type'] != "ping" && message['type'] != "welcome") {
-          messageController.add(message);
+        if (message['type'] != "ping" && message['type'] != "welcome" && message['type'] != "confirm_subscription" && message['message']['type'] != "conversations:unreads") {
+          messageController.add(message['message']);
         }
       },
       onDone: () {
@@ -59,6 +63,8 @@ class WebsocketService {
       debugPrint('Not connected');
       return;
     }
+    log("SENDING MESSAGE");
+    log(data);
     channel.sink.add(data);
   }
 

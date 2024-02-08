@@ -1,5 +1,6 @@
 import 'package:chatbot/features/chatbot/domain/chat_details_ui_output.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_use_case.dart';
+import 'package:chatbot/features/chatbot/model/block_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_view_model.dart';
 import 'package:chatbot/providers/src/usecase_providers.dart';
 import 'package:clean_framework/clean_framework_legacy.dart';
@@ -18,7 +19,8 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
   @override
   void onLayoutReady(BuildContext context, ChatBotUseCase useCase) {
     if (conversationID.isEmpty) {
-      useCase.startNewConversation();
+      //useCase.startNewConversation();
+      useCase.initWebsocketConversation();
     }
   }
 
@@ -31,6 +33,12 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
       onMessageEntered: (String message) {
         useCase.sendMessage(messageData: message);
       },
+      chatMessageType: output.chatMessageType,
+      chatBotUserState: output.chatBotUserState,
+      userInputOptions: output.userInputOptions,
+      onUserInputTriggered: (Block inputData){
+        useCase.sendUserInput(inputData: inputData);
+      }
     );
   }
 }

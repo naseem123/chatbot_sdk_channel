@@ -1,3 +1,6 @@
+import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
+import 'package:chatbot/features/chatbot/model/block_model.dart';
+import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_presenter.dart';
 import 'package:clean_framework/clean_framework.dart';
@@ -12,10 +15,16 @@ class ChatBotEntity extends Entity {
 
   //Chat details fields
   final ChatDetailsUiState chatDetailsUiState;
-  final List<String> chatDetailList;
-
+  final List<MessageUiModel> chatDetailList;
+  final ChatBotUserState chatBotUserState;
+  final ChatMessageType chatMessageType;
+  
   //Chat conversation fields
   final String chatTriggerId;
+  final String conversationKey;
+  final String messageKey;
+  final List<Block> userInputOptions;
+
 
   const ChatBotEntity({
     this.chatBotUiState = ChatBotUiState.conversationLoading,
@@ -24,6 +33,11 @@ class ChatBotEntity extends Entity {
     this.chatDetailsUiState = ChatDetailsUiState.idle,
     this.chatDetailList = const [],
     this.chatTriggerId = "",
+    this.chatBotUserState = ChatBotUserState.idle,
+    this.chatMessageType = ChatMessageType.idle,
+    this.conversationKey = "",
+    this.messageKey = "",
+    this.userInputOptions = const [],
   });
 
   ChatBotEntity merge({
@@ -31,8 +45,13 @@ class ChatBotEntity extends Entity {
     ChatConversationSuccessInput? chatList,
     AppSettings? appSettings,
     ChatDetailsUiState? chatDetailsUiState,
-    List<String>? chatDetailList,
+    List<MessageUiModel>? chatDetailList,
     String? chatTriggerId,
+    String? conversationKey,
+    ChatBotUserState? chatBotUserState,
+    ChatMessageType? chatMessageType,
+    List<Block>? userInputOptions,
+    String? messageKey,
   }) {
     return ChatBotEntity(
       chatBotUiState: chatBotUiState ?? this.chatBotUiState,
@@ -41,6 +60,11 @@ class ChatBotEntity extends Entity {
       chatDetailsUiState: chatDetailsUiState ?? this.chatDetailsUiState,
       chatDetailList: chatDetailList ?? this.chatDetailList,
       chatTriggerId: chatTriggerId ?? this.chatTriggerId,
+      conversationKey: conversationKey ?? this.conversationKey,
+      messageKey: messageKey ?? this.messageKey,
+      chatBotUserState: chatBotUserState ?? this.chatBotUserState,
+      chatMessageType: chatMessageType ?? this.chatMessageType,
+      userInputOptions : userInputOptions ?? this.userInputOptions,
     );
   }
 
@@ -50,6 +74,10 @@ class ChatBotEntity extends Entity {
         chatList,
         appSettings,
         chatDetailsUiState,
-        chatDetailList
+        chatDetailList,
+        conversationKey,
+        chatTriggerId,
+        chatBotUserState,
+        chatMessageType,
       ];
 }

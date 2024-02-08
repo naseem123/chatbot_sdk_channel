@@ -17,7 +17,7 @@ class ChatBotPresenter
   void onLayoutReady(BuildContext context, ChatBotUseCase useCase) {
     useCase.initUserSession();
     useCase.initialiseWebSocket();
-    // useCase.loadRecentConversationList();
+    useCase.loadRecentConversationList();
   }
 
   @override

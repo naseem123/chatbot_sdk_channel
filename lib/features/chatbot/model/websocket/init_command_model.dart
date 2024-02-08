@@ -1,3 +1,4 @@
+import 'package:chatbot/features/chatbot/model/block_model.dart';
 import 'package:equatable/equatable.dart';
 
 class InitCommandModel extends Equatable {
@@ -68,13 +69,35 @@ class Identifier extends Equatable {
 
 class Data extends Equatable {
   final dynamic conversation;
-  final String trigger;
+  final dynamic trigger;
   final String action;
+  final String? title;
+  final String? url;
+  final String? browserVersion;
+  final String? browserName;
+  final String? osVersion;
+  final String? os;
+  final String? conversationKey;
+  final String? messageKey;
+  final String? pathId;
+  final String? step;
+  final Block? reply;
 
   const Data({
     required this.conversation,
     required this.trigger,
     required this.action,
+    this.title,
+    this.url,
+    this.browserVersion,
+    this.browserName,
+    this.osVersion,
+    this.os,
+    this.conversationKey,
+    this.messageKey,
+    this.pathId,
+    this.step,
+    this.reply,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) {
@@ -89,10 +112,53 @@ class Data extends Equatable {
   List<Object?> get props => [conversation, trigger, action];
 
   Map<String, dynamic> toJson() {
-    return {
-      'conversation': conversation,
-      'trigger': trigger,
-      'action': action,
+
+    Map<String,dynamic> data= {
+      'action': action
     };
+
+    if(trigger != null){
+      data['trigger'] = trigger;
+    }
+
+    if(conversation != null){
+      data['conversation'] = conversation;
+    }
+    if(title != null){
+      data['title'] = title;
+    }
+    if(url != null){
+      data['url'] = url;
+    }
+    if(browserVersion != null){
+      data['browser_version'] = browserVersion;
+    }
+    if(browserName != null){
+      data['browser_name'] = browserName;
+    }
+    if(osVersion != null){
+      data['os_version'] = osVersion;
+    }
+    if(os != null){
+      data['os'] = os;
+    }
+
+    if(conversationKey != null){
+      data['conversation_key'] = conversationKey;
+    }
+    if(messageKey != null){
+      data['message_key'] = messageKey;
+    }
+    if(pathId != null){
+      data['path_id'] = pathId;
+    }
+
+    if(step != null){
+      data['step'] = step;
+    }
+    if(reply!= null){
+      data['reply'] = reply!.toJson();
+    }
+    return data;
   }
 }
