@@ -10,6 +10,7 @@ import '../model/conversation_model.dart';
 
 class ChatBotEntity extends Entity {
   final ChatBotUiState chatBotUiState;
+  final OutBondUiState outBondUiState;
   final ChatConversationSuccessInput? chatList;
   final AppSettings appSettings;
 
@@ -27,6 +28,7 @@ class ChatBotEntity extends Entity {
 
   const ChatBotEntity({
     this.chatBotUiState = ChatBotUiState.conversationLoading,
+    this.outBondUiState = OutBondUiState.outBondStateIdle,
     this.chatList,
     this.appSettings = const AppSettings(),
     this.chatDetailsUiState = ChatDetailsUiState.idle,
@@ -41,6 +43,7 @@ class ChatBotEntity extends Entity {
 
   ChatBotEntity merge({
     ChatBotUiState? chatBotUiState,
+    OutBondUiState? outBondUiState,
     ChatConversationSuccessInput? chatList,
     AppSettings? appSettings,
     ChatDetailsUiState? chatDetailsUiState,
@@ -64,12 +67,15 @@ class ChatBotEntity extends Entity {
       chatBotUserState: chatBotUserState ?? this.chatBotUserState,
       chatMessageType: chatMessageType ?? this.chatMessageType,
       userInputOptions: userInputOptions ?? this.userInputOptions,
+      outBondUiState: outBondUiState ?? this.outBondUiState,
+      userInputOptions: userInputOptions ?? this.userInputOptions,
     );
   }
 
   @override
   List<Object?> get props => [
         chatBotUiState,
+        outBondUiState,
         chatList,
         appSettings,
         chatDetailsUiState,

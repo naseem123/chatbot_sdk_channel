@@ -1,11 +1,10 @@
 import 'dart:convert';
+
 import 'package:chatbot/chatbot_app.dart';
 import 'package:chatbot/core/env/env_reader.dart';
 import 'package:chatbot/core/utils/shared_pref.dart';
 import 'package:chatbot/core/utils/websocket_constants.dart';
-import 'package:chatbot/features/chatbot/domain/chat_details_ui_output.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_entity.dart';
-import 'package:chatbot/features/chatbot/domain/chatbot_ui_output.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
 import 'package:chatbot/features/chatbot/gateway/chatbot_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/configuration_gateway.dart';
@@ -16,15 +15,17 @@ import 'package:chatbot/features/chatbot/gateway/websocket/websocket_disconnect_
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_init_command_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_message_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_send_message_gateway.dart';
-import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
 import 'package:chatbot/features/chatbot/model/block_model.dart';
+import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
 import 'package:chatbot/features/chatbot/model/websocket/init_command_model.dart';
 import 'package:chatbot/features/chatbot/model/websocket_message_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_presenter.dart';
 import 'package:chatbot/providers.dart';
-import 'package:chatbot/providers/src/usecase_providers.dart';
 import 'package:clean_framework/clean_framework.dart';
+
+import 'transformers/input_transformers.dart';
+import 'transformers/output_transformers.dart';
 
 class ChatBotUseCase extends UseCase<ChatBotEntity> {
   ChatBotUseCase()
@@ -49,6 +50,8 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         onSuccess: (InitGuestUserSuccessInput input) {
       preference.put(PreferenceKey.sessionId, input.initData.user.sessionId);
       loadConfigurations();
+      loadRecentConversationList(perPage: 100, page: 1);
+      initialiseWebSocket();
       return entity.merge(
         chatBotUiState: ChatBotUiState.setupSuccess,
       );
@@ -64,6 +67,9 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         onSuccess: (SDKConfigurationSuccessInput input) {
       return entity.merge(
           chatBotUiState: ChatBotUiState.setupSuccess,
+          outBondUiState: input.appSettings.app.inBusinessHours
+              ? OutBondUiState.outBondStateOpen
+              : OutBondUiState.outBondStateClose,
           appSettings: input.appSettings);
     }, onFailure: (_) {
       return entity.merge(
@@ -72,11 +78,19 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     });
   }
 
+  Future<void> deleteConversation() async {
+    await preference.remove(PreferenceKey.sessionId);
+    initialise();
+  }
+
+  void initialise() {
+    initUserSession();
+  }
+
   void loadRecentConversationList({int page = 1, int perPage = 3}) {
     state = state.merge(
       chatBotUiState: ChatBotUiState.conversationLoading,
     );
-
     request(ChatBotGatewayOutput(page: page, perPage: perPage),
         onSuccess: (ChatBotSuccessInput input) {
       return entity.merge(
@@ -116,6 +130,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
   void initialiseWebSocket() {
     state = state.merge(
       chatDetailsUiState: ChatDetailsUiState.loading,
+      userInputOptions: [],
       chatDetailList: [],
     );
 
@@ -422,129 +437,6 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         step: inputData.nextStepUuid,
       ).toJson()),
     );
-  }
-}
-
-class ChatBotUIOutputTransformer
-    extends OutputTransformer<ChatBotEntity, ChatBotUIOutput> {
-  @override
-  ChatBotUIOutput transform(ChatBotEntity entity) {
-    return ChatBotUIOutput(
-      chatBotUiState: entity.chatBotUiState,
-      chatList: entity.chatList?.conversations ?? [],
-      appSettings: entity.appSettings,
-    );
-  }
-}
-
-class ChatDetailsUIOutputTransformer
-    extends OutputTransformer<ChatBotEntity, ChatDetailsUIOutput> {
-  @override
-  ChatDetailsUIOutput transform(ChatBotEntity entity) {
-    return ChatDetailsUIOutput(
-      chatDetailsUiState: entity.chatDetailsUiState,
-      chatDetailList: entity.chatDetailList,
-      chatBotUserState: entity.chatBotUserState,
-      chatMessageType: entity.chatMessageType,
-      userInputOptions: entity.userInputOptions,
-    );
-  }
-}
-
-class ChatDetailsUIInputTransformer
-    extends InputTransformer<ChatBotEntity, WebsocketConnectSuccessInput> {
-  @override
-  ChatBotEntity transform(
-      ChatBotEntity entity, WebsocketConnectSuccessInput input) {
-    return entity;
-  }
-}
-
-class ChatDetailsConnectMessageInputTransformer
-    extends InputTransformer<ChatBotEntity, WebsocketConnectSuccessInput> {
-  @override
-  ChatBotEntity transform(
-      ChatBotEntity entity, WebsocketConnectSuccessInput input) {
-    return entity;
-  }
-}
-
-class ChatDetailsGetMessageInputTransformer
-    extends InputTransformer<ChatBotEntity, WebsocketMessageSuccessInput> {
-  @override
-  ChatBotEntity transform(
-      ChatBotEntity entity, WebsocketMessageSuccessInput input) {
-    if (input.data["type"] == "triggers:receive") {
-      final triggerId = input.data["data"]["trigger"]["id"];
-      Future.delayed(const Duration(seconds: 1), () {
-        chatBotUseCaseProvider
-            .getUseCaseFromContext(providersContext)
-            .initWebsocketCommand(chatTriggerId: triggerId);
-      });
-      return entity.merge(chatTriggerId: triggerId);
-    } else if (input.data["type"] == "conversations:conversation_part") {
-      final conversationKey = input.data["data"]["conversation_key"];
-      final messageKey = input.data["data"]["key"];
-      chatBotUseCaseProvider
-          .getUseCaseFromContext(providersContext)
-          .getNextConversationMessage(
-            conversationKey: conversationKey,
-            messageKey: messageKey,
-          );
-      Map<String, dynamic> messageData = input.data["data"]["message"];
-      var message = "";
-
-      if (messageData.containsKey("blocks")) {
-        final blockData = BlocksData.fromJson(messageData["blocks"]);
-        if (blockData.waitForInput) {
-          return entity.merge(
-            userInputOptions: blockData.schema,
-            chatBotUserState: ChatBotUserState.waitForInput,
-            chatMessageType: ChatMessageType.askForInputButton,
-          );
-        }
-      } else {
-        if (messageData["html_content"] != "--***--") {
-          message = messageData["html_content"];
-        } else if (messageData["serialized_content"] != "--***--") {
-          message = messageData["serialized_content"];
-        } else if (messageData["text_content"] != "--***--") {
-          message = messageData["text_content"];
-        }
-        final messageuiData = MessageUiModel(
-          message: message,
-          messageId: messageKey,
-        );
-        if (!entity.chatDetailList.contains(messageuiData)) {
-          return entity.merge(
-              conversationKey: conversationKey,
-              chatMessageType: ChatMessageType.enterMessage,
-              messageKey: messageKey,
-              chatDetailList: [...entity.chatDetailList, messageuiData]);
-        }
-      }
-      return entity;
-    } else {
-      return entity;
-    }
-  }
-}
-
-class ChatDetailsSendMessageInputTransformer
-    extends InputTransformer<ChatBotEntity, WebsocketSendMessageSuccessInput> {
-  @override
-  ChatBotEntity transform(
-      ChatBotEntity entity, WebsocketSendMessageSuccessInput input) {
-    return entity;
-  }
-}
-
-class ChatDetailsDisconnectMessageInputTransformer
-    extends InputTransformer<ChatBotEntity, WebsocketDisconnectSuccessInput> {
-  @override
-  ChatBotEntity transform(
-      ChatBotEntity entity, WebsocketDisconnectSuccessInput input) {
-    return entity;
   }
 }
 

@@ -31,6 +31,7 @@ class Identifier extends Equatable {
   final String encData;
   final String? sessionValue;
   final String userData;
+
   const Identifier({
     required this.app,
     required this.channel,
