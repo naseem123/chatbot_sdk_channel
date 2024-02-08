@@ -6,8 +6,11 @@ class StartNewConversationWidget extends StatelessWidget {
     super.key,
     this.buttonColor,
     required this.onStartConversationPressed,
+    required this.onSeePreviousPressed,
   });
+
   final VoidCallback onStartConversationPressed;
+  final VoidCallback onSeePreviousPressed;
   final Color? buttonColor;
 
   @override
@@ -63,13 +66,16 @@ class StartNewConversationWidget extends StatelessWidget {
               ),
               Expanded(
                 flex: 2,
-                child: Text(
-                  'See previous',
-                  style: context.textTheme.captionBold.copyWith(
-                    color: context.colorScheme.primary,
-                    fontSize: 14,
+                child: InkWell(
+                  onTap: onSeePreviousPressed,
+                  child: Text(
+                    'See previous',
+                    style: context.textTheme.captionBold.copyWith(
+                      color: context.colorScheme.primary,
+                      fontSize: 14,
+                    ),
+                    textAlign: TextAlign.end,
                   ),
-                  textAlign: TextAlign.end,
                 ),
               )
             ],

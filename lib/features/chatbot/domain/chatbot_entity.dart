@@ -10,6 +10,7 @@ import '../model/conversation_model.dart';
 
 class ChatBotEntity extends Entity {
   final ChatBotUiState chatBotUiState;
+  final OutBondUiState outBondUiState;
   final ChatConversationSuccessInput? chatList;
   final AppSettings appSettings;
 
@@ -18,16 +19,16 @@ class ChatBotEntity extends Entity {
   final List<MessageUiModel> chatDetailList;
   final ChatBotUserState chatBotUserState;
   final ChatMessageType chatMessageType;
-  
+
   //Chat conversation fields
   final String chatTriggerId;
   final String conversationKey;
   final String messageKey;
   final List<Block> userInputOptions;
 
-
   const ChatBotEntity({
     this.chatBotUiState = ChatBotUiState.conversationLoading,
+    this.outBondUiState = OutBondUiState.outBondStateIdle,
     this.chatList,
     this.appSettings = const AppSettings(),
     this.chatDetailsUiState = ChatDetailsUiState.idle,
@@ -42,6 +43,7 @@ class ChatBotEntity extends Entity {
 
   ChatBotEntity merge({
     ChatBotUiState? chatBotUiState,
+    OutBondUiState? outBondUiState,
     ChatConversationSuccessInput? chatList,
     AppSettings? appSettings,
     ChatDetailsUiState? chatDetailsUiState,
@@ -64,13 +66,15 @@ class ChatBotEntity extends Entity {
       messageKey: messageKey ?? this.messageKey,
       chatBotUserState: chatBotUserState ?? this.chatBotUserState,
       chatMessageType: chatMessageType ?? this.chatMessageType,
-      userInputOptions : userInputOptions ?? this.userInputOptions,
+      userInputOptions: userInputOptions ?? this.userInputOptions,
+      outBondUiState: outBondUiState ?? this.outBondUiState,
     );
   }
 
   @override
   List<Object?> get props => [
         chatBotUiState,
+        outBondUiState,
         chatList,
         appSettings,
         chatDetailsUiState,

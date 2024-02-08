@@ -5,12 +5,14 @@ import 'package:clean_framework/clean_framework.dart';
 
 class ChatBotUIOutput extends Output {
   final ChatBotUiState chatBotUiState;
+  final OutBondUiState outBondUiState;
   final List<Conversation> chatList;
   final AppSettings appSettings;
 
   const ChatBotUIOutput({
     required this.chatBotUiState,
     required this.chatList,
+    required this.outBondUiState,
     required this.appSettings,
   });
 
@@ -19,5 +21,6 @@ class ChatBotUIOutput extends Output {
         chatBotUiState,
         chatList,
         appSettings,
+        outBondUiState,
       ];
 }

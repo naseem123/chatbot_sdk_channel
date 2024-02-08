@@ -1,5 +1,4 @@
 import 'package:clean_framework/clean_framework.dart';
-import 'package:equatable/equatable.dart';
 
 class ChatDataItemModel1 extends Equatable {
   const ChatDataItemModel1({

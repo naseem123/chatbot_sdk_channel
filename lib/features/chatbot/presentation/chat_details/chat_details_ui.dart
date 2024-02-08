@@ -68,7 +68,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
             ),
             color: const Color(0xff142542),
             child: IconButton(
-              onPressed: (){
+              onPressed: () {
                 context.pop();
               },
               icon: const Icon(
@@ -153,22 +153,21 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                   },
                 ),
               ),
-          if(chatBotUserState == ChatBotUserState.waitForInput && chatMessageType == ChatMessageType.askForInputButton)
-            ChatWaitForInputButtonWidget(
-              buttons : userInputOptions,
-              onUserInputTriggered : (blockData){
-                viewModel.onUserInputTriggered(blockData);
-              }
-            ),
-          if(viewModel.chatMessageType == ChatMessageType.enterMessage)
-          ChatUserInputEditorWidget(
-            textEditingController: messageController,
-            onMessageEntered: (message){
-              viewModel
-                  .onMessageEntered(messageController.text);
-              messageController.clear();
-            },
-          )
+              if (chatBotUserState == ChatBotUserState.waitForInput &&
+                  chatMessageType == ChatMessageType.askForInputButton)
+                ChatWaitForInputButtonWidget(
+                    buttons: userInputOptions,
+                    onUserInputTriggered: (blockData) {
+                      viewModel.onUserInputTriggered(blockData);
+                    }),
+              if (viewModel.chatMessageType == ChatMessageType.enterMessage)
+                ChatUserInputEditorWidget(
+                  textEditingController: messageController,
+                  onMessageEntered: (message) {
+                    viewModel.onMessageEntered(messageController.text);
+                    messageController.clear();
+                  },
+                )
             ],
           ),
         ),

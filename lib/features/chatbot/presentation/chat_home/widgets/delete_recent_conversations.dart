@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-void showDeleteConversationConfirmationPopup(BuildContext context) {
+void showDeleteConversationConfirmationPopup(
+    BuildContext context, VoidCallback onDeletePressed) {
   showDialog(
     context: context,
     builder: (context) => Dialog(
@@ -40,7 +41,10 @@ void showDeleteConversationConfirmationPopup(BuildContext context) {
               margin: const EdgeInsets.symmetric(horizontal: 24),
               height: 42,
               child: Button.destructive(
-                onPressed: context.pop,
+                onPressed: () {
+                  context.pop();
+                  onDeletePressed.call();
+                },
                 child: Text(
                   'Clear Conversations',
                   style: context.textTheme.captionBold.copyWith(

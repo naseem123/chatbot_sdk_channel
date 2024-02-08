@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:resources/resources.dart';
 
-class ChatUserInputEditorWidget  extends StatelessWidget {
-  const ChatUserInputEditorWidget({super.key, required this.textEditingController, required this.onMessageEntered,});
+class ChatUserInputEditorWidget extends StatelessWidget {
+  const ChatUserInputEditorWidget({
+    super.key,
+    required this.textEditingController,
+    required this.onMessageEntered,
+  });
+
   final TextEditingController textEditingController;
   final Function(String) onMessageEntered;
 
@@ -23,8 +28,7 @@ class ChatUserInputEditorWidget  extends StatelessWidget {
               controller: textEditingController,
               decoration: InputDecoration(
                 filled: true,
-                fillColor:
-                context.secondaryColor.gainsboro.withAlpha(100),
+                fillColor: context.secondaryColor.gainsboro.withAlpha(100),
                 hintText: 'Type a message',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16.0),
@@ -46,5 +50,3 @@ class ChatUserInputEditorWidget  extends StatelessWidget {
     );
   }
 }
-
-

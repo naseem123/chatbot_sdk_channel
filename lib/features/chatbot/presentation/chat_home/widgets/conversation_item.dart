@@ -9,8 +9,10 @@ class ConversationItem extends StatelessWidget {
     super.key,
     required this.chatData,
     this.onPressed,
+    required this.isLastItem,
   });
 
+  final bool isLastItem;
   final Conversation chatData;
   final VoidCallback? onPressed;
 
@@ -65,7 +67,8 @@ class ConversationItem extends StatelessWidget {
                     Text(
                       chatData.assigneeName,
                       style: context.textTheme.captionMedium.copyWith(
-                          color: const Color(0xFF4D4C4C), fontSize: 14),
+                          color: context.secondaryColor.matterhorn,
+                          fontSize: 14),
                     ),
                     if (chatIsOpen)
                       const Text('is waiting for your reply')
@@ -77,15 +80,16 @@ class ConversationItem extends StatelessWidget {
                 Text(
                   chatData.lastUpdatedTimeText,
                   style: context.textTheme.captionMedium
-                      .copyWith(color: const Color(0xFF4D4C4C)),
+                      .copyWith(color: context.secondaryColor.matterhorn),
                 )
               ],
             ),
           ),
-          const Divider(
-            color: Color(0xFFECECEC),
-            thickness: 1,
-          ),
+          if (!isLastItem)
+            const Divider(
+              color: Color(0xFFECECEC),
+              thickness: 1,
+            ),
         ],
       ),
     );

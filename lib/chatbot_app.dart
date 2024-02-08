@@ -9,6 +9,7 @@ ProvidersContext _providersContext = ProvidersContext();
 
 class ChatBotApp extends StatefulWidget {
   const ChatBotApp({super.key, this.testing = false});
+
   final bool testing;
 
   @override
