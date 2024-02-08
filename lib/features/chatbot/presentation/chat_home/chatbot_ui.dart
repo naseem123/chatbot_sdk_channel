@@ -20,7 +20,6 @@ class ChatBotUI extends UI<ChatBotViewModel> {
   @override
   Widget build(BuildContext context, ChatBotViewModel viewModel) {
     Widget child;
-    print("viewModel.uiState = ${viewModel.uiState}");
     if (viewModel.uiState == ChatBotUiState.conversationLoading) {
       return const Scaffold(
         body: Center(

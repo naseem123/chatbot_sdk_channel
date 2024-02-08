@@ -1,12 +1,12 @@
 import 'package:clean_framework/clean_framework.dart';
 
 class WebsocketSuccessResponse extends SuccessResponse {
-  final dynamic data;
+  final Map<String,dynamic> data;
 
   const WebsocketSuccessResponse({required this.data});
 
   factory WebsocketSuccessResponse.empty() {
-    return const WebsocketSuccessResponse(data: "");
+    return const WebsocketSuccessResponse(data: {});
   }
 }
 
