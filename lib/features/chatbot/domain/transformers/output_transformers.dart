@@ -15,7 +15,6 @@ class ChatBotUIOutputTransformer
   }
 }
 
-
 class ChatDetailsUIOutputTransformer
     extends OutputTransformer<ChatBotEntity, ChatDetailsUIOutput> {
   @override

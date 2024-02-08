@@ -29,8 +29,7 @@ class Block extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [element, id, label, nextStepUuid, pathId, rules];
+  List<Object?> get props => [element, id, label, nextStepUuid, pathId, rules];
 }
 
 class Rule extends Equatable {
@@ -66,23 +65,25 @@ class BlocksData extends Equatable {
 
   factory BlocksData.fromJson(Map<String, dynamic> json) {
     List<dynamic> schemaList = json['schema'];
-    List<Block> schema = schemaList.map((e) => Block(
-      element: e['element'],
-      id: e['id'],
-      label: e['label'],
-      nextStepUuid: e['next_step_uuid'],
-      pathId: e['path_id'],
-      rules: e['rules'] != null
-          ? (e['rules'] as List).map((r) {
-        return Rule(
-          action: r['action'],
-          attribute: r['attribute'],
-          target: r['target'],
-          value: (r['value'] as List).cast<String>(),
-        );
-      }).toList()
-          : null,
-    )).toList();
+    List<Block> schema = schemaList
+        .map((e) => Block(
+              element: e['element'],
+              id: e['id'],
+              label: e['label'],
+              nextStepUuid: e['next_step_uuid'],
+              pathId: e['path_id'],
+              rules: e['rules'] != null
+                  ? (e['rules'] as List).map((r) {
+                      return Rule(
+                        action: r['action'],
+                        attribute: r['attribute'],
+                        target: r['target'],
+                        value: (r['value'] as List).cast<String>(),
+                      );
+                    }).toList()
+                  : null,
+            ))
+        .toList();
 
     return BlocksData(
       schema: schema,

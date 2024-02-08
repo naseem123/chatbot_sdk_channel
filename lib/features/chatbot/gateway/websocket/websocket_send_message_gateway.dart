@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:chatbot/core/dependency/webscoket/websocket_gateway.dart';
 import 'package:chatbot/core/dependency/webscoket/websocket_requests.dart';
 import 'package:chatbot/core/dependency/webscoket/websocket_responses.dart';
@@ -33,6 +34,7 @@ class WebsocketSendMessageGateway extends WebsocketGateway<
 
 class WebsocketSendMessageGatewayOutput extends Output {
   final WebsocketMessageModel messageToSend;
+
   const WebsocketSendMessageGatewayOutput({required this.messageToSend});
 
   @override

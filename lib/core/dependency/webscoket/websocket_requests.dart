@@ -10,6 +10,7 @@ class SendMessageToSocketRequest extends WebsocketRequest {
   SendMessageToSocketRequest({
     required this.messageData,
   });
+
   final String messageData;
 }
 

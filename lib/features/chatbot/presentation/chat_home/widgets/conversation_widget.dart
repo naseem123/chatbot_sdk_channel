@@ -60,12 +60,11 @@ class ConversationWidget extends StatelessWidget {
             itemBuilder: (context, index) {
               final chatData = chatList[index];
               return ConversationItem(
-                chatData: chatData,
-                onPressed: () {
-                  context.push("/chatDetail");
-                },
-                isLastItem:chatList.length-1==index
-              );
+                  chatData: chatData,
+                  onPressed: () {
+                    context.push("/chatDetail");
+                  },
+                  isLastItem: chatList.length - 1 == index);
             },
             itemCount: chatList.length,
           ),

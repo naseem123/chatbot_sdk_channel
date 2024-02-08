@@ -28,18 +28,17 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
   ChatDetailsViewModel createViewModel(
       ChatBotUseCase useCase, ChatDetailsUIOutput output) {
     return ChatDetailsViewModel(
-      uiState: output.chatDetailsUiState,
-      chatList: output.chatDetailList,
-      onMessageEntered: (String message) {
-        useCase.sendMessage(messageData: message);
-      },
-      chatMessageType: output.chatMessageType,
-      chatBotUserState: output.chatBotUserState,
-      userInputOptions: output.userInputOptions,
-      onUserInputTriggered: (Block inputData){
-        useCase.sendUserInput(inputData: inputData);
-      }
-    );
+        uiState: output.chatDetailsUiState,
+        chatList: output.chatDetailList,
+        onMessageEntered: (String message) {
+          useCase.sendMessage(messageData: message);
+        },
+        chatMessageType: output.chatMessageType,
+        chatBotUserState: output.chatBotUserState,
+        userInputOptions: output.userInputOptions,
+        onUserInputTriggered: (Block inputData) {
+          useCase.sendUserInput(inputData: inputData);
+        });
   }
 }
 

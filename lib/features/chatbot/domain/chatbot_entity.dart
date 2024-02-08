@@ -26,7 +26,6 @@ class ChatBotEntity extends Entity {
   final String messageKey;
   final List<Block> userInputOptions;
 
-
   const ChatBotEntity({
     this.chatBotUiState = ChatBotUiState.conversationLoading,
     this.outBondUiState = OutBondUiState.outBondStateIdle,

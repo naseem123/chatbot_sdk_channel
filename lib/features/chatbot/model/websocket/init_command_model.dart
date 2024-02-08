@@ -31,6 +31,7 @@ class Identifier extends Equatable {
   final String encData;
   final String? sessionValue;
   final String userData;
+
   const Identifier({
     required this.app,
     required this.channel,
@@ -112,51 +113,48 @@ class Data extends Equatable {
   List<Object?> get props => [conversation, trigger, action];
 
   Map<String, dynamic> toJson() {
+    Map<String, dynamic> data = {'action': action};
 
-    Map<String,dynamic> data= {
-      'action': action
-    };
-
-    if(trigger != null){
+    if (trigger != null) {
       data['trigger'] = trigger;
     }
 
-    if(conversation != null){
+    if (conversation != null) {
       data['conversation'] = conversation;
     }
-    if(title != null){
+    if (title != null) {
       data['title'] = title;
     }
-    if(url != null){
+    if (url != null) {
       data['url'] = url;
     }
-    if(browserVersion != null){
+    if (browserVersion != null) {
       data['browser_version'] = browserVersion;
     }
-    if(browserName != null){
+    if (browserName != null) {
       data['browser_name'] = browserName;
     }
-    if(osVersion != null){
+    if (osVersion != null) {
       data['os_version'] = osVersion;
     }
-    if(os != null){
+    if (os != null) {
       data['os'] = os;
     }
 
-    if(conversationKey != null){
+    if (conversationKey != null) {
       data['conversation_key'] = conversationKey;
     }
-    if(messageKey != null){
+    if (messageKey != null) {
       data['message_key'] = messageKey;
     }
-    if(pathId != null){
+    if (pathId != null) {
       data['path_id'] = pathId;
     }
 
-    if(step != null){
+    if (step != null) {
       data['step'] = step;
     }
-    if(reply!= null){
+    if (reply != null) {
       data['reply'] = reply!.toJson();
     }
     return data;

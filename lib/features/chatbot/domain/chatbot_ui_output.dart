@@ -17,8 +17,7 @@ class ChatBotUIOutput extends Output {
   });
 
   @override
-  List<Object?> get props =>
-      [
+  List<Object?> get props => [
         chatBotUiState,
         chatList,
         appSettings,

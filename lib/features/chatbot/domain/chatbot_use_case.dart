@@ -113,17 +113,17 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
 
     request(StartConversationGatewayOutput(),
         onSuccess: (StartConversationSuccessInput input) {
-          entity =
-              entity.merge(chatTriggerId: input.data.app.newConversationBots.id);
-          initWebsocketCommand(chatTriggerId : state.chatTriggerId);
-          return entity.merge(
-            chatDetailsUiState: ChatDetailsUiState.success,
-          );
-        }, onFailure: (_) {
-          return entity.merge(
-            chatDetailsUiState: ChatDetailsUiState.failure,
-          );
-        });
+      entity =
+          entity.merge(chatTriggerId: input.data.app.newConversationBots.id);
+      initWebsocketCommand(chatTriggerId: state.chatTriggerId);
+      return entity.merge(
+        chatDetailsUiState: ChatDetailsUiState.success,
+      );
+    }, onFailure: (_) {
+      return entity.merge(
+        chatDetailsUiState: ChatDetailsUiState.failure,
+      );
+    });
   }
 
   // region realtime data requests
@@ -136,24 +136,24 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
 
     request(WebsocketConnectGatewayOutput(),
         onSuccess: (WebsocketConnectSuccessInput input) {
-          listenForMessages();
-          return entity.merge(
-            chatDetailsUiState: ChatDetailsUiState.success,
-          );
-        }, onFailure: (_) {
-          return entity.merge(
-            chatDetailsUiState: ChatDetailsUiState.failure,
-          );
-        });
+      listenForMessages();
+      return entity.merge(
+        chatDetailsUiState: ChatDetailsUiState.success,
+      );
+    }, onFailure: (_) {
+      return entity.merge(
+        chatDetailsUiState: ChatDetailsUiState.failure,
+      );
+    });
   }
 
   void listenForMessages() {
     request(WebsocketMessageGatewayOutput(),
         onSuccess: (WebsocketMessageSuccessInput input) {
-            return entity;
-        }, onFailure: (_) {
-          return entity;
-        });
+      return entity;
+    }, onFailure: (_) {
+      return entity;
+    });
     Future.delayed(const Duration(seconds: 2), () {
       subscribeToPresenceChannel();
       subscribeToMessengerChannel();
@@ -165,8 +165,8 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         WebsocketSendMessageGatewayOutput(
             messageToSend: getMessageData(messageData)),
         onSuccess: (WebsocketSendMessageSuccessInput input) {
-          return entity;
-        }, onFailure: (_) {
+      return entity;
+    }, onFailure: (_) {
       return entity;
     });
   }
@@ -174,22 +174,22 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
   void disconnectMessageChannel() {
     request(WebsocketDisconnectGatewayOutput(),
         onSuccess: (WebsocketDisconnectSuccessInput input) {
-          return entity;
-        }, onFailure: (_) {
-          return entity;
-        });
+      return entity;
+    }, onFailure: (_) {
+      return entity;
+    });
   }
 
   void initWebsocketCommand({required String chatTriggerId}) {
     request(
         WebsocketInitCommandGatewayOutput(
-            messageToSend: getInitWebsocketCommandData(chatTriggerId:chatTriggerId)),
+            messageToSend:
+                getInitWebsocketCommandData(chatTriggerId: chatTriggerId)),
         onSuccess: (WebsocketSendMessageSuccessInput input) {
-          return entity;
-        }, onFailure: (_) {
+      return entity;
+    }, onFailure: (_) {
       return entity;
     });
-
   }
 
   //If there is no previous conversations, then start a trigger
@@ -198,36 +198,36 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         WebsocketInitCommandGatewayOutput(
             messageToSend: getInitSendMessageChannel()),
         onSuccess: (WebsocketSendMessageSuccessInput input) {
-          sendTriggerInitiateMessage();
-          return entity;
-        }, onFailure: (_) {
+      sendTriggerInitiateMessage();
+      return entity;
+    }, onFailure: (_) {
       return entity;
     });
   }
 
-  void sendTriggerInitiateMessage(){
+  void sendTriggerInitiateMessage() {
     request(
         WebsocketInitCommandGatewayOutput(
             messageToSend: getEngageAppUserChannel()),
         onSuccess: (WebsocketSendMessageSuccessInput input) {
-          return entity;
-        }, onFailure: (_) {
+      return entity;
+    }, onFailure: (_) {
       return entity;
     });
   }
 
-
-  InitCommandModel getInitWebsocketCommandData({required String chatTriggerId}) {
+  InitCommandModel getInitWebsocketCommandData(
+      {required String chatTriggerId}) {
     final sessionId = preference.get<String>(PreferenceKey.sessionId, "");
     return InitCommandModel(
       command: socketMessage,
       identifier: jsonEncode(Identifier(
-          app: providersContext().read(envReaderProvider).getAppID(),
-          channel: socketMessageChannel,
-          sessionId: sessionId ?? "",
-          encData: "{}",
-          sessionValue: null,
-          userData: "{}")
+              app: providersContext().read(envReaderProvider).getAppID(),
+              channel: socketMessageChannel,
+              sessionId: sessionId ?? "",
+              encData: "{}",
+              sessionValue: null,
+              userData: "{}")
           .toJson()),
       data: jsonEncode(Data(
         action: socketActionTrigger,
@@ -242,29 +242,28 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     return InitCommandModel(
       command: socketSubscribe,
       identifier: jsonEncode(Identifier(
-          app: providersContext().read(envReaderProvider).getAppID(),
-          channel: socketPresenceChannel,
-          sessionId: sessionId ?? "",
-          encData: "{}",
-          sessionValue: null,
-          userData: "{}")
+              app: providersContext().read(envReaderProvider).getAppID(),
+              channel: socketPresenceChannel,
+              sessionId: sessionId ?? "",
+              encData: "{}",
+              sessionValue: null,
+              userData: "{}")
           .toJson()),
       data: null,
     );
   }
-
 
   InitCommandModel getInitSubscribeMessengerChannel() {
     final sessionId = preference.get<String>(PreferenceKey.sessionId, "");
     return InitCommandModel(
       command: socketSubscribe,
       identifier: jsonEncode(Identifier(
-          app: providersContext().read(envReaderProvider).getAppID(),
-          channel: socketMessageChannel,
-          sessionId: sessionId ?? "",
-          encData: "{}",
-          sessionValue: null,
-          userData: "{}")
+              app: providersContext().read(envReaderProvider).getAppID(),
+              channel: socketMessageChannel,
+              sessionId: sessionId ?? "",
+              encData: "{}",
+              sessionValue: null,
+              userData: "{}")
           .toJson()),
       data: null,
     );
@@ -275,12 +274,12 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     return InitCommandModel(
       command: socketMessage,
       identifier: jsonEncode(Identifier(
-          app: providersContext().read(envReaderProvider).getAppID(),
-          channel: socketMessageChannel,
-          sessionId: sessionId ?? "",
-          encData: "{}",
-          sessionValue: null,
-          userData: "{}")
+              app: providersContext().read(envReaderProvider).getAppID(),
+              channel: socketMessageChannel,
+              sessionId: sessionId ?? "",
+              encData: "{}",
+              sessionValue: null,
+              userData: "{}")
           .toJson()),
       data: jsonEncode(const Data(
         action: socketActionSendMessage,
@@ -296,18 +295,17 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     );
   }
 
-
   InitCommandModel getInitUserBannersChannel() {
     final sessionId = preference.get<String>(PreferenceKey.sessionId, "");
     return InitCommandModel(
       command: socketMessage,
       identifier: jsonEncode(Identifier(
-          app: providersContext().read(envReaderProvider).getAppID(),
-          channel: socketMessageChannel,
-          sessionId: sessionId ?? "",
-          encData: "{}",
-          sessionValue: null,
-          userData: "{}")
+              app: providersContext().read(envReaderProvider).getAppID(),
+              channel: socketMessageChannel,
+              sessionId: sessionId ?? "",
+              encData: "{}",
+              sessionValue: null,
+              userData: "{}")
           .toJson()),
       data: jsonEncode(const Data(
         action: socketGetBannersForUser,
@@ -317,18 +315,17 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     );
   }
 
-
   InitCommandModel getEngageAppUserChannel() {
     final sessionId = preference.get<String>(PreferenceKey.sessionId, "");
     return InitCommandModel(
       command: socketMessage,
       identifier: jsonEncode(Identifier(
-          app: providersContext().read(envReaderProvider).getAppID(),
-          channel: socketMessageChannel,
-          sessionId: sessionId ?? "",
-          encData: "{}",
-          sessionValue: null,
-          userData: "{}")
+              app: providersContext().read(envReaderProvider).getAppID(),
+              channel: socketMessageChannel,
+              sessionId: sessionId ?? "",
+              encData: "{}",
+              sessionValue: null,
+              userData: "{}")
           .toJson()),
       data: jsonEncode(const Data(
         action: socketEngageAppUser,
@@ -338,14 +335,13 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     );
   }
 
-
   void subscribeToPresenceChannel() {
     request(
         WebsocketInitCommandGatewayOutput(
             messageToSend: getInitSubscribePresenceChannel()),
         onSuccess: (WebsocketSendMessageSuccessInput input) {
-          return entity;
-        }, onFailure: (_) {
+      return entity;
+    }, onFailure: (_) {
       return entity;
     });
   }
@@ -355,37 +351,40 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         WebsocketInitCommandGatewayOutput(
             messageToSend: getInitSubscribeMessengerChannel()),
         onSuccess: (WebsocketSendMessageSuccessInput input) {
-          return entity;
-        }, onFailure: (_) {
+      return entity;
+    }, onFailure: (_) {
       return entity;
     });
   }
 
-  void getNextConversationMessage({required String conversationKey, required String messageKey}) {
-    Future.delayed(const Duration(milliseconds: 500), (){
+  void getNextConversationMessage(
+      {required String conversationKey, required String messageKey}) {
+    Future.delayed(const Duration(milliseconds: 500), () {
       request(
           WebsocketInitCommandGatewayOutput(
-              messageToSend: getNextConversationCommandData(conversationKey: conversationKey, messageKey: messageKey,)),
-          onSuccess: (WebsocketSendMessageSuccessInput input) {
-            return entity;
-          }, onFailure: (_) {
+              messageToSend: getNextConversationCommandData(
+            conversationKey: conversationKey,
+            messageKey: messageKey,
+          )), onSuccess: (WebsocketSendMessageSuccessInput input) {
+        return entity;
+      }, onFailure: (_) {
         return entity;
       });
     });
-
   }
 
-  InitCommandModel getNextConversationCommandData({required String conversationKey, required String messageKey}) {
+  InitCommandModel getNextConversationCommandData(
+      {required String conversationKey, required String messageKey}) {
     final sessionId = preference.get<String>(PreferenceKey.sessionId, "");
     return InitCommandModel(
       command: socketMessage,
       identifier: jsonEncode(Identifier(
-          app: providersContext().read(envReaderProvider).getAppID(),
-          channel: socketMessageChannel,
-          sessionId: sessionId ?? "",
-          encData: "{}",
-          sessionValue: null,
-          userData: "{}")
+              app: providersContext().read(envReaderProvider).getAppID(),
+              channel: socketMessageChannel,
+              sessionId: sessionId ?? "",
+              encData: "{}",
+              sessionValue: null,
+              userData: "{}")
           .toJson()),
       data: jsonEncode(Data(
         action: socketActionReceiveConversation,
@@ -409,8 +408,8 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         WebsocketInitCommandGatewayOutput(
             messageToSend: setUserInputCommand(inputData)),
         onSuccess: (WebsocketSendMessageSuccessInput input) {
-          return entity;
-        }, onFailure: (_) {
+      return entity;
+    }, onFailure: (_) {
       return entity;
     });
   }
@@ -420,12 +419,12 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     return InitCommandModel(
       command: socketMessage,
       identifier: jsonEncode(Identifier(
-          app: providersContext().read(envReaderProvider).getAppID(),
-          channel: socketMessageChannel,
-          sessionId: sessionId ?? "",
-          encData: "{}",
-          sessionValue: null,
-          userData: "{}")
+              app: providersContext().read(envReaderProvider).getAppID(),
+              channel: socketMessageChannel,
+              sessionId: sessionId ?? "",
+              encData: "{}",
+              sessionValue: null,
+              userData: "{}")
           .toJson()),
       data: jsonEncode(Data(
         action: socketActionTriggerStep,
@@ -439,10 +438,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       ).toJson()),
     );
   }
-
 }
-
-
 
 WebsocketMessageModel getMessageData(String messageText) {
   return WebsocketMessageModel.fromJson({
@@ -456,11 +452,9 @@ WebsocketMessageModel getMessageData(String messageText) {
       "label": "wait_for_reply",
       "html_content": messageText,
       "serialized_content":
-      "{\"blocks\":[{\"key\":\"a3ggs\",\"text\":$messageText,\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "{\"blocks\":[{\"key\":\"a3ggs\",\"text\":$messageText,\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
       "text_content": messageText
     },
     "action": "receive_conversation_part"
   });
 }
-
-

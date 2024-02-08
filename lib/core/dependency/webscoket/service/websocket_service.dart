@@ -41,7 +41,10 @@ class WebsocketService {
         }
         log(event);
         _MessageLogger(endpoint: _webSocketURL, message: message);
-        if (message['type'] != "ping" && message['type'] != "welcome" && message['type'] != "confirm_subscription" && message['message']['type'] != "conversations:unreads") {
+        if (message['type'] != "ping" &&
+            message['type'] != "welcome" &&
+            message['type'] != "confirm_subscription" &&
+            message['message']['type'] != "conversations:unreads") {
           messageController.add(message['message']);
         }
       },

@@ -58,7 +58,6 @@ class RecentConversationListWidget extends StatelessWidget {
               itemCount: chatList.length,
             ),
           ),
-
           InkWell(
             child: Text(
               'view all conversations',
