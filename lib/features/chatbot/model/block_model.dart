@@ -65,7 +65,7 @@ class BlocksData extends Equatable {
   List<Object?> get props => [schema, type, waitForInput];
 
   factory BlocksData.fromJson(Map<String, dynamic> json) {
-    List<dynamic> schemaList = json['blocks']['schema'];
+    List<dynamic> schemaList = json['schema'];
     List<Block> schema = schemaList.map((e) => Block(
       element: e['element'],
       id: e['id'],
@@ -86,8 +86,8 @@ class BlocksData extends Equatable {
 
     return BlocksData(
       schema: schema,
-      type: json['blocks']['type'],
-      waitForInput: json['blocks']['wait_for_input'],
+      type: json['type'],
+      waitForInput: json['wait_for_input'],
     );
   }
 }

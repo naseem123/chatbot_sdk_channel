@@ -54,6 +54,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
     }
 
     return Scaffold(
+      backgroundColor: const Color(0xfff1f1f1),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(
           70,
@@ -131,8 +132,6 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.only(
-            left: 16.0,
-            right: 16.0,
             top: 8.0,
             bottom: (viewInsets.bottom > 0) ? 8.0 : 0.0,
           ),
@@ -140,6 +139,12 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
             children: [
               Expanded(
                 child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const ClampingScrollPhysics(),
+                  padding: const EdgeInsets.only(
+                    left: 16.0,
+                    right: 16.0,
+                  ),
                   itemCount: messages.length,
                   controller: _scrollController,
                   itemBuilder: (context, index) {

@@ -9,13 +9,36 @@ class ChatWaitForInputButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemBuilder: (BuildContext context, int index){
-      final button = buttons[index];
-      return Container(
-        padding: const EdgeInsets.all(12),
-        child: Text(button.label,),
-      );
-    });
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.only(top: 10,bottom: 10),
+      child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: buttons.length,
+          itemBuilder: (BuildContext context, int index){
+        final button = buttons[index];
+        return Padding(
+          padding: const EdgeInsets.only(bottom:15.0,right: 15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              InkWell(
+                onTap: (){
+                  onUserInputTriggered(button);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(5)
+                  ),
+                  padding: const EdgeInsets.all(12),
+                  child: Text(button.label,),
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
+    );
   }
 }

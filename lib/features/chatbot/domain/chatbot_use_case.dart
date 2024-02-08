@@ -383,9 +383,16 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
   }
 
   void sendUserInput({required Block inputData}) {
+    final messageuiData = MessageUiModel(
+      message: "You replied : ${inputData.label}",
+      messageId: DateTime.now().toString(),
+    );
+    entity = entity.merge(
+        chatBotUserState: ChatBotUserState.idle,
+        chatDetailList: [...entity.chatDetailList, messageuiData]);
     request(
         WebsocketInitCommandGatewayOutput(
-            messageToSend: setUserInputCommand()),
+            messageToSend: setUserInputCommand(inputData)),
         onSuccess: (WebsocketSendMessageSuccessInput input) {
           return entity;
         }, onFailure: (_) {
@@ -393,7 +400,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     });
   }
 
-  InitCommandModel setUserInputCommand() {
+  InitCommandModel setUserInputCommand(Block inputData) {
     final sessionId = preference.get<String>(PreferenceKey.sessionId, "");
     return InitCommandModel(
       command: socketMessage,
@@ -411,6 +418,9 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         trigger: entity.chatTriggerId,
         conversationKey: entity.conversationKey,
         messageKey: entity.messageKey,
+        reply: inputData,
+        pathId: inputData.pathId,
+        step: inputData.nextStepUuid,
       ).toJson()),
     );
   }
