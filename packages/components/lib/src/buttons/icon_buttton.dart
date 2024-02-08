@@ -16,6 +16,7 @@ class IconButtons extends StatelessWidget {
         path,
         height: height,
         width: width,
+        package: "resources",
         color: Theme.of(context).appBarTheme.iconTheme!.color,
       ),
       onPressed: onPressed.call,

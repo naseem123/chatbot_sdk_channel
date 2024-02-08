@@ -68,7 +68,6 @@ class ChatBotEntity extends Entity {
       chatMessageType: chatMessageType ?? this.chatMessageType,
       userInputOptions: userInputOptions ?? this.userInputOptions,
       outBondUiState: outBondUiState ?? this.outBondUiState,
-      userInputOptions: userInputOptions ?? this.userInputOptions,
     );
   }
 
@@ -84,5 +83,6 @@ class ChatBotEntity extends Entity {
         chatTriggerId,
         chatBotUserState,
         chatMessageType,
+        userInputOptions,
       ];
 }

@@ -53,11 +53,13 @@ class BlocksData extends Equatable {
   final List<Block> schema;
   final String type;
   final bool waitForInput;
+  final String? label;
 
   BlocksData({
     required this.schema,
     required this.type,
     required this.waitForInput,
+    this.label,
   });
 
   @override
@@ -67,11 +69,11 @@ class BlocksData extends Equatable {
     List<dynamic> schemaList = json['schema'];
     List<Block> schema = schemaList
         .map((e) => Block(
-              element: e['element'],
-              id: e['id'],
-              label: e['label'],
-              nextStepUuid: e['next_step_uuid'],
-              pathId: e['path_id'],
+              element: e['element'] ?? "",
+              id: e['id']?? "",
+              label: e['label'] ?? "",
+              nextStepUuid: e['next_step_uuid'] ?? "",
+              pathId: e['path_id'] ?? "",
               rules: e['rules'] != null
                   ? (e['rules'] as List).map((r) {
                       return Rule(
@@ -88,7 +90,8 @@ class BlocksData extends Equatable {
     return BlocksData(
       schema: schema,
       type: json['type'],
-      waitForInput: json['wait_for_input'],
+      waitForInput: json['wait_for_input'] ?? true,
+        label: json['label'] ?? ""
     );
   }
 }
