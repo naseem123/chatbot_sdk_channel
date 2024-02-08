@@ -35,6 +35,6 @@ class WebsocketMessageGatewayOutput extends Output {
 }
 
 class WebsocketMessageSuccessInput extends SuccessInput {
-  final Map<String,dynamic> data;
+  final Map<String, dynamic> data;
   WebsocketMessageSuccessInput({required this.data});
 }

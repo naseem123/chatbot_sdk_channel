@@ -32,24 +32,23 @@ class MessageItemWidget extends StatelessWidget {
 */
     Widget messageWidget;
 
-    if(message.message.contains("blocks")) {
+    if (message.message.contains("blocks")) {
       messageWidget = DraftTextView.json(
         jsonDecode(message.message),
         padding: const EdgeInsets.symmetric(horizontal: 16),
         defaultStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-          color: context.secondaryColor.mostlyBlack,
-        ),
-        onLinkTab: (link){
+              color: context.secondaryColor.mostlyBlack,
+            ),
+        onLinkTab: (link) {
           _launchUrl(link);
         },
       ); //
-    }
-    else{
+    } else {
       messageWidget = Text(
         message.message,
         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-          color: context.secondaryColor.mostlyBlack,
-        ),
+              color: context.secondaryColor.mostlyBlack,
+            ),
       );
     }
 

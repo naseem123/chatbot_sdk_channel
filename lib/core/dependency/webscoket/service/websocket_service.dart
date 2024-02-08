@@ -14,7 +14,7 @@ class WebsocketService {
   final String _webSocketURL;
   late IOWebSocketChannel channel;
   late StreamController<Map<String, dynamic>> messageController;
-
+  late Map<String, String> _headers;
   void initializeControllers() {
     messageController = StreamController<Map<String, dynamic>>.broadcast();
   }
@@ -24,6 +24,7 @@ class WebsocketService {
   }) {
     debugPrint('Connecting to the server...');
     var url = transformURL(headers: headers);
+    _headers = headers;
     debugPrint(url);
     channel = IOWebSocketChannel.connect(
       url,
@@ -41,7 +42,10 @@ class WebsocketService {
         }
         log(event);
         _MessageLogger(endpoint: _webSocketURL, message: message);
-        if (message['type'] != "ping" && message['type'] != "welcome" && message['type'] != "confirm_subscription" && message['message']['type'] != "conversations:unreads") {
+        if (message['type'] != "ping" &&
+            message['type'] != "welcome" &&
+            message['type'] != "confirm_subscription" &&
+            message['message']['type'] != "conversations:unreads") {
           messageController.add(message['message']);
         }
       },
@@ -61,6 +65,7 @@ class WebsocketService {
   void send(String data) {
     if (channel.closeCode != null) {
       debugPrint('Not connected');
+      connect(headers: _headers);
       return;
     }
     log("SENDING MESSAGE");

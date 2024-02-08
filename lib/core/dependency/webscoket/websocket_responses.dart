@@ -1,7 +1,7 @@
 import 'package:clean_framework/clean_framework.dart';
 
 class WebsocketSuccessResponse extends SuccessResponse {
-  final Map<String,dynamic> data;
+  final Map<String, dynamic> data;
 
   const WebsocketSuccessResponse({required this.data});
 

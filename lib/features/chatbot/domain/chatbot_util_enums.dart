@@ -1,10 +1,9 @@
-enum ChatBotUserState{
+enum ChatBotUserState {
   idle,
   waitForInput,
 }
 
-
-enum ChatMessageType{
+enum ChatMessageType {
   idle,
   askForInputButton,
   enterMessage,

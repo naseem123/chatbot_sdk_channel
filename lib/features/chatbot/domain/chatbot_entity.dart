@@ -18,13 +18,12 @@ class ChatBotEntity extends Entity {
   final List<MessageUiModel> chatDetailList;
   final ChatBotUserState chatBotUserState;
   final ChatMessageType chatMessageType;
-  
+
   //Chat conversation fields
   final String chatTriggerId;
   final String conversationKey;
   final String messageKey;
   final List<Block> userInputOptions;
-
 
   const ChatBotEntity({
     this.chatBotUiState = ChatBotUiState.conversationLoading,
@@ -64,7 +63,7 @@ class ChatBotEntity extends Entity {
       messageKey: messageKey ?? this.messageKey,
       chatBotUserState: chatBotUserState ?? this.chatBotUserState,
       chatMessageType: chatMessageType ?? this.chatMessageType,
-      userInputOptions : userInputOptions ?? this.userInputOptions,
+      userInputOptions: userInputOptions ?? this.userInputOptions,
     );
   }
 

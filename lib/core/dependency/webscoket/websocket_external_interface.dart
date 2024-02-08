@@ -85,7 +85,7 @@ class WebsocketExternalInterface
       'app': _appId,
       'session-id': sessionId,
       'origin': _origin,
-      'user_data' : "e30=",
+      'user_data': "e30=",
       'content-type': "application/json"
     };
   }
