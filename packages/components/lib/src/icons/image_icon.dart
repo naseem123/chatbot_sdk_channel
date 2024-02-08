@@ -13,6 +13,7 @@ class ImageIcons extends StatelessWidget {
       path,
       height: height,
       width: width,
+      package: 'resources',
     );
   }
 }

@@ -7,7 +7,6 @@ class ChatUserInputEditorWidget extends StatelessWidget {
     required this.textEditingController,
     required this.onMessageEntered,
   });
-
   final TextEditingController textEditingController;
   final Function(String) onMessageEntered;
 

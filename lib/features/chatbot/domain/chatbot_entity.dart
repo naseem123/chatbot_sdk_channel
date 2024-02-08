@@ -83,5 +83,6 @@ class ChatBotEntity extends Entity {
         chatTriggerId,
         chatBotUserState,
         chatMessageType,
+        userInputOptions,
       ];
 }

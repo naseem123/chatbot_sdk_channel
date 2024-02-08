@@ -33,15 +33,18 @@ class MessageItemWidget extends StatelessWidget {
     Widget messageWidget;
 
     if (message.message.contains("blocks")) {
-      messageWidget = DraftTextView.json(
-        jsonDecode(message.message),
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        defaultStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-              color: context.secondaryColor.mostlyBlack,
-            ),
-        onLinkTab: (link) {
-          _launchUrl(link);
-        },
+      messageWidget = Container(
+        width: MediaQuery.of(context).size.width-30,
+        child: DraftTextView.json(
+          jsonDecode(message.message),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          defaultStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: context.secondaryColor.mostlyBlack,
+              ),
+          onLinkTab: (link) {
+            _launchUrl(link);
+          },
+        ),
       ); //
     } else {
       messageWidget = Text(

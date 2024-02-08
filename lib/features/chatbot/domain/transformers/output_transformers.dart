@@ -24,7 +24,7 @@ class ChatDetailsUIOutputTransformer
       chatDetailList: entity.chatDetailList,
       chatBotUserState: entity.chatBotUserState,
       chatMessageType: entity.chatMessageType,
-      userInputOptions: entity.userInputOptions,
+      userInputOptions: entity.userInputOptions.where((element) => element.label.isNotEmpty).toList(),
     );
   }
 }
