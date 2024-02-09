@@ -16,12 +16,14 @@ class ChatDetailsViewModel extends ViewModel {
     required this.onUserInputTriggered,
     required this.colorSecondary,
     required this.colorPrimary,
-
+    required this.backButtonPressed,
   });
 
   final ChatDetailsUiState uiState;
   final List<MessageUiModel> chatList;
   final Function(String message) onMessageEntered;
+  final VoidCallback backButtonPressed;
+
   final Color colorSecondary;
   final Color colorPrimary;
 
@@ -38,6 +40,7 @@ class ChatDetailsViewModel extends ViewModel {
         chatMessageType,
         userInputOptions,
         colorSecondary,
-          colorPrimary,
+        colorPrimary,
+        backButtonPressed,
       ];
 }

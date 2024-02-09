@@ -35,7 +35,7 @@ class ConversationAppBar extends StatelessWidget
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(right:10.0),
+                padding: const EdgeInsets.only(right: 10.0),
                 child: IconButton(
                   onPressed: () {
                     //TODO(naseem) : need to exit from the bot once SDK setup is complete

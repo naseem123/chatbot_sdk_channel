@@ -30,6 +30,6 @@ class ChatDetailsUIOutput extends Output {
         chatBotUserState,
         chatMessageType,
         userInputOptions,
-    appSettings,
+        appSettings,
       ];
 }

@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 
 class ChatWaitForInputButtonWidget extends StatelessWidget {
   const ChatWaitForInputButtonWidget(
-      {super.key, required this.buttons, required this.onUserInputTriggered, required this.color});
+      {super.key,
+      required this.buttons,
+      required this.onUserInputTriggered,
+      required this.color});
 
   final Function(Block) onUserInputTriggered;
   final List<Block> buttons;
@@ -30,14 +33,11 @@ class ChatWaitForInputButtonWidget extends StatelessWidget {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                          color: color,
-                          borderRadius: BorderRadius.circular(5)),
+                          color: color, borderRadius: BorderRadius.circular(5)),
                       padding: const EdgeInsets.all(12),
                       child: Text(
                         button.label,
-                        style: const TextStyle(
-                          color: Colors.white
-                        ),
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ),

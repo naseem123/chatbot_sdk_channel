@@ -36,13 +36,20 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: navigatorKey,
         path: '/chatDetail',
         name: chatDetail,
-        pageBuilder: (context, state) => NoTransitionPage(
-          key: state.pageKey,
-          child: ChatDetailsUI(
+        pageBuilder: (context, state) {
+          var conversationId = '';
+          if (state.extra != null) {
+            Map<String, String> args = state.extra as Map<String, String>;
+            conversationId = args['conversationId']!;
+          }
+          return NoTransitionPage(
             key: state.pageKey,
-            conversationID: state.params['conversationId'] ?? "",
-          ),
-        ),
+            child: ChatDetailsUI(
+              key: state.pageKey,
+              conversationID: conversationId,
+            ),
+          );
+        },
       )
     ],
     errorBuilder: (context, state) => _PageNotFound(

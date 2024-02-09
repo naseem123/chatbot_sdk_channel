@@ -22,6 +22,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
 
   @override
   ChatDetailsPresenter create(PresenterBuilder<ChatDetailsViewModel> builder) {
+    print("conversationID $conversationID");
     return ChatDetailsPresenter(
       builder: builder,
       conversationID: conversationID,
@@ -69,6 +70,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
             color: viewModel.colorPrimary,
             child: IconButton(
               onPressed: () {
+                viewModel.backButtonPressed();
                 context.pop();
               },
               icon: const Icon(
@@ -109,17 +111,6 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                     ),
                   ),
                 ),
-                /* Expanded(
-                  child: Container(
-                    alignment: Alignment.topCenter,
-                    padding: const EdgeInsets.only(right: 0),
-                    child: const Icon(
-                      Icons.close,
-                      size: 50,
-                      color: Colors.white,
-                    ),
-                  ),
-                )*/
               ],
             ),
           ),

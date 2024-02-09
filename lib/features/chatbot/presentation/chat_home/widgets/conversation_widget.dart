@@ -62,7 +62,8 @@ class ConversationWidget extends StatelessWidget {
               return ConversationItem(
                   chatData: chatData,
                   onPressed: () {
-                    context.push("/chatDetail");
+                    context.push("/chatDetail",
+                        extra: {'conversationId': chatData.key});
                   },
                   isLastItem: chatList.length - 1 == index);
             },

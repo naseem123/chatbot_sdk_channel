@@ -21,6 +21,8 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
   void onLayoutReady(BuildContext context, ChatBotUseCase useCase) {
     if (conversationID.isEmpty) {
       useCase.initializeNewConversation();
+    } else {
+      useCase.loadChatHistory(conversationID: conversationID);
     }
   }
 
@@ -39,11 +41,13 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
         onUserInputTriggered: (Block inputData) {
           useCase.sendUserInput(inputData: inputData);
         },
-      colorSecondary:
-      output.appSettings.app.customizationColors.secondary.toColor,
-      colorPrimary:
-      output.appSettings.app.customizationColors.primary.toColor,
-    );
+        colorSecondary:
+            output.appSettings.app.customizationColors.secondary.toColor,
+        colorPrimary:
+            output.appSettings.app.customizationColors.primary.toColor,
+        backButtonPressed: () {
+          useCase.loadRecentConversationList();
+        });
   }
 }
 
