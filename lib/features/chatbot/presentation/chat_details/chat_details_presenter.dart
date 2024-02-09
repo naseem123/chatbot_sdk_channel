@@ -41,6 +41,8 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
         },
       colorSecondary:
       output.appSettings.app.customizationColors.secondary.toColor,
+      colorPrimary:
+      output.appSettings.app.customizationColors.primary.toColor,
     );
   }
 }

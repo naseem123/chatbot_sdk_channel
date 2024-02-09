@@ -60,13 +60,13 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
           70,
         ),
         child: AppBar(
-          backgroundColor: const Color(0xff142542),
+          backgroundColor: viewModel.colorPrimary,
           leading: Container(
             padding: const EdgeInsets.only(
               left: 20,
               top: 10,
             ),
-            color: const Color(0xff142542),
+            color: viewModel.colorPrimary,
             child: IconButton(
               onPressed: () {
                 context.pop();

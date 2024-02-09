@@ -34,15 +34,18 @@ class ConversationAppBar extends StatelessWidget
                   fontSize: 22,
                 ),
               ),
-              IconButton(
-                onPressed: () {
-                  //TODO(naseem) : need to exit from the bot once SDK setup is complete
-                  // Navigator.of(context).pop();
-                },
-                icon: const Icon(
-                  Icons.close,
-                  size: 38,
-                  color: Colors.white,
+              Padding(
+                padding: const EdgeInsets.only(right:10.0),
+                child: IconButton(
+                  onPressed: () {
+                    //TODO(naseem) : need to exit from the bot once SDK setup is complete
+                    // Navigator.of(context).pop();
+                  },
+                  icon: const Icon(
+                    Icons.close,
+                    size: 38,
+                    color: Colors.white,
+                  ),
                 ),
               )
             ],
