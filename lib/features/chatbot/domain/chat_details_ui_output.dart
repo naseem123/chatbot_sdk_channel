@@ -1,4 +1,5 @@
 import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
+import 'package:chatbot/features/chatbot/model/app_settings_model.dart';
 import 'package:chatbot/features/chatbot/model/block_model.dart';
 import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
@@ -11,10 +12,12 @@ class ChatDetailsUIOutput extends Output {
     required this.chatBotUserState,
     required this.chatMessageType,
     required this.userInputOptions,
+    required this.appSettings,
   });
 
   final ChatDetailsUiState chatDetailsUiState;
   final List<MessageUiModel> chatDetailList;
+  final AppSettings appSettings;
 
   final ChatBotUserState chatBotUserState;
   final ChatMessageType chatMessageType;
@@ -27,5 +30,6 @@ class ChatDetailsUIOutput extends Output {
         chatBotUserState,
         chatMessageType,
         userInputOptions,
+    appSettings,
       ];
 }

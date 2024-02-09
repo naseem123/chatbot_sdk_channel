@@ -27,6 +27,7 @@ class ChatDetailsUIOutputTransformer
       userInputOptions: entity.userInputOptions
           .where((element) => element.label.isNotEmpty)
           .toList(),
+      appSettings: entity.appSettings,
     );
   }
 }

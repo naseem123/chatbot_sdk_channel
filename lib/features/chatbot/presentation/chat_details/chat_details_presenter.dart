@@ -1,3 +1,4 @@
+import 'package:chatbot/core/extensions/string_extensions.dart';
 import 'package:chatbot/features/chatbot/domain/chat_details_ui_output.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_use_case.dart';
 import 'package:chatbot/features/chatbot/model/block_model.dart';
@@ -37,7 +38,10 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
         userInputOptions: output.userInputOptions,
         onUserInputTriggered: (Block inputData) {
           useCase.sendUserInput(inputData: inputData);
-        });
+        },
+      colorSecondary:
+      output.appSettings.app.customizationColors.secondary.toColor,
+    );
   }
 }
 

@@ -157,6 +157,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                   chatMessageType == ChatMessageType.askForInputButton)
                 ChatWaitForInputButtonWidget(
                     buttons: userInputOptions,
+                    color: viewModel.colorSecondary,
                     onUserInputTriggered: (blockData) {
                       viewModel.onUserInputTriggered(blockData);
                     }),
