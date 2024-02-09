@@ -48,7 +48,7 @@ class ChatBotPresenter
 
     if (state == ChatBotUiState.conversationSuccess &&
         output.chatList.isEmpty) {
-      Future.delayed(const Duration(seconds: 3)).then((value) {
+      Future.delayed(const Duration(seconds: 4)).then((value) {
         context.push("/chatDetail");
       });
     }

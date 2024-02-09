@@ -42,19 +42,19 @@ class ChatBotUI extends UI<ChatBotViewModel> {
           color: const Color(0xFFfbf9f9),
           child: Column(
             children: [
-              if(viewModel.chatList.isNotEmpty)
-              ConversationWidget(
-                  chatList: viewModel.chatList.take(3).toList(),
-                  onSeeConvesationListPressed: () {
-                    showConversationListPage(context,
-                        chatList: viewModel.chatList,
-                        color: viewModel.colorPrimary,
-                        taglineText: viewModel.tagline);
-                  },
-                  onDeleteConversationPressed: () {
-                    viewModel.onDeleteConversationPressed();
-                  },
-                  showViewAllConversation: showPreviousChatList),
+              if (viewModel.chatList.isNotEmpty)
+                ConversationWidget(
+                    chatList: viewModel.chatList.take(3).toList(),
+                    onSeeConvesationListPressed: () {
+                      showConversationListPage(context,
+                          chatList: viewModel.chatList,
+                          color: viewModel.colorPrimary,
+                          taglineText: viewModel.tagline);
+                    },
+                    onDeleteConversationPressed: () {
+                      viewModel.onDeleteConversationPressed();
+                    },
+                    showViewAllConversation: showPreviousChatList),
               if (viewModel.outputState != OutBondUiState.outBondStateIdle)
                 if (inBusinessHours)
                   StartNewConversationWidget(

@@ -81,11 +81,11 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
           title: Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.only(top: 10),
-            child: Row(
+            child: const Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(
                     top: 2,
                   ),
@@ -93,10 +93,10 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                     path: 'assets/icons/message_icon.svg',
                   ),
                 ),
-                const SizedBox(
+                SizedBox(
                   width: 20,
                 ),
-                const Expanded(
+                Expanded(
                   flex: 4,
                   child: SizedBox(
                     child: Text(
@@ -109,7 +109,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                     ),
                   ),
                 ),
-                Expanded(
+                /* Expanded(
                   child: Container(
                     alignment: Alignment.topCenter,
                     padding: const EdgeInsets.only(right: 0),
@@ -119,7 +119,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                       color: Colors.white,
                     ),
                   ),
-                )
+                )*/
               ],
             ),
           ),

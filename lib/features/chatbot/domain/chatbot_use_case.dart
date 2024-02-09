@@ -80,6 +80,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
 
   Future<void> deleteConversation() async {
     await preference.remove(PreferenceKey.sessionId);
+    entity = entity.merge(chatList: null);
     initialise();
   }
 

@@ -29,10 +29,8 @@ class WebsocketService {
     channel = IOWebSocketChannel.connect(
       url,
       headers: headers,
-      pingInterval: const Duration(seconds: 1),
+      pingInterval: const Duration(seconds: 10),
     );
-
-    print(headers);
 
     channel.stream.listen(
       (event) {
