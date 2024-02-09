@@ -34,7 +34,7 @@ class MessageItemWidget extends StatelessWidget {
 
     if (message.message.contains("blocks")) {
       messageWidget = Container(
-        width: MediaQuery.of(context).size.width-30,
+        width: MediaQuery.of(context).size.width - 30,
         child: DraftTextView.json(
           jsonDecode(message.message),
           padding: const EdgeInsets.symmetric(horizontal: 16),

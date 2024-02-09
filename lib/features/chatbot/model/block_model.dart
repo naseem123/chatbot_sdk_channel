@@ -70,7 +70,7 @@ class BlocksData extends Equatable {
     List<Block> schema = schemaList
         .map((e) => Block(
               element: e['element'] ?? "",
-              id: e['id']?? "",
+              id: e['id'] ?? "",
               label: e['label'] ?? "",
               nextStepUuid: e['next_step_uuid'] ?? "",
               pathId: e['path_id'] ?? "",
@@ -88,10 +88,9 @@ class BlocksData extends Equatable {
         .toList();
 
     return BlocksData(
-      schema: schema,
-      type: json['type'],
-      waitForInput: json['wait_for_input'] ?? true,
-        label: json['label'] ?? ""
-    );
+        schema: schema,
+        type: json['type'],
+        waitForInput: json['wait_for_input'] ?? true,
+        label: json['label'] ?? "");
   }
 }

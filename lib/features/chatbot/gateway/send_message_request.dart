@@ -2,11 +2,14 @@ import 'package:chatbot/core/dependency/graphql/api_requests.dart';
 import 'package:clean_framework_graphql/clean_framework_graphql.dart';
 
 class SendMessageRequest extends MutationAPIRequest {
-
   final Map<String, dynamic> message;
   final String appKey;
   final String id;
-  SendMessageRequest({required this.message, required this.appKey, required this.id,});
+  SendMessageRequest({
+    required this.message,
+    required this.appKey,
+    required this.id,
+  });
 
   @override
   String get document => r'''
@@ -41,9 +44,7 @@ class SendMessageRequest extends MutationAPIRequest {
   ''';
 
   @override
-  Map<String, dynamic>? get variables => {
-
-  };
+  Map<String, dynamic>? get variables => {};
 
   @override
   GraphQLFetchPolicy? get fetchPolicy => GraphQLFetchPolicy.networkOnly;

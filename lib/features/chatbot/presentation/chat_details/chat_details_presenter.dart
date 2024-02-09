@@ -19,8 +19,7 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
   @override
   void onLayoutReady(BuildContext context, ChatBotUseCase useCase) {
     if (conversationID.isEmpty) {
-      useCase.startNewConversation();
-      //useCase.initWebsocketConversation();
+      useCase.initializeNewConversation();
     }
   }
 

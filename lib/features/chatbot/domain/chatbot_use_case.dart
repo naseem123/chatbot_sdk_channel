@@ -104,6 +104,14 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     });
   }
 
+  void initializeNewConversation() {
+    if (state.chatList != null && state.chatList!.conversations.isEmpty) {
+      initWebsocketConversation();
+    } else {
+      startNewConversation();
+    }
+  }
+
   //region chat conversation starts
   void startNewConversation() {
     state = state.merge(

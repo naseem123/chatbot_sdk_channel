@@ -53,7 +53,7 @@ class ChatDetailsGetMessageInputTransformer
 
       if (messageData.containsKey("blocks")) {
         final blockData = BlocksData.fromJson(messageData["blocks"]);
-        if(blockData.label!=null && blockData.label!.isNotEmpty){
+        if (blockData.label != null && blockData.label!.isNotEmpty) {
           final messageuiData = MessageUiModel(
             message: blockData.label!,
             messageId: messageData["id"].toString(),
@@ -62,8 +62,7 @@ class ChatDetailsGetMessageInputTransformer
             entity = entity.merge(
                 conversationKey: conversationKey,
                 messageKey: messageKey,
-                chatDetailList: [...entity.chatDetailList, messageuiData]
-            );
+                chatDetailList: [...entity.chatDetailList, messageuiData]);
           }
         }
         if (blockData.waitForInput) {
@@ -76,15 +75,21 @@ class ChatDetailsGetMessageInputTransformer
           );
         }
       } else {
-        if (messageData["html_content"]!=null && messageData["html_content"] != "--***--") {
+        if (messageData["html_content"] != null &&
+            messageData["html_content"] != "--***--") {
           message = messageData["html_content"];
-        } else if (messageData["serialized_content"]!= null && messageData["serialized_content"] != "--***--") {
+        } else if (messageData["serialized_content"] != null &&
+            messageData["serialized_content"] != "--***--") {
           message = messageData["serialized_content"];
-        } else if (messageData["text_content"] != null && messageData["text_content"] != "--***--") {
+        } else if (messageData["text_content"] != null &&
+            messageData["text_content"] != "--***--") {
           message = messageData["text_content"];
-        } else if(messageData.containsKey("action") && messageData["action"] == "assigned"){
+        } else if (messageData.containsKey("action") &&
+            messageData["action"] == "assigned") {
           message = "Assigned to ${messageData["data"]["name"]}";
-          entity = entity.merge(chatBotUserState: ChatBotUserState.waitForInput, chatMessageType: ChatMessageType.enterMessage);
+          entity = entity.merge(
+              chatBotUserState: ChatBotUserState.waitForInput,
+              chatMessageType: ChatMessageType.enterMessage);
         }
         final messageuiData = MessageUiModel(
           message: message,

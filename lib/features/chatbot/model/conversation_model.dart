@@ -6,7 +6,7 @@ class ChatConversationSuccessInput extends Equatable {
   final List<Conversation> conversations;
 
   const ChatConversationSuccessInput(
-      {required this.conversationMeta, required this.conversations});
+      {required this.conversationMeta, this.conversations = const []});
 
   factory ChatConversationSuccessInput.fromJson(Map<String, dynamic> json) {
     final data = Deserializer(json);
