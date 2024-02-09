@@ -42,6 +42,7 @@ class ChatBotUI extends UI<ChatBotViewModel> {
           color: const Color(0xFFfbf9f9),
           child: Column(
             children: [
+              if(viewModel.chatList.isNotEmpty)
               ConversationWidget(
                   chatList: viewModel.chatList.take(3).toList(),
                   onSeeConvesationListPressed: () {
