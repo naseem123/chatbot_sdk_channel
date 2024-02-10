@@ -11,7 +11,8 @@ import '../model/conversation_model.dart';
 class ChatBotEntity extends Entity {
   final ChatBotUiState chatBotUiState;
   final OutBondUiState outBondUiState;
-  final ChatConversationSuccessInput? chatList;
+  final ConversationMeta conversationMeta;
+  final List<Conversation> chatList;
   final AppSettings appSettings;
 
   //Chat details fields
@@ -29,7 +30,8 @@ class ChatBotEntity extends Entity {
   const ChatBotEntity({
     this.chatBotUiState = ChatBotUiState.conversationLoading,
     this.outBondUiState = OutBondUiState.outBondStateIdle,
-    this.chatList,
+    this.chatList = const [],
+    this.conversationMeta = const ConversationMeta(),
     this.appSettings = const AppSettings(),
     this.chatDetailsUiState = ChatDetailsUiState.idle,
     this.chatDetailList = const [],
@@ -44,7 +46,8 @@ class ChatBotEntity extends Entity {
   ChatBotEntity merge({
     ChatBotUiState? chatBotUiState,
     OutBondUiState? outBondUiState,
-    ChatConversationSuccessInput? chatList,
+    List<Conversation>? chatList,
+    ConversationMeta? conversationMeta,
     AppSettings? appSettings,
     ChatDetailsUiState? chatDetailsUiState,
     List<MessageUiModel>? chatDetailList,
@@ -58,6 +61,7 @@ class ChatBotEntity extends Entity {
     return ChatBotEntity(
       chatBotUiState: chatBotUiState ?? this.chatBotUiState,
       chatList: chatList ?? this.chatList,
+      conversationMeta: conversationMeta ?? this.conversationMeta,
       appSettings: appSettings ?? this.appSettings,
       chatDetailsUiState: chatDetailsUiState ?? this.chatDetailsUiState,
       chatDetailList: chatDetailList ?? this.chatDetailList,

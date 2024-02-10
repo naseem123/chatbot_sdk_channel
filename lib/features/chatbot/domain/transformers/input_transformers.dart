@@ -31,7 +31,7 @@ class ChatDetailsGetMessageInputTransformer
             .getUseCaseFromContext(providersContext)
             .initWebsocketCommand(chatTriggerId: triggerId);
 
-        Future.delayed(const Duration(milliseconds: 5300), () {
+        Future.delayed(const Duration(milliseconds: 2000), () {
           chatBotUseCaseProvider
               .getUseCaseFromContext(providersContext)
               .loadRecentConversationList(page: 1, perPage: 100);
@@ -57,6 +57,7 @@ class ChatDetailsGetMessageInputTransformer
           final messageuiData = MessageUiModel(
             message: blockData.label!,
             messageId: messageData["id"].toString(),
+            messageSenderType: MessageSenderType.bot,
           );
           if (!entity.chatDetailList.contains(messageuiData)) {
             entity = entity.merge(
@@ -75,6 +76,7 @@ class ChatDetailsGetMessageInputTransformer
           );
         }
       } else {
+        message = "";
         if (messageData["html_content"] != null &&
             messageData["html_content"] != "--***--") {
           message = messageData["html_content"];
@@ -94,6 +96,7 @@ class ChatDetailsGetMessageInputTransformer
         final messageuiData = MessageUiModel(
           message: message,
           messageId: messageKey,
+          messageSenderType: MessageSenderType.bot,
         );
         if (!entity.chatDetailList.contains(messageuiData)) {
           return entity.merge(

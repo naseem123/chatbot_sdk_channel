@@ -25,8 +25,12 @@ class ChatBotPresenter
     return ChatBotViewModel(
       chatList: output.chatList,
       outputState: output.outBondUiState,
-      onRefresh: () async {},
-      onRetry: () {},
+      onRefresh: () async {
+        useCase.initialise();
+      },
+      onRetry: () {
+        useCase.initialise();
+      },
       uiState: output.chatBotUiState,
       title: output.appSettings.app.greetings,
       tagline: output.appSettings.app.tagline,
@@ -49,7 +53,10 @@ class ChatBotPresenter
     if (state == ChatBotUiState.conversationSuccess &&
         output.chatList.isEmpty) {
       Future.delayed(const Duration(seconds: 4)).then((value) {
-        context.push("/chatDetail");
+        if (GoRouter.of(context).routeInformationProvider.value.location !=
+            "/chatDetail") {
+          context.push("/chatDetail");
+        }
       });
     }
   }

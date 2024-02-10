@@ -3,12 +3,14 @@ import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_view_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/avatar.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_user_input_editor_widget.dart';
+import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_user_select_item_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_wait_for_input_button_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/message_item_widget.dart';
 import 'package:clean_framework/clean_framework_legacy.dart';
 import 'package:components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ChatDetailsUI extends UI<ChatDetailsViewModel> {
   ChatDetailsUI({
@@ -82,11 +84,11 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
           title: Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.only(top: 10),
-            child: const Row(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Padding(
+                const Padding(
                   padding: EdgeInsets.only(
                     top: 2,
                   ),
@@ -94,7 +96,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                     path: 'assets/icons/message_icon.svg',
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
                 Expanded(
@@ -102,10 +104,10 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                   child: SizedBox(
                     child: Text(
                       "Chat with us!",
-                      style: TextStyle(
+                      style: GoogleFonts.arimo(
+                        color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -145,12 +147,22 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
               ),
               if (chatBotUserState == ChatBotUserState.waitForInput &&
                   chatMessageType == ChatMessageType.askForInputButton)
-                ChatWaitForInputButtonWidget(
-                    buttons: userInputOptions,
-                    color: viewModel.colorSecondary,
-                    onUserInputTriggered: (blockData) {
-                      viewModel.onUserInputTriggered(blockData);
-                    }),
+                if (userInputOptions.length > 3) ...[
+                  ChatUserSelectItemWidget(
+                      buttons: userInputOptions,
+                      color: viewModel.colorPrimary,
+                      colorSecondary: viewModel.colorSecondary,
+                      onUserInputTriggered: (blockData) {
+                        viewModel.onUserInputTriggered(blockData);
+                      })
+                ] else ...[
+                  ChatWaitForInputButtonWidget(
+                      buttons: userInputOptions,
+                      color: viewModel.colorSecondary,
+                      onUserInputTriggered: (blockData) {
+                        viewModel.onUserInputTriggered(blockData);
+                      })
+                ],
               if (viewModel.chatMessageType == ChatMessageType.enterMessage)
                 ChatUserInputEditorWidget(
                   textEditingController: messageController,

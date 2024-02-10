@@ -1,5 +1,7 @@
 import 'package:chatbot/features/chatbot/model/block_model.dart';
+import 'package:components/components.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ChatWaitForInputButtonWidget extends StatelessWidget {
   const ChatWaitForInputButtonWidget(
@@ -37,7 +39,9 @@ class ChatWaitForInputButtonWidget extends StatelessWidget {
                       padding: const EdgeInsets.all(12),
                       child: Text(
                         button.label,
-                        style: const TextStyle(color: Colors.white),
+                        style: GoogleFonts.arimo(
+                          color: context.secondaryColor.mostlyBlack,
+                        ),
                       ),
                     ),
                   ),

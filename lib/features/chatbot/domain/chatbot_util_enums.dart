@@ -8,3 +8,8 @@ enum ChatMessageType {
   askForInputButton,
   enterMessage,
 }
+
+enum MessageSenderType {
+  bot,
+  user,
+}

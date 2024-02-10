@@ -28,7 +28,7 @@ class ChatBotGateway extends APIGateway<ChatBotGatewayOutput,
     ChatBotGraphQLSuccessResponse response,
   ) {
     return ChatBotSuccessInput(
-        chatList: ChatConversationSuccessInput.fromJson(response.data));
+        chatList: ChatConversationModel.fromJson(response.data));
   }
 
   @override
@@ -55,5 +55,5 @@ class ChatBotGatewayOutput extends Output {
 class ChatBotSuccessInput extends SuccessInput {
   const ChatBotSuccessInput({required this.chatList});
 
-  final ChatConversationSuccessInput chatList;
+  final ChatConversationModel chatList;
 }

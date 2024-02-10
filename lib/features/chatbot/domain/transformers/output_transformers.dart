@@ -9,7 +9,7 @@ class ChatBotUIOutputTransformer
   ChatBotUIOutput transform(ChatBotEntity entity) {
     return ChatBotUIOutput(
         chatBotUiState: entity.chatBotUiState,
-        chatList: entity.chatList?.conversations ?? [],
+        chatList: entity.chatList,
         appSettings: entity.appSettings,
         outBondUiState: entity.outBondUiState);
   }

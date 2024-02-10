@@ -1,18 +1,18 @@
 import 'package:chatbot/core/extensions/date_extensions.dart';
 import 'package:clean_framework/clean_framework.dart';
 
-class ChatConversationSuccessInput extends Equatable {
+class ChatConversationModel extends Equatable {
   final ConversationMeta conversationMeta;
   final List<Conversation> conversations;
 
-  const ChatConversationSuccessInput(
+  const ChatConversationModel(
       {required this.conversationMeta, this.conversations = const []});
 
-  factory ChatConversationSuccessInput.fromJson(Map<String, dynamic> json) {
+  factory ChatConversationModel.fromJson(Map<String, dynamic> json) {
     final data = Deserializer(json);
     final Map desJson = data.getMap('messenger')['conversations'];
 
-    return ChatConversationSuccessInput(
+    return ChatConversationModel(
       conversations: (desJson['collection'] as List)
           .map((e) => Conversation.fromJson(e))
           .toList(),
@@ -121,18 +121,18 @@ class Message {
 }
 
 class ConversationMeta {
-  int currentPage;
-  int? nextPage;
-  int? prevPage;
-  int totalPages;
-  int totalCount;
+  final int currentPage;
+  final int? nextPage;
+  final int? prevPage;
+  final int totalPages;
+  final int totalCount;
 
-  ConversationMeta({
-    required this.currentPage,
-    this.nextPage,
-    this.prevPage,
-    required this.totalPages,
-    required this.totalCount,
+  const ConversationMeta({
+    this.currentPage = 0,
+    this.nextPage = 0,
+    this.prevPage = 0,
+    this.totalPages = 0,
+    this.totalCount = 0,
   });
 
   factory ConversationMeta.fromJson(Map<String, dynamic> json) {

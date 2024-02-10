@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_draft/flutter_draft.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:resources/resources.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -40,6 +41,8 @@ class MessageItemWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           defaultStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 color: context.secondaryColor.mostlyBlack,
+                fontSize: 16,
+                height: 1.5,
               ),
           onLinkTab: (link) {
             _launchUrl(link);
@@ -47,29 +50,43 @@ class MessageItemWidget extends StatelessWidget {
         ),
       ); //
     } else {
-      messageWidget = Text(
-        message.message,
-        style: context.textTheme.bodyMedium!.copyWith(
-          color: context.secondaryColor.mostlyBlack,
+      messageWidget = SizedBox(
+        width: MediaQuery.of(context).size.width - 30,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Text(
+            message.message,
+            style: GoogleFonts.arimo(
+              color: context.secondaryColor.mostlyBlack,
+              fontSize: 16,
+              height: 1.5,
+            ),
+          ),
         ),
       );
     }
 
-    return Card(
-      color: Colors.white,
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Container(
-          constraints: BoxConstraints(maxWidth: size.width * 0.9),
-          padding: const EdgeInsets.all(8.0),
-          margin: const EdgeInsets.all(4.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(
-              8.0,
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Container(
+        constraints: BoxConstraints(maxWidth: size.width * 0.9),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              spreadRadius: 2,
+              blurRadius: 3,
+              offset: Offset(0, 2), // changes position of shadow
             ),
+          ],
+          borderRadius: BorderRadius.circular(
+            3.0,
           ),
-          child: messageWidget,
         ),
+        child: messageWidget,
       ),
     );
   }

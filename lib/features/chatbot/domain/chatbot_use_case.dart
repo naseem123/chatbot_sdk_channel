@@ -81,7 +81,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
 
   Future<void> deleteConversation() async {
     await preference.remove(PreferenceKey.sessionId);
-    entity = entity.merge(chatList: null);
+    entity = entity.merge(chatList: []);
     initialise();
   }
 
@@ -97,7 +97,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         onSuccess: (ChatBotSuccessInput input) {
       return entity.merge(
         chatBotUiState: ChatBotUiState.conversationSuccess,
-        chatList: input.chatList,
+        chatList: input.chatList.conversations,
       );
     }, onFailure: (_) {
       return entity.merge(
@@ -107,7 +107,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
   }
 
   void initializeNewConversation() {
-    if (state.chatList != null && state.chatList!.conversations.isEmpty) {
+    if (state.chatList.isEmpty) {
       initWebsocketConversation();
     } else {
       startNewConversation();
@@ -410,9 +410,12 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     final messageuiData = MessageUiModel(
       message: "You replied : ${inputData.label}",
       messageId: DateTime.now().toString(),
+      messageSenderType: MessageSenderType.user,
     );
     entity = entity.merge(
         chatBotUserState: ChatBotUserState.idle,
+        chatMessageType: ChatMessageType.idle,
+        userInputOptions: [],
         chatDetailList: [...entity.chatDetailList, messageuiData]);
     request(
         WebsocketInitCommandGatewayOutput(
@@ -491,6 +494,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         final messageuiData = MessageUiModel(
           message: blockData.label!,
           messageId: messageData["id"].toString(),
+          messageSenderType: MessageSenderType.bot,
         );
         if (!entity.chatDetailList.contains(messageuiData)) {
           entity = entity.merge(
@@ -525,11 +529,10 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
             chatBotUserState: ChatBotUserState.waitForInput,
             chatMessageType: ChatMessageType.enterMessage);
       }
-      print("Mesasge === $message");
       final messageuiData = MessageUiModel(
-        message: message,
-        messageId: messageKey,
-      );
+          message: message,
+          messageId: messageKey,
+          messageSenderType: MessageSenderType.bot);
       if (!entity.chatDetailList.contains(messageuiData)) {
         entity = entity.merge(
             conversationKey: conversationKey,
