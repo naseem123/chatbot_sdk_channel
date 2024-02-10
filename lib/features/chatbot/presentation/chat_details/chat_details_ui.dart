@@ -22,7 +22,6 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
 
   @override
   ChatDetailsPresenter create(PresenterBuilder<ChatDetailsViewModel> builder) {
-    print("conversationID $conversationID");
     return ChatDetailsPresenter(
       builder: builder,
       conversationID: conversationID,

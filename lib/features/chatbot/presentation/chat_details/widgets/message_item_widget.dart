@@ -33,7 +33,7 @@ class MessageItemWidget extends StatelessWidget {
     Widget messageWidget;
 
     if (message.message.contains("blocks")) {
-      messageWidget = Container(
+      messageWidget = SizedBox(
         width: MediaQuery.of(context).size.width - 30,
         child: DraftTextView.json(
           jsonDecode(message.message),
@@ -49,9 +49,9 @@ class MessageItemWidget extends StatelessWidget {
     } else {
       messageWidget = Text(
         message.message,
-        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-              color: context.secondaryColor.mostlyBlack,
-            ),
+        style: context.textTheme.bodyMedium!.copyWith(
+          color: context.secondaryColor.mostlyBlack,
+        ),
       );
     }
 

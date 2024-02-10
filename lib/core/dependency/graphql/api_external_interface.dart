@@ -88,16 +88,6 @@ class APIExternalInterface extends ChatBotGraphQLExternalInterface {
           .remainder(100000000000000000)
           .toString();
     }
-// _headers = {
-//       'app': _appID,
-//       'session-id':
-//       "eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCem9LWlcxaGFXeEpJaEYwWlhOMFFIUmxjM1F1WTJ3R09nWkZWRG9KZEhsd1pUQT0iLCJleHAiOm51bGwsInB1ciI6ImxvZ2luIn19--8eb78acd4acda60d78a3c17059a4297312469ccb93444d789e64deac0890952f",
-//       'origin': _baseURL,
-//       'content-type': "application/json",
-//       'User-Data':
-//       "{\"email\":\"test@test.cl\",\"properties\":{\"name\":\"Alex\",\"lang\":\"en\",\"id\":\"localhost\",\"country\":\"Canada\",\"role\":\"admin\",\"pro\":null,\"num_devices\":2,\"last_sign_in\":\"2024-02-05T04:16:19.206Z\"},\"identifier_key\":\"3c59d7cd213e20a5cbd7baad3a073b618e2b694151b11dfbb5be80b71f4dc143\"}"
-//     };
-    print('APIExternalInterface._transformHeader $sessionId');
     _headers = {
       'app': _appID,
       'session-id': sessionId,
