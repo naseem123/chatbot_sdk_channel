@@ -38,7 +38,9 @@ class WebsocketService {
         if (messageController.isClosed) {
           return;
         }
-        _MessageLogger(endpoint: _webSocketURL, message: message);
+        if (message['type'] != "ping") {
+          _MessageLogger(endpoint: _webSocketURL, message: message);
+        }
         if (message['type'] != "ping" &&
             message['type'] != "welcome" &&
             message['type'] != "confirm_subscription" &&

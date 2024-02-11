@@ -49,6 +49,8 @@ class APIExternalInterface extends ChatBotGraphQLExternalInterface {
 
     on<MutationAPIRequest>(
       (request, send) async {
+        await _transformHeader();
+        _logRequestHeaders();
         final response = await service.request(
             method: GraphQLMethod.mutation,
             document: request.document,

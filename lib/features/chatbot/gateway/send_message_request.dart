@@ -4,11 +4,11 @@ import 'package:clean_framework_graphql/clean_framework_graphql.dart';
 class SendMessageRequest extends MutationAPIRequest {
   final Map<String, dynamic> message;
   final String appKey;
-  final String id;
+  final String conversationId;
   SendMessageRequest({
     required this.message,
     required this.appKey,
-    required this.id,
+    required this.conversationId,
   });
 
   @override
@@ -44,7 +44,8 @@ class SendMessageRequest extends MutationAPIRequest {
   ''';
 
   @override
-  Map<String, dynamic>? get variables => {};
+  Map<String, dynamic>? get variables =>
+      {"appKey": appKey, "id": conversationId, "message": message};
 
   @override
   GraphQLFetchPolicy? get fetchPolicy => GraphQLFetchPolicy.networkOnly;

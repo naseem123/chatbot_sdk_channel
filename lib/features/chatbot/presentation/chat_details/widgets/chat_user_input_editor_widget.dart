@@ -16,30 +16,29 @@ class ChatUserInputEditorWidget extends StatelessWidget {
       padding: const EdgeInsets.only(top: 8.0),
       child: Row(
         children: [
-          IconButton(
+          /*  IconButton(
             onPressed: () {
 // TODO: Send an image
             },
             icon: const Icon(Icons.attach_file),
-          ),
+          ),*/
           Expanded(
-            child: TextFormField(
-              controller: textEditingController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: context.secondaryColor.gainsboro.withAlpha(100),
-                hintText: 'Type a message',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16.0),
-                  borderSide: BorderSide.none,
-                ),
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    if (textEditingController.text.trim().isNotEmpty) {
-                      onMessageEntered(textEditingController.text.trim());
-                    }
-                  },
-                  icon: const Icon(Icons.send),
+            child: SizedBox(
+              height: 60,
+              child: TextFormField(
+                controller: textEditingController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: 'Send Message',
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      if (textEditingController.text.trim().isNotEmpty) {
+                        onMessageEntered(textEditingController.text.trim());
+                      }
+                    },
+                    icon: const Icon(Icons.send),
+                  ),
                 ),
               ),
             ),

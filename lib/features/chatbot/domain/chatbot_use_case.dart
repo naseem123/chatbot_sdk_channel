@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:chatbot/chatbot_app.dart';
 import 'package:chatbot/core/env/env_reader.dart';
+import 'package:chatbot/core/utils/misc.dart';
 import 'package:chatbot/core/utils/shared_pref.dart';
 import 'package:chatbot/core/utils/websocket_constants.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_entity.dart';
@@ -9,6 +10,7 @@ import 'package:chatbot/features/chatbot/gateway/chatbot_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/configuration_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/conversation_history_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/init_guest_user_gateway.dart';
+import 'package:chatbot/features/chatbot/gateway/send_message_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/start_conversation_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_connect_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_disconnect_gateway.dart';
@@ -22,7 +24,6 @@ import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_
 import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_presenter.dart';
 import 'package:chatbot/providers.dart';
 import 'package:clean_framework/clean_framework.dart';
-
 import 'transformers/input_transformers.dart';
 import 'transformers/output_transformers.dart';
 
@@ -168,7 +169,22 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     });
   }
 
-  void sendMessage({required String messageData}) {}
+  void sendMessage({required String messageData}) {
+    request(
+        SendMessageGatewayOutput(
+            conversationId: entity.conversationKey,
+            appKey: providersContext().read(envReaderProvider).getAppID(),
+            message: {
+              "html": messageData,
+              "text": messageData,
+              "serialized":
+                  "{\"blocks\":[{\"key\":\"${getRandomKey(length: 5)}\",\"text\":\"$messageData\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            }), onSuccess: (SendMessageSuccessInput input) {
+      return entity;
+    }, onFailure: (_) {
+      return entity;
+    });
+  }
 
   void disconnectMessageChannel() {
     request(WebsocketDisconnectGatewayOutput(),
@@ -484,6 +500,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
           message: blockData.label!,
           messageId: messageData["id"].toString(),
           messageSenderType: MessageSenderType.bot,
+          imageUrl: data["appUser"]["avatarUrl"],
         );
         if (!entity.chatDetailList.contains(messageuiData)) {
           entity = entity.merge(
@@ -500,6 +517,18 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
           chatBotUserState: ChatBotUserState.waitForInput,
           chatMessageType: ChatMessageType.askForInputButton,
         );
+      }
+      if (messageData["state"] != null &&
+          messageData["state"] == "replied" &&
+          messageData["data"] != null &&
+          messageData["data"]["label"] != null) {
+        final messageuiData = MessageUiModel(
+          message: "You replied : ${messageData["data"]["label"]}",
+          messageId: DateTime.now().toString(),
+          messageSenderType: MessageSenderType.user,
+        );
+        entity = entity
+            .merge(chatDetailList: [...entity.chatDetailList, messageuiData]);
       }
     } else {
       if (messageData["htmlContent"] != null &&
@@ -519,9 +548,11 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
             chatMessageType: ChatMessageType.enterMessage);
       }
       final messageuiData = MessageUiModel(
-          message: message,
-          messageId: messageKey,
-          messageSenderType: MessageSenderType.bot);
+        message: message,
+        messageId: messageKey,
+        messageSenderType: MessageSenderType.bot,
+        imageUrl: data["appUser"]["avatarUrl"],
+      );
       if (!entity.chatDetailList.contains(messageuiData)) {
         entity = entity.merge(
             conversationKey: conversationKey,
@@ -540,3 +571,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     );
   }
 }
+
+/*
+{"conversation_key":"mKm2qfY28jLT2BR8uDB7LtVT","message_key":"FuxWQSQeXzZCfSwxhkjaWvTk","trigger":"2025","step":"51e87c9a-4402-4413-9540-8cb80077962d","reply":{"id":"e7100e18-f2e2-43fd-b976-b85951388479","label":"I need care","element":"button","path_id":"d2642fc1-942b-41f8-ba81-db4d7edc73fd","next_step_uuid":"51e87c9a-4402-4413-9540-8cb80077962d"},"action":"trigger_step"}
+ */

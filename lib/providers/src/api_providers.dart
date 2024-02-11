@@ -15,6 +15,7 @@ final apiExternalInterfaceProvider = ExternalInterfaceProvider(
       () => initGuestUserGatewayProvider.getGateway(providersContext),
       () => startConversationGatewayProvider.getGateway(providersContext),
       () => conversationHistoryGatewayProvider.getGateway(providersContext),
+      () => sendMessageGatewayProvider.getGateway(providersContext),
     ],
   ),
 );

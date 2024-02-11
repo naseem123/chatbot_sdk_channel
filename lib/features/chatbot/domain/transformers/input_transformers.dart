@@ -42,67 +42,81 @@ class ChatDetailsGetMessageInputTransformer
     } else if (input.data["type"] == "conversations:conversation_part") {
       final conversationKey = input.data["data"]["conversation_key"];
       final messageKey = input.data["data"]["key"];
-      chatBotUseCaseProvider
-          .getUseCaseFromContext(providersContext)
-          .getNextConversationMessage(
-            conversationKey: conversationKey,
-            messageKey: messageKey,
-          );
       Map<String, dynamic> messageData = input.data["data"]["message"];
-      var message = "";
 
-      if (messageData.containsKey("blocks")) {
-        final blockData = BlocksData.fromJson(messageData["blocks"]);
-        if (blockData.label != null && blockData.label!.isNotEmpty) {
+      if (messageData.containsKey("blocks") &&
+          messageData["blocks"]["type"] != null &&
+          messageData["blocks"]["type"] != null &&
+          messageData["blocks"]["type"] == "wait_for_reply") {
+        return entity.merge(
+          conversationKey: conversationKey,
+          messageKey: messageKey,
+          chatBotUserState: ChatBotUserState.waitForInput,
+          chatMessageType: ChatMessageType.enterMessage,
+        );
+      } else {
+        chatBotUseCaseProvider
+            .getUseCaseFromContext(providersContext)
+            .getNextConversationMessage(
+              conversationKey: conversationKey,
+              messageKey: messageKey,
+            );
+        var message = "";
+        if (messageData.containsKey("blocks")) {
+          final blockData = BlocksData.fromJson(messageData["blocks"]);
+          if (blockData.label != null && blockData.label!.isNotEmpty) {
+            final messageuiData = MessageUiModel(
+              message: blockData.label!,
+              messageId: messageData["id"].toString(),
+              imageUrl: input.data["data"]["app_user"]["avatar_url"],
+              messageSenderType: MessageSenderType.bot,
+            );
+            if (!entity.chatDetailList.contains(messageuiData)) {
+              entity = entity.merge(
+                  conversationKey: conversationKey,
+                  messageKey: messageKey,
+                  chatDetailList: [...entity.chatDetailList, messageuiData]);
+            }
+          }
+          if (blockData.waitForInput) {
+            return entity.merge(
+              conversationKey: conversationKey,
+              messageKey: messageKey,
+              userInputOptions: blockData.schema,
+              chatBotUserState: ChatBotUserState.waitForInput,
+              chatMessageType: ChatMessageType.askForInputButton,
+            );
+          }
+        } else {
+          message = "";
+          if (messageData["html_content"] != null &&
+              messageData["html_content"] != "--***--") {
+            message = messageData["html_content"];
+          } else if (messageData["serialized_content"] != null &&
+              messageData["serialized_content"] != "--***--") {
+            message = messageData["serialized_content"];
+          } else if (messageData["text_content"] != null &&
+              messageData["text_content"] != "--***--") {
+            message = messageData["text_content"];
+          } else if (messageData.containsKey("action") &&
+              messageData["action"] == "assigned") {
+            message = "Assigned to ${messageData["data"]["name"]}";
+            entity = entity.merge(
+                chatBotUserState: ChatBotUserState.waitForInput,
+                chatMessageType: ChatMessageType.enterMessage);
+          }
           final messageuiData = MessageUiModel(
-            message: blockData.label!,
-            messageId: messageData["id"].toString(),
+            message: message,
+            messageId: messageKey,
+            imageUrl: input.data["data"]["app_user"]["avatar_url"],
             messageSenderType: MessageSenderType.bot,
           );
           if (!entity.chatDetailList.contains(messageuiData)) {
-            entity = entity.merge(
+            return entity.merge(
                 conversationKey: conversationKey,
                 messageKey: messageKey,
                 chatDetailList: [...entity.chatDetailList, messageuiData]);
           }
-        }
-        if (blockData.waitForInput) {
-          return entity.merge(
-            conversationKey: conversationKey,
-            messageKey: messageKey,
-            userInputOptions: blockData.schema,
-            chatBotUserState: ChatBotUserState.waitForInput,
-            chatMessageType: ChatMessageType.askForInputButton,
-          );
-        }
-      } else {
-        message = "";
-        if (messageData["html_content"] != null &&
-            messageData["html_content"] != "--***--") {
-          message = messageData["html_content"];
-        } else if (messageData["serialized_content"] != null &&
-            messageData["serialized_content"] != "--***--") {
-          message = messageData["serialized_content"];
-        } else if (messageData["text_content"] != null &&
-            messageData["text_content"] != "--***--") {
-          message = messageData["text_content"];
-        } else if (messageData.containsKey("action") &&
-            messageData["action"] == "assigned") {
-          message = "Assigned to ${messageData["data"]["name"]}";
-          entity = entity.merge(
-              chatBotUserState: ChatBotUserState.waitForInput,
-              chatMessageType: ChatMessageType.enterMessage);
-        }
-        final messageuiData = MessageUiModel(
-          message: message,
-          messageId: messageKey,
-          messageSenderType: MessageSenderType.bot,
-        );
-        if (!entity.chatDetailList.contains(messageuiData)) {
-          return entity.merge(
-              conversationKey: conversationKey,
-              messageKey: messageKey,
-              chatDetailList: [...entity.chatDetailList, messageuiData]);
         }
       }
       return entity;

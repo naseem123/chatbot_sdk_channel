@@ -3,6 +3,7 @@ import 'package:chatbot/features/chatbot/gateway/chatbot_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/configuration_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/conversation_history_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/init_guest_user_gateway.dart';
+import 'package:chatbot/features/chatbot/gateway/send_message_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/start_conversation_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_connect_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_disconnect_gateway.dart';
@@ -42,6 +43,13 @@ final startConversationGatewayProvider = GatewayProvider(
 
 final conversationHistoryGatewayProvider = GatewayProvider(
   (_) => ConversationHistoryGateway(
+    context: providersContext,
+    useCaseProvider: chatBotUseCaseProvider,
+  ),
+);
+
+final sendMessageGatewayProvider = GatewayProvider(
+  (_) => SendMessageGateway(
     context: providersContext,
     useCaseProvider: chatBotUseCaseProvider,
   ),

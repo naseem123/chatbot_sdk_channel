@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
 import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_draft/flutter_draft.dart';
@@ -36,17 +38,20 @@ class MessageItemWidget extends StatelessWidget {
     if (message.message.contains("blocks")) {
       messageWidget = SizedBox(
         width: MediaQuery.of(context).size.width - 30,
-        child: DraftTextView.json(
-          jsonDecode(message.message),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          defaultStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                color: context.secondaryColor.mostlyBlack,
-                fontSize: 16,
-                height: 1.5,
-              ),
-          onLinkTab: (link) {
-            _launchUrl(link);
-          },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: DraftTextView.json(
+            jsonDecode(message.message),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            defaultStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: context.secondaryColor.mostlyBlack,
+                  fontSize: 18,
+                  height: 1.5,
+                ),
+            onLinkTab: (link) {
+              _launchUrl(link);
+            },
+          ),
         ),
       ); //
     } else {
@@ -67,28 +72,51 @@ class MessageItemWidget extends StatelessWidget {
     }
 
     return Align(
-      alignment: Alignment.centerRight,
-      child: Container(
-        constraints: BoxConstraints(maxWidth: size.width * 0.9),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              spreadRadius: 2,
-              blurRadius: 3,
-              offset: Offset(0, 2), // changes position of shadow
+        alignment: Alignment.centerRight,
+        child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+          if (message.messageSenderType == MessageSenderType.bot &&
+              message.imageUrl.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Container(
+                width: 35.0,
+                height: 35.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: CachedNetworkImageProvider(
+                      message.imageUrl,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 10,
             ),
           ],
-          borderRadius: BorderRadius.circular(
-            3.0,
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+              margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    spreadRadius: 2,
+                    blurRadius: 3,
+                    offset: Offset(0, 2), // changes position of shadow
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(
+                  3.0,
+                ),
+              ),
+              child: messageWidget,
+            ),
           ),
-        ),
-        child: messageWidget,
-      ),
-    );
+        ]));
   }
 
   Future<void> _launchUrl(String url) async {

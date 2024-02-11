@@ -12,3 +12,16 @@ String getRandomString({int length = 10}) {
 
   return buffer.toString();
 }
+
+String getRandomKey({int length = 10}) {
+  final random = Random();
+  const hexChars = '0123456789abcdefghijklmnopqrstuvwxyz';
+
+  StringBuffer buffer = StringBuffer();
+
+  for (int i = 0; i < length; i++) {
+    buffer.write(hexChars[random.nextInt(hexChars.length)]);
+  }
+
+  return buffer.toString();
+}

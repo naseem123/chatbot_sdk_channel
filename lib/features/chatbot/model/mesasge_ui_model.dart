@@ -5,10 +5,12 @@ class MessageUiModel extends Equatable {
   final String message;
   final String messageId;
   final MessageSenderType messageSenderType;
+  final String imageUrl;
   const MessageUiModel({
     required this.message,
     required this.messageId,
     required this.messageSenderType,
+    this.imageUrl = "",
   });
 
   @override
@@ -16,5 +18,6 @@ class MessageUiModel extends Equatable {
         message,
         messageId,
         messageSenderType,
+        imageUrl,
       ];
 }

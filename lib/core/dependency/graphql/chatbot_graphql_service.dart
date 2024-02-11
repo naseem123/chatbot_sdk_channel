@@ -96,7 +96,8 @@ class ChatBotGraphQLService {
           );
         case GraphQLMethod.mutation:
           return _handleExceptions(
-            await _mutate(doc, variables, resolvedTimeout, policy, errPolicy),
+            await _mutate(
+                doc, variables, headers, resolvedTimeout, policy, errPolicy),
             hasStitching: hasStitching,
           );
       }
@@ -198,6 +199,7 @@ class ChatBotGraphQLService {
   Future<QueryResult> _mutate(
     DocumentNode document,
     Map<String, dynamic>? variables,
+    Map<String, String> headers,
     Duration? timeout,
     FetchPolicy? fetchPolicy,
     ErrorPolicy? errorPolicy,
@@ -207,6 +209,7 @@ class ChatBotGraphQLService {
       variables: variables ?? {},
       fetchPolicy: fetchPolicy,
       errorPolicy: errorPolicy,
+      context: Context.fromList([HttpLinkHeaders(headers: headers)]),
     );
 
     return _timedOut<dynamic>((await _client).mutate(options), timeout);

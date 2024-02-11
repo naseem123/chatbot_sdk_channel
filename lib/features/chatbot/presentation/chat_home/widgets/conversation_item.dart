@@ -115,11 +115,3 @@ class ConversationItem extends StatelessWidget {
     );
   }
 }
-
-/*
-{"conversation_key":"5Q5GZv3jJrQKq9KCqPkHtp4z","message_key":"F3g99YMQpKJRPQprFeARZbeL","trigger":"2025","step":"11d8e2ec-f838-45e7-b141-06500abc345b","reply":{"id":"38c8a2a0-e266-4f6d-9fdc-6e2b6b705636","label":"Yes","rules":[{"value":["ED"],"action":"set","target":"conversation","attribute":"tag_list"}],"element":"button","path_id":"7f96451d-268b-4c5e-ae1d-cd0aeed6c638","next_step_uuid":"11d8e2ec-f838-45e7-b141-06500abc345b"},"action":"trigger_step"}
-
-
-{"command":"message",
-"identifier":"{\"app\":\"yB9BJmrcH3bM4CShtMKB5qrw\",\"channel\":\"MessengerEventsChannel\",\"session_id\":\"05u90nkzmBbGpYOg8W8GwA\",\"enc_data\":\"{}\",\"session_value\":null,\"user_data\":\"{}\"}",
-"data":"{\"action\":\"trigger_step\",\"trigger\":\"\",\"conversation_key\":\"guXaxqJGBAqtcuSXfpbuoNJG\",\"message_key\":\"TXpX2GFhxwKkfUrLjhxKoCVH\",\"path_id\":\"5bb40c1f-429d-4473-9578-52374c649395\",\"step\":\"adc182b5-07a4-4218-808a-c24c6350e9e1\",\"reply\":{\"element\":\"button\",\"id\":\"0dc3559e-4eab-43d9-ab60-7325219a3f6f\",\"label\":\"Formatted Messages\",\"next_step_uuid\":\"adc182b5-07a4-4218-808a-c24c6350e9e1\",\"path_id\":\"5bb40c1f-429d-4473-9578-52374c649395\"}}"}*/
