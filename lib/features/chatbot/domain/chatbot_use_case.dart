@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:chatbot/chatbot_app.dart';
 import 'package:chatbot/core/env/env_reader.dart';
 import 'package:chatbot/core/utils/shared_pref.dart';
@@ -19,7 +18,6 @@ import 'package:chatbot/features/chatbot/gateway/websocket/websocket_send_messag
 import 'package:chatbot/features/chatbot/model/block_model.dart';
 import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
 import 'package:chatbot/features/chatbot/model/websocket/init_command_model.dart';
-import 'package:chatbot/features/chatbot/model/websocket_message_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_presenter.dart';
 import 'package:chatbot/providers.dart';
@@ -89,7 +87,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     initUserSession();
   }
 
-  void loadRecentConversationList({int page = 1, int perPage = 3}) {
+  void loadRecentConversationList({int page = 1, int perPage = 100}) {
     state = state.merge(
       chatBotUiState: ChatBotUiState.conversationLoading,
     );
@@ -170,16 +168,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     });
   }
 
-  void sendMessage({required String messageData}) {
-    request(
-        WebsocketSendMessageGatewayOutput(
-            messageToSend: getMessageData(messageData)),
-        onSuccess: (WebsocketSendMessageSuccessInput input) {
-      return entity;
-    }, onFailure: (_) {
-      return entity;
-    });
-  }
+  void sendMessage({required String messageData}) {}
 
   void disconnectMessageChannel() {
     request(WebsocketDisconnectGatewayOutput(),
@@ -550,23 +539,4 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       userInputOptions: [],
     );
   }
-}
-
-WebsocketMessageModel getMessageData(String messageText) {
-  return WebsocketMessageModel.fromJson({
-    "conversation_key": "TeCM3zJ1nXm87nRrThkRymfH",
-    "message_key": "yMiKr8yj9PHsVeJnrGd5cp7L",
-    "step": "31eac700-d836-4460-ae47-9e3fbbd0ff0e",
-    "trigger": "2091",
-    "reply": {
-      "nextStepUuid": "bb9b493d-dcfc-49bf-8ec5-0dabcbdfcff5",
-      "pathId": "800acc6e-34ba-4792-9699-9866951599b4",
-      "label": "wait_for_reply",
-      "html_content": messageText,
-      "serialized_content":
-          "{\"blocks\":[{\"key\":\"a3ggs\",\"text\":$messageText,\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
-      "text_content": messageText
-    },
-    "action": "receive_conversation_part"
-  });
 }

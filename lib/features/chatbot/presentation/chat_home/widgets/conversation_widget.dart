@@ -73,15 +73,23 @@ class ConversationWidget extends StatelessWidget {
             },
             itemCount: chatList.length,
           ),
-          if (showViewAllConversation)
+          if (showViewAllConversation && hasChatList) ...[
+            Divider(
+              height: 1,
+              color: Colors.grey.withOpacity(0.5),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
             InkWell(
               onTap: onSeeConversationListPressed,
               child: Text(
-                'view all conversations',
+                'View all conversations',
                 style: context.textTheme.captionBold.copyWith(
                     color: context.secondaryColor.matterhorn, fontSize: 12),
               ),
             )
+          ]
         ],
       ),
     );

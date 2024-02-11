@@ -38,13 +38,17 @@ class ConversationItem extends StatelessWidget {
                     if (chatData.assigneeAvatar == null)
                       defaultIcon()
                     else
-                      CachedNetworkImage(
-                        imageUrl: chatData.assigneeAvatar!,
-                        height: 40,
-                        width: 40,
-                        errorWidget: (context, url, error) {
-                          return defaultIcon();
-                        },
+                      Container(
+                        width: 40.0,
+                        height: 40.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: CachedNetworkImageProvider(
+                              chatData.assigneeAvatar!,
+                            ),
+                          ),
+                        ),
                       ),
                     if (chatIsOpen)
                       Positioned(

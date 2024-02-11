@@ -24,7 +24,7 @@ class ChatConversationModel extends Equatable {
   List<Object> get props => [conversationMeta, conversations];
 }
 
-class Conversation {
+class Conversation extends Equatable {
   String id;
   String key;
   String state;
@@ -36,17 +36,18 @@ class Conversation {
   LastMessage lastMessage;
   DateTime? lastUpdatedTime;
 
-  Conversation(
-      {required this.id,
-      required this.key,
-      required this.state,
-      required this.assigneeAvatar,
-      required this.closedAt,
-      required this.lastMessage,
-      required this.assigneeName,
-      required this.participantAvatar,
-      required this.lastUpdatedTime,
-      required this.participantName});
+  Conversation({
+    required this.id,
+    required this.key,
+    required this.state,
+    required this.assigneeAvatar,
+    required this.closedAt,
+    required this.lastMessage,
+    required this.assigneeName,
+    required this.participantAvatar,
+    required this.lastUpdatedTime,
+    required this.participantName,
+  });
 
   factory Conversation.fromJson(Map<String, dynamic> json) {
     return Conversation(
@@ -69,6 +70,20 @@ class Conversation {
 
   String get lastUpdatedTimeText =>
       lastUpdatedTime != null ? lastUpdatedTime!.timeAgo : '';
+
+  @override
+  List<Object?> get props => [
+        id,
+        key,
+        state,
+        assigneeAvatar,
+        closedAt,
+        lastMessage,
+        assigneeName,
+        participantAvatar,
+        lastUpdatedTime,
+        participantName,
+      ];
 }
 
 class LastMessage {
