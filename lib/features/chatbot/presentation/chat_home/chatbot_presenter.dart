@@ -63,7 +63,7 @@ class ChatBotPresenter
 
   @override
   void onDestroy(ChatBotUseCase useCase) {
-    useCase.disconnectMessageChannel();
+    useCase.resetData();
   }
 }
 

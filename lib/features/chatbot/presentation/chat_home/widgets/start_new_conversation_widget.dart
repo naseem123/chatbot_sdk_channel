@@ -93,6 +93,9 @@ class StartNewConversationWidget extends StatelessWidget {
               )
             ],
           ),
+          const SizedBox(
+            height: 5,
+          ),
         ],
       ),
     );

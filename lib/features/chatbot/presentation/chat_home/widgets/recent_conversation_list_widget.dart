@@ -3,6 +3,7 @@ import 'package:chatbot/features/chatbot/presentation/chat_home/widgets/conversa
 import 'package:chatbot/features/chatbot/presentation/chat_home/widgets/delete_recent_conversations.dart';
 import 'package:components/components.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class RecentConversationListWidget extends StatelessWidget {
   const RecentConversationListWidget({
@@ -35,9 +36,11 @@ class RecentConversationListWidget extends StatelessWidget {
             children: [
               Text(
                 'Continue the conversation',
-                style: context.textTheme.captionBold.copyWith(
+                style: GoogleFonts.arimo(
                   color: context.colorScheme.primary,
                   fontSize: 19,
+                  fontWeight: FontWeight.bold,
+                  height: 1.3,
                 ),
               ),
               IconButtons(
@@ -61,8 +64,12 @@ class RecentConversationListWidget extends StatelessWidget {
           InkWell(
             child: Text(
               'view all conversations',
-              style: context.textTheme.captionBold.copyWith(
-                  color: context.secondaryColor.matterhorn, fontSize: 12),
+              style: GoogleFonts.arimo(
+                color: context.secondaryColor.matterhorn,
+                fontSize: 12,
+                fontWeight: FontWeight.normal,
+                height: 1.3,
+              ),
             ),
           )
         ],
