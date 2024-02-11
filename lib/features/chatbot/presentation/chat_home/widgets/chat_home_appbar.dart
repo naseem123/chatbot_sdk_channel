@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:resources/resources.dart';
 
 class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
@@ -28,9 +29,11 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
               leading: buildLogo(),
               title: Text(
                 title,
-                style: context.textTheme.captionBold.copyWith(
+                style: GoogleFonts.arimo(
                   color: context.secondaryColor.lightWhite,
                   fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  height: 1.5,
                 ),
               ),
               trailing: IconButton(
@@ -46,9 +49,11 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
               ),
               subtitle: Text(
                 subtitle,
-                style: context.textTheme.captionRegular.copyWith(
+                style: GoogleFonts.arimo(
                   color: context.secondaryColor.lightWhite,
                   fontSize: 16,
+                  fontWeight: FontWeight.normal,
+                  height: 1.5,
                 ),
               ),
             )

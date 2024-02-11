@@ -150,7 +150,7 @@ class _AccentButton extends Button {
             ? context.colorScheme.primary
             : context.colorScheme.surface,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(25.0),
         ),
       );
     }

@@ -11,12 +11,12 @@ class ConversationWidget extends StatelessWidget {
     super.key,
     required this.chatList,
     required this.onDeleteConversationPressed,
-    required this.onSeeConvesationListPressed,
+    required this.onSeeConversationListPressed,
     required this.showViewAllConversation,
   });
 
   final bool showViewAllConversation;
-  final VoidCallback onSeeConvesationListPressed;
+  final VoidCallback onSeeConversationListPressed;
   final VoidCallback onDeleteConversationPressed;
   final List<Conversation> chatList;
 
@@ -24,17 +24,20 @@ class ConversationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final hasChatList = chatList.isNotEmpty;
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-      padding: const EdgeInsets.all(14),
+      margin: const EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.grey,
-              blurRadius: 5.0,
-            ),
-          ]),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(4),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 3,
+            offset: const Offset(0, 2), // changes position of shadow
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -57,6 +60,7 @@ class ConversationWidget extends StatelessWidget {
           ),
           ListView.builder(
             shrinkWrap: true,
+            padding: EdgeInsets.zero,
             itemBuilder: (context, index) {
               final chatData = chatList[index];
               return ConversationItem(
@@ -69,9 +73,9 @@ class ConversationWidget extends StatelessWidget {
             },
             itemCount: chatList.length,
           ),
-          if (showViewAllConversation && hasChatList)
+          if (showViewAllConversation)
             InkWell(
-              onTap: onSeeConvesationListPressed,
+              onTap: onSeeConversationListPressed,
               child: Text(
                 'view all conversations',
                 style: context.textTheme.captionBold.copyWith(

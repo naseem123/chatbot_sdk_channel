@@ -49,6 +49,12 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
           useCase.loadRecentConversationList();
         });
   }
+
+  @override
+  void onDestroy(ChatBotUseCase useCase) {
+    useCase.resetData();
+    super.onDestroy(useCase);
+  }
 }
 
 enum ChatDetailsUiState {

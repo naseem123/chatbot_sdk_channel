@@ -45,7 +45,7 @@ class ChatBotUI extends UI<ChatBotViewModel> {
               if (viewModel.chatList.isNotEmpty)
                 ConversationWidget(
                     chatList: viewModel.chatList.take(3).toList(),
-                    onSeeConvesationListPressed: () {
+                    onSeeConversationListPressed: () {
                       showConversationListPage(context,
                           chatList: viewModel.chatList,
                           color: viewModel.colorPrimary,

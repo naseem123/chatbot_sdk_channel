@@ -541,6 +541,15 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       }
     }
   }
+
+  void resetData() {
+    entity = entity.merge(
+      chatDetailList: [],
+      chatBotUserState: ChatBotUserState.idle,
+      chatMessageType: ChatMessageType.idle,
+      userInputOptions: [],
+    );
+  }
 }
 
 WebsocketMessageModel getMessageData(String messageText) {
