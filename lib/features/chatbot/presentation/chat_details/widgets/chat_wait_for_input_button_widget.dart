@@ -40,9 +40,8 @@ class ChatWaitForInputButtonWidget extends StatelessWidget {
                       child: Text(
                         button.label,
                         style: GoogleFonts.arimo(
-                          color: context.secondaryColor.mostlyBlack,
-                          fontWeight: FontWeight.bold
-                        ),
+                            color: context.secondaryColor.mostlyBlack,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
