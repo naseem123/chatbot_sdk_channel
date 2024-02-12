@@ -39,6 +39,10 @@ class ChatDetailsGetMessageInputTransformer
       });
 
       return entity.merge(chatTriggerId: triggerId);
+    } else if (input.data["type"] == "conversations:update_state") {
+      return entity.merge(
+        chatBotUserState: ChatBotUserState.conversationClosed,
+      );
     } else if (input.data["type"] == "conversations:conversation_part") {
       final conversationKey = input.data["data"]["conversation_key"];
       final messageKey = input.data["data"]["key"];
@@ -116,6 +120,13 @@ class ChatDetailsGetMessageInputTransformer
                 conversationKey: conversationKey,
                 messageKey: messageKey,
                 chatDetailList: [...entity.chatDetailList, messageuiData]);
+          }
+          if (messageData['data'] != null &&
+              (messageData['data'] as Map).containsKey('next_step_uuid') &&
+              messageData['data']['next_step_uuid'] == null) {
+            return entity.merge(
+                chatBotUserState: ChatBotUserState.waitForInput,
+                chatMessageType: ChatMessageType.enterMessage);
           }
         }
       }

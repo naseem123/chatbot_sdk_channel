@@ -43,38 +43,37 @@ class ConversationList extends StatelessWidget {
         subtitle: '',
         colorPrimary: colorPrimary,
       ),
-      body: Container(
-        child: SafeArea(
-          child: Column(
-            children: [
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      final chatData = chatList[index];
-                      return ConversationItem(
-                        chatData: chatData,
-                        onPressed: () {
-                          context.push("/chatDetail");
-                        },
-                        isLastItem: chatList.length - 1 == index,
-                      );
-                    },
-                    itemCount: chatList.length,
-                  ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    final chatData = chatList[index];
+                    return ConversationItem(
+                      chatData: chatData,
+                      onPressed: () {
+                        context.push("/chatDetail",
+                            extra: {'conversationId': chatData.key});
+                      },
+                      isLastItem: chatList.length - 1 == index,
+                    );
+                  },
+                  itemCount: chatList.length,
                 ),
               ),
-              if (taglineText.isNotEmpty) ...[
-                const Divider(thickness: 1),
-                Text(
-                  taglineText,
-                  style: context.textTheme.captionRegular.copyWith(
-                      color: context.secondaryColor.matterhorn, fontSize: 14),
-                )
-              ]
-            ],
-          ),
+            ),
+            if (taglineText.isNotEmpty) ...[
+              const Divider(thickness: 1),
+              Text(
+                taglineText,
+                style: context.textTheme.captionRegular.copyWith(
+                    color: context.secondaryColor.matterhorn, fontSize: 14),
+              )
+            ]
+          ],
         ),
       ),
     );

@@ -1,6 +1,7 @@
 enum ChatBotUserState {
   idle,
   waitForInput,
+  conversationClosed,
 }
 
 enum ChatMessageType {

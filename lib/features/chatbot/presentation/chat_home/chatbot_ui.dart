@@ -4,7 +4,7 @@ import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_view_mod
 import 'package:chatbot/features/chatbot/presentation/chat_home/conversation_list.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/widgets/chat_closed_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/widgets/chat_home_appbar.dart';
-import 'package:chatbot/features/chatbot/presentation/chat_home/widgets/conversation_widget.dart';
+import 'package:chatbot/features/chatbot/presentation/chat_home/widgets/conversation_list_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/widgets/loading_failed_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/widgets/start_new_conversation_widget.dart';
 import 'package:clean_framework/clean_framework_legacy.dart';
