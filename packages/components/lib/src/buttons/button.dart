@@ -15,10 +15,10 @@ class Button extends StatelessWidget {
 
   const factory Button.accent(
       {Key? key,
-        required Widget child,
-        required VoidCallback onPressed,
-        ButtonState state,
-        Color? primaryColor}) = _AccentButton;
+      required Widget child,
+      required VoidCallback onPressed,
+      ButtonState state,
+      Color? primaryColor}) = _AccentButton;
 
   const factory Button.destructive({
     Key? key,
@@ -42,6 +42,14 @@ class Button extends StatelessWidget {
     ButtonState state,
     Widget? icon,
   }) = _SecondaryWhiteButton;
+
+  const factory Button.iconButton({
+    Key? key,
+    required Widget child,
+    required VoidCallback onPressed,
+    ButtonState state,
+    Widget? icon,
+  }) = _IconButton;
 
   final Widget child;
   final VoidCallback onPressed;
@@ -111,13 +119,13 @@ class Button extends StatelessWidget {
         return icon == null
             ? child
             : Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            icon!,
-            const SizedBox(width: 12),
-            Flexible(child: child)
-          ],
-        );
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  icon!,
+                  const SizedBox(width: 12),
+                  Flexible(child: child)
+                ],
+              );
       case ButtonState.loading:
         return SizedBox.square(
           dimension: 16,
@@ -130,10 +138,10 @@ class Button extends StatelessWidget {
 class _AccentButton extends Button {
   const _AccentButton(
       {super.key,
-        required super.child,
-        required super.onPressed,
-        super.state,
-        super.primaryColor});
+      required super.child,
+      required super.onPressed,
+      super.state,
+      super.primaryColor});
 
   @override
   Widget build(BuildContext context) {
@@ -267,6 +275,29 @@ class _SecondaryWhiteButton extends Button {
         ).merge(_secondaryStyle),
         onPressed: onPressed,
         child: _child(context.colorScheme.surface),
+      ),
+    );
+  }
+}
+
+class _IconButton extends Button {
+  const _IconButton({
+    super.key,
+    required super.child,
+    required super.onPressed,
+    super.state,
+    super.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+
+    return IgnorePointer(
+      ignoring: isInactive,
+      child: IconButton(
+        padding: EdgeInsets.zero,
+        onPressed: onPressed,
+        icon: _child(context.colorScheme.surface),
       ),
     );
   }

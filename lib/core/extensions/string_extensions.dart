@@ -11,4 +11,8 @@ extension StringExtension on String {
     buffer.write(replaceFirst('#', ''));
     return Color(int.parse(buffer.toString(), radix: 16));
   }
+
+  DateTime get toDate {
+    return DateTime.tryParse(this) ?? DateTime.now();
+  }
 }

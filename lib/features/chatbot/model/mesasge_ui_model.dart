@@ -6,11 +6,14 @@ class MessageUiModel extends Equatable {
   final String messageId;
   final MessageSenderType messageSenderType;
   final String imageUrl;
+  final String createdAt;
+
   const MessageUiModel({
     required this.message,
     required this.messageId,
     required this.messageSenderType,
     this.imageUrl = "",
+    this.createdAt = '',
   });
 
   @override
@@ -19,5 +22,6 @@ class MessageUiModel extends Equatable {
         messageId,
         messageSenderType,
         imageUrl,
+        createdAt,
       ];
 }

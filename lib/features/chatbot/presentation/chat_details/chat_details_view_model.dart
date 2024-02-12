@@ -1,5 +1,6 @@
 import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
 import 'package:chatbot/features/chatbot/model/block_model.dart';
+import 'package:chatbot/features/chatbot/model/chat_assignee.dart';
 import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
 import 'package:clean_framework/clean_framework.dart';
@@ -17,6 +18,7 @@ class ChatDetailsViewModel extends ViewModel {
     required this.colorSecondary,
     required this.colorPrimary,
     required this.backButtonPressed,
+    required this.chatAssignee,
   });
 
   final ChatDetailsUiState uiState;
@@ -31,6 +33,7 @@ class ChatDetailsViewModel extends ViewModel {
   final ChatMessageType chatMessageType;
   final List<Block> userInputOptions;
   final Function(Block input) onUserInputTriggered;
+  final ChatAssignee chatAssignee;
 
   @override
   List<Object?> get props => [
@@ -42,5 +45,6 @@ class ChatDetailsViewModel extends ViewModel {
         colorSecondary,
         colorPrimary,
         backButtonPressed,
+        chatAssignee,
       ];
 }
