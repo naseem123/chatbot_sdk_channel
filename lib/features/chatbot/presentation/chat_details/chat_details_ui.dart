@@ -30,7 +30,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
   @override
   Widget build(BuildContext context, ChatDetailsViewModel viewModel) {
     final viewInsets = MediaQuery.viewInsetsOf(context);
-    final messages = viewModel.chatList.reversed.toList();
+    final messages = viewModel.chatList.toList();
     final isLoading = viewModel.uiState == ChatDetailsUiState.loading;
 
     final chatMessageType = viewModel.chatMessageType;
@@ -47,7 +47,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
     // Scroll to bottom when list size changes or widget is first built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollController.animateTo(
-        0.0,
+        _scrollController.position.maxScrollExtent,
         curve: Curves.easeOut,
         duration: const Duration(milliseconds: 300),
       );
@@ -84,7 +84,6 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                   ),
                   itemCount: messages.length,
                   controller: _scrollController,
-                  reverse: true,
                   itemBuilder: (context, index) {
                     final message = messages[index];
                     return MessageItemWidget(message: message);
