@@ -1,5 +1,6 @@
 import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
 import 'package:chatbot/features/chatbot/model/block_model.dart';
+import 'package:chatbot/features/chatbot/model/chat_assignee.dart';
 import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_presenter.dart';
@@ -26,6 +27,7 @@ class ChatBotEntity extends Entity {
   final String conversationKey;
   final String messageKey;
   final List<Block> userInputOptions;
+  final ChatAssignee chatAssignee;
 
   const ChatBotEntity({
     this.chatBotUiState = ChatBotUiState.conversationLoading,
@@ -41,6 +43,7 @@ class ChatBotEntity extends Entity {
     this.conversationKey = "",
     this.messageKey = "",
     this.userInputOptions = const [],
+    this.chatAssignee = const ChatAssignee(),
   });
 
   ChatBotEntity merge({
@@ -57,6 +60,7 @@ class ChatBotEntity extends Entity {
     ChatMessageType? chatMessageType,
     List<Block>? userInputOptions,
     String? messageKey,
+    ChatAssignee? chatAssignee,
   }) {
     return ChatBotEntity(
       chatBotUiState: chatBotUiState ?? this.chatBotUiState,
@@ -72,6 +76,7 @@ class ChatBotEntity extends Entity {
       chatMessageType: chatMessageType ?? this.chatMessageType,
       userInputOptions: userInputOptions ?? this.userInputOptions,
       outBondUiState: outBondUiState ?? this.outBondUiState,
+      chatAssignee: chatAssignee ?? this.chatAssignee,
     );
   }
 

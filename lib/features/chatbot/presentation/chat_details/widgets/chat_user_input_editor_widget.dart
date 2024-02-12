@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:resources/resources.dart';
 
 class ChatUserInputEditorWidget extends StatelessWidget {
   const ChatUserInputEditorWidget({
@@ -7,6 +6,7 @@ class ChatUserInputEditorWidget extends StatelessWidget {
     required this.textEditingController,
     required this.onMessageEntered,
   });
+
   final TextEditingController textEditingController;
   final Function(String) onMessageEntered;
 

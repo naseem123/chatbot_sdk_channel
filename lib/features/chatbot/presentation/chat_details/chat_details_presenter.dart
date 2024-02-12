@@ -30,24 +30,25 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
   ChatDetailsViewModel createViewModel(
       ChatBotUseCase useCase, ChatDetailsUIOutput output) {
     return ChatDetailsViewModel(
-        uiState: output.chatDetailsUiState,
-        chatList: output.chatDetailList,
-        onMessageEntered: (String message) {
-          useCase.sendMessage(messageData: message);
-        },
-        chatMessageType: output.chatMessageType,
-        chatBotUserState: output.chatBotUserState,
-        userInputOptions: output.userInputOptions,
-        onUserInputTriggered: (Block inputData) {
-          useCase.sendUserInput(inputData: inputData);
-        },
-        colorSecondary:
-            output.appSettings.app.customizationColors.secondary.toColor,
-        colorPrimary:
-            output.appSettings.app.customizationColors.primary.toColor,
-        backButtonPressed: () {
-          useCase.loadRecentConversationList();
-        });
+      uiState: output.chatDetailsUiState,
+      chatList: output.chatDetailList,
+      onMessageEntered: (String message) {
+        useCase.sendMessage(messageData: message);
+      },
+      chatMessageType: output.chatMessageType,
+      chatBotUserState: output.chatBotUserState,
+      userInputOptions: output.userInputOptions,
+      onUserInputTriggered: (Block inputData) {
+        useCase.sendUserInput(inputData: inputData);
+      },
+      colorSecondary:
+          output.appSettings.app.customizationColors.secondary.toColor,
+      colorPrimary: output.appSettings.app.customizationColors.primary.toColor,
+      backButtonPressed: () {
+        useCase.loadRecentConversationList();
+      },
+      chatAssignee: output.chatAssignee,
+    );
   }
 
   @override

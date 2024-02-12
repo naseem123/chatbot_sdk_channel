@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:chatbot/chatbot_app.dart';
 import 'package:chatbot/core/env/env_reader.dart';
 import 'package:chatbot/core/utils/misc.dart';
@@ -18,12 +19,14 @@ import 'package:chatbot/features/chatbot/gateway/websocket/websocket_init_comman
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_message_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_send_message_gateway.dart';
 import 'package:chatbot/features/chatbot/model/block_model.dart';
+import 'package:chatbot/features/chatbot/model/chat_assignee.dart';
 import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
 import 'package:chatbot/features/chatbot/model/websocket/init_command_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_presenter.dart';
 import 'package:chatbot/providers.dart';
 import 'package:clean_framework/clean_framework.dart';
+
 import 'transformers/input_transformers.dart';
 import 'transformers/output_transformers.dart';
 
@@ -413,9 +416,10 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
 
   void sendUserInput({required Block inputData}) {
     final messageuiData = MessageUiModel(
-      message: "You replied : ${inputData.label}",
+      message: "$sentMessageHead${inputData.label}",
       messageId: DateTime.now().toString(),
       messageSenderType: MessageSenderType.user,
+      createdAt: DateTime.now().toString(),
     );
     entity = entity.merge(
         chatBotUserState: ChatBotUserState.idle,
@@ -482,6 +486,9 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       Map<String, dynamic> data, String conversationID) {
     final List<dynamic> conversationList =
         data["messenger"]["conversation"]["messages"]["collection"];
+    final assigneeMap = data["messenger"]["conversation"]['assignee'];
+    final assignee = ChatAssignee.fromJson(assigneeMap);
+    entity = entity.merge(chatAssignee: assignee);
     for (dynamic item in conversationList.reversed) {
       parseHistoryMessage(item, conversationID);
     }
@@ -493,6 +500,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     entity = entity.merge(chatTriggerId: data["triggerId"]);
     Map<String, dynamic> messageData = data["message"];
     var message = "";
+
     if (messageData.containsKey("blocks") && messageData["blocks"] != null) {
       final blockData = BlocksData.fromJson(messageData["blocks"]);
       if (blockData.label != null && blockData.label!.isNotEmpty) {
@@ -501,6 +509,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
           messageId: messageData["id"].toString(),
           messageSenderType: MessageSenderType.bot,
           imageUrl: data["appUser"]["avatarUrl"],
+          createdAt: data["createdAt"],
         );
         if (!entity.chatDetailList.contains(messageuiData)) {
           entity = entity.merge(
@@ -523,7 +532,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
           messageData["data"] != null &&
           messageData["data"]["label"] != null) {
         final messageuiData = MessageUiModel(
-          message: "You replied : ${messageData["data"]["label"]}",
+          message: "$sentMessageHead${messageData["data"]["label"]}",
           messageId: DateTime.now().toString(),
           messageSenderType: MessageSenderType.user,
         );
@@ -552,6 +561,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         messageId: messageKey,
         messageSenderType: MessageSenderType.bot,
         imageUrl: data["appUser"]["avatarUrl"],
+        createdAt: data["createdAt"],
       );
       if (!entity.chatDetailList.contains(messageuiData)) {
         entity = entity.merge(
@@ -572,6 +582,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
   }
 }
 
+const sentMessageHead = 'You replied : ';
 /*
 {"conversation_key":"mKm2qfY28jLT2BR8uDB7LtVT","message_key":"FuxWQSQeXzZCfSwxhkjaWvTk","trigger":"2025","step":"51e87c9a-4402-4413-9540-8cb80077962d","reply":{"id":"e7100e18-f2e2-43fd-b976-b85951388479","label":"I need care","element":"button","path_id":"d2642fc1-942b-41f8-ba81-db4d7edc73fd","next_step_uuid":"51e87c9a-4402-4413-9540-8cb80077962d"},"action":"trigger_step"}
  */
