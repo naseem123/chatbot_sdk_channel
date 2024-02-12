@@ -415,6 +415,11 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
   }
 
   void sendUserInput({required Block inputData}) {
+    entity = entity.merge(
+        chatBotUserState: ChatBotUserState.idle,
+        chatMessageType: ChatMessageType.idle,
+        userInputOptions: []
+    );
     final messageuiData = MessageUiModel(
       message: "$sentMessageHead${inputData.label}",
       messageId: DateTime.now().toString(),

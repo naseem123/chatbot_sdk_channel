@@ -52,12 +52,12 @@ class ChatBotPresenter
 
     if (state == ChatBotUiState.conversationSuccess &&
         output.chatList.isEmpty) {
-      Future.delayed(const Duration(seconds: 4)).then((value) {
+     /* Future.delayed(const Duration(seconds: 4)).then((value) {
         if (GoRouter.of(context).routeInformationProvider.value.location !=
             "/chatDetail") {
           context.push("/chatDetail");
         }
-      });
+      });*/
     }
   }
 

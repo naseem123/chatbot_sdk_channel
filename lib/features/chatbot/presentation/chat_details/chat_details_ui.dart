@@ -62,9 +62,9 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
           70,
         ),
         child: ChatBotAppbar(
-          title: viewModel.chatAssignee.assignee,
+          title:  "virtualcare bot",
           subTitle: 'The team will respond as soon as possible',
-          logo: viewModel.chatAssignee.assigneeImage,
+          logo: "https://test.ca.digital-front-door.stg.gcp.trchq.com/assets/icons8-bot-50-ccd9ed66d2850c1bd0737308082e76890d697c8e.png",
           colorPrimary: viewModel.colorPrimary,
           backButtonPressed: viewModel.backButtonPressed,
         ),
@@ -94,9 +94,8 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                 ),
               ),
             ),
-            if (chatBotUserState == ChatBotUserState.waitForInput &&
-                chatMessageType == ChatMessageType.askForInputButton)
-              if (userInputOptions.length > 3) ...[
+            if (chatBotUserState == ChatBotUserState.waitForInput && chatMessageType == ChatMessageType.askForInputButton && userInputOptions.length > 3)
+              ...[
                 ChatUserSelectItemWidget(
                     buttons: userInputOptions,
                     color: viewModel.colorPrimary,
@@ -104,7 +103,9 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                     onUserInputTriggered: (blockData) {
                       viewModel.onUserInputTriggered(blockData);
                     })
-              ] else ...[
+              ],
+            if (chatBotUserState == ChatBotUserState.waitForInput && chatMessageType == ChatMessageType.askForInputButton && userInputOptions.length <= 3)
+            ...[
                 ChatWaitForInputButtonWidget(
                     buttons: userInputOptions,
                     color: viewModel.colorSecondary,
