@@ -128,7 +128,8 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                       fontWeight: FontWeight.w800),
                 ),
               ),
-            if (viewModel.chatMessageType == ChatMessageType.enterMessage)
+            if (chatBotUserState != ChatBotUserState.conversationClosed &&
+                viewModel.chatMessageType == ChatMessageType.enterMessage)
               ChatUserInputEditorWidget(
                 textEditingController: messageController,
                 onMessageEntered: (message) {
