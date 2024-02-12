@@ -1,3 +1,4 @@
+import 'package:chatbot/core/extensions/context_extension.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_view_model.dart';
@@ -8,6 +9,8 @@ import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/message_item_widget.dart';
 import 'package:clean_framework/clean_framework_legacy.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:resources/resources.dart';
 
 class ChatDetailsUI extends UI<ChatDetailsViewModel> {
   ChatDetailsUI({
@@ -110,6 +113,22 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                       viewModel.onUserInputTriggered(blockData);
                     })
               ],
+            if (chatBotUserState == ChatBotUserState.conversationClosed)
+              Container(
+                padding: EdgeInsets.symmetric(
+                    vertical: context.bottomPadding.bottom),
+                color: Colors.white,
+                width: double.infinity,
+                alignment: Alignment.center,
+                child: Text(
+                  'This conversation has ended',
+                  style: GoogleFonts.arimo(
+                      color: context.secondaryColor.mostlyBlack,
+                      fontSize: 14,
+                      height: 1.5,
+                      fontWeight: FontWeight.w800),
+                ),
+              ),
             if (viewModel.chatMessageType == ChatMessageType.enterMessage)
               ChatUserInputEditorWidget(
                 textEditingController: messageController,

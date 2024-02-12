@@ -492,6 +492,14 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     for (dynamic item in conversationList.reversed) {
       parseHistoryMessage(item, conversationID);
     }
+
+    // Handle if the thread is closed
+
+    if (data["messenger"]["conversation"]['state'] == 'closed') {
+      entity = entity.merge(
+        chatBotUserState: ChatBotUserState.conversationClosed,
+      );
+    }
   }
 
   void parseHistoryMessage(Map<String, dynamic> data, String conversationID) {

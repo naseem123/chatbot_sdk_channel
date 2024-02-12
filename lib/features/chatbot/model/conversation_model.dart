@@ -119,17 +119,20 @@ class LastMessage {
 class Message {
   // Assuming that "blocks" is a Map<String, dynamic>
   Map<String, dynamic>? blocks;
+  String? serializedContent;
 
   // Add other properties as needed
 
   Message({
     this.blocks,
+    this.serializedContent,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
     final data = Deserializer(json);
     return Message(
       blocks: data.getMap('blocks'),
+      serializedContent: data.getString('serializedContent'),
       // Add other properties as needed
     );
   }

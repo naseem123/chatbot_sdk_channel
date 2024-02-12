@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chatbot/core/extensions/string_extensions.dart';
 import 'package:chatbot/features/chatbot/model/conversation_model.dart';
 import 'package:components/components.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_draft/flutter_draft.dart';
 import 'package:gap/gap.dart';
 
 class ConversationItem extends StatelessWidget {
@@ -91,6 +95,22 @@ class ConversationItem extends StatelessWidget {
                       ),
                       if (chatIsOpen)
                         const Text('is waiting for your reply')
+                      else if (!chatData
+                          .lastMessage.message.serializedContent.isNullOrEmpty)
+                        Expanded(
+                          child: DraftTextView.json(
+                            jsonDecode(chatData
+                                .lastMessage.message.serializedContent!),
+                            defaultStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: context.secondaryColor.mostlyBlack,
+                                  fontSize: 18,
+                                  height: 1.5,
+                                ),
+                          ),
+                        )
                       else
                         const Text('Thanks for stopping by!')
                     ],

@@ -39,6 +39,10 @@ class ChatDetailsGetMessageInputTransformer
       });
 
       return entity.merge(chatTriggerId: triggerId);
+    } else if (input.data["type"] == "conversations:update_state") {
+      return entity.merge(
+        chatBotUserState: ChatBotUserState.conversationClosed,
+      );
     } else if (input.data["type"] == "conversations:conversation_part") {
       final conversationKey = input.data["data"]["conversation_key"];
       final messageKey = input.data["data"]["key"];
