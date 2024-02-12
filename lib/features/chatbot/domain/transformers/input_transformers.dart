@@ -121,6 +121,13 @@ class ChatDetailsGetMessageInputTransformer
                 messageKey: messageKey,
                 chatDetailList: [...entity.chatDetailList, messageuiData]);
           }
+          if (messageData['data'] != null &&
+              (messageData['data'] as Map).containsKey('next_step_uuid') &&
+              messageData['data']['next_step_uuid'] == null) {
+            return entity.merge(
+                chatBotUserState: ChatBotUserState.waitForInput,
+                chatMessageType: ChatMessageType.enterMessage);
+          }
         }
       }
       return entity;
