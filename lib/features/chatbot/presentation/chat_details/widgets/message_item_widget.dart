@@ -1,12 +1,13 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatbot/core/extensions/date_extensions.dart';
 import 'package:chatbot/core/extensions/string_extensions.dart';
+import 'package:chatbot/core/widgets/draft_view/view/draft_text_view.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
 import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_draft/flutter_draft.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:resources/resources.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -41,6 +42,7 @@ class MessageItemWidget extends StatelessWidget {
     final isBot = message.messageSenderType == MessageSenderType.bot;
 
     if (message.message.contains("blocks")) {
+      log("message = $message");
       messageWidget = SizedBox(
         width: MediaQuery.of(context).size.width - 30,
         child: Padding(

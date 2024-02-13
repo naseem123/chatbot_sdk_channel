@@ -1,11 +1,10 @@
 import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatbot/core/extensions/string_extensions.dart';
+import 'package:chatbot/core/widgets/draft_view/view/draft_text_view.dart';
 import 'package:chatbot/features/chatbot/model/conversation_model.dart';
 import 'package:components/components.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_draft/flutter_draft.dart';
 import 'package:gap/gap.dart';
 
 class ConversationItem extends StatelessWidget {

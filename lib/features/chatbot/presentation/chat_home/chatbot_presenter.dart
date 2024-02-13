@@ -5,7 +5,6 @@ import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_view_mod
 import 'package:chatbot/providers/src/usecase_providers.dart';
 import 'package:clean_framework/clean_framework_legacy.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class ChatBotPresenter
     extends Presenter<ChatBotViewModel, ChatBotUIOutput, ChatBotUseCase> {
@@ -52,7 +51,7 @@ class ChatBotPresenter
 
     if (state == ChatBotUiState.conversationSuccess &&
         output.chatList.isEmpty) {
-     /* Future.delayed(const Duration(seconds: 4)).then((value) {
+      /* Future.delayed(const Duration(seconds: 4)).then((value) {
         if (GoRouter.of(context).routeInformationProvider.value.location !=
             "/chatDetail") {
           context.push("/chatDetail");

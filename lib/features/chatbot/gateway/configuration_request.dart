@@ -18,7 +18,6 @@ class SDKSettingConfigurationRequest extends QueryAPIRequest {
         name
         activeMessenger
         privacyConsentRequired
-        inlineNewConversations
         enableMessengerBranding
         displayLogo
         inBusinessHours
