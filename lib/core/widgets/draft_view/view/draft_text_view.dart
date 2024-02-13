@@ -147,7 +147,7 @@ class DraftTextView extends StatelessWidget {
     }
     // 无序列表
     if (block.type == BlockType.bulletList) {
-      var size = TextUtil.measureText('缩进', textStyle);
+      var size = TextUtil.measureText(' ', textStyle);
       double dotSize = 5;
       const solid = BoxDecoration(color: Colors.black, shape: BoxShape.circle);
       var hollow = BoxDecoration(
@@ -158,15 +158,9 @@ class DraftTextView extends StatelessWidget {
         margin: EdgeInsets.only(right: dotSize),
         decoration: block.depth > 0 ? hollow : solid,
       );
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox.fromSize(
-            size: Size(size.width * block.depth + dotSize * 2, size.height),
-            child: Align(alignment: Alignment.centerRight, child: dot),
-          ),
-          textView,
-        ],
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: textView,
       );
     }
     if (block.type == BlockType.numberList) {
