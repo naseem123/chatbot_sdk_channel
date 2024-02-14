@@ -1,4 +1,5 @@
 import 'package:chatbot/core/extensions/context_extension.dart';
+import 'package:chatbot/core/widgets/idle_detector.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_view_model.dart';
@@ -55,93 +56,96 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
         duration: const Duration(milliseconds: 300),
       );
     });
-    return Scaffold(
-      backgroundColor: const Color(0xfff1f1f1),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(
-          70,
+    return IdleDetector(
+      idleTime: viewModel.idleTimeout,
+      child: Scaffold(
+        backgroundColor: const Color(0xfff1f1f1),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(
+            70,
+          ),
+          child: ChatBotAppbar(
+            title: "virtualcare bot",
+            subTitle: 'The team will respond as soon as possible',
+            logo:
+                "https://test.ca.digital-front-door.stg.gcp.trchq.com/assets/icons8-bot-50-ccd9ed66d2850c1bd0737308082e76890d697c8e.png",
+            colorPrimary: viewModel.colorPrimary,
+            backButtonPressed: viewModel.backButtonPressed,
+          ),
         ),
-        child: ChatBotAppbar(
-          title: "virtualcare bot",
-          subTitle: 'The team will respond as soon as possible',
-          logo:
-              "https://test.ca.digital-front-door.stg.gcp.trchq.com/assets/icons8-bot-50-ccd9ed66d2850c1bd0737308082e76890d697c8e.png",
-          colorPrimary: viewModel.colorPrimary,
-          backButtonPressed: viewModel.backButtonPressed,
-        ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.only(
-          top: 8.0,
-          bottom: (viewInsets.bottom > 0) ? 8.0 : 0.0,
-        ),
-        child: Column(
-          children: [
-            Expanded(
-              child: SafeArea(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const ClampingScrollPhysics(),
-                  padding: const EdgeInsets.only(
-                    left: 16.0,
-                    right: 16.0,
+        body: Padding(
+          padding: EdgeInsets.only(
+            top: 8.0,
+            bottom: (viewInsets.bottom > 0) ? 8.0 : 0.0,
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: SafeArea(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const ClampingScrollPhysics(),
+                    padding: const EdgeInsets.only(
+                      left: 16.0,
+                      right: 16.0,
+                    ),
+                    itemCount: messages.length,
+                    controller: _scrollController,
+                    itemBuilder: (context, index) {
+                      final message = messages[index];
+                      return MessageItemWidget(message: message);
+                    },
                   ),
-                  itemCount: messages.length,
-                  controller: _scrollController,
-                  itemBuilder: (context, index) {
-                    final message = messages[index];
-                    return MessageItemWidget(message: message);
+                ),
+              ),
+              if (chatBotUserState == ChatBotUserState.waitForInput &&
+                  chatMessageType == ChatMessageType.askForInputButton &&
+                  userInputOptions.length > 3) ...[
+                ChatUserSelectItemWidget(
+                    buttons: userInputOptions,
+                    color: viewModel.colorPrimary,
+                    colorSecondary: viewModel.colorSecondary,
+                    onUserInputTriggered: (blockData) {
+                      viewModel.onUserInputTriggered(blockData);
+                    })
+              ],
+              if (chatBotUserState == ChatBotUserState.waitForInput &&
+                  chatMessageType == ChatMessageType.askForInputButton &&
+                  userInputOptions.length <= 3) ...[
+                ChatWaitForInputButtonWidget(
+                    buttons: userInputOptions,
+                    color: viewModel.colorSecondary,
+                    onUserInputTriggered: (blockData) {
+                      viewModel.onUserInputTriggered(blockData);
+                    })
+              ],
+              if (chatBotUserState == ChatBotUserState.conversationClosed)
+                Container(
+                  padding: EdgeInsets.symmetric(
+                      vertical: context.bottomPadding.bottom),
+                  color: Colors.white,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  child: Text(
+                    'This conversation has ended',
+                    style: GoogleFonts.arimo(
+                        color: context.secondaryColor.mostlyBlack,
+                        fontSize: 14,
+                        height: 1.5,
+                        fontWeight: FontWeight.w800),
+                  ),
+                ),
+              if (chatBotUserState != ChatBotUserState.conversationClosed &&
+                  viewModel.chatMessageType == ChatMessageType.enterMessage)
+                ChatUserInputEditorWidget(
+                  textEditingController: messageController,
+                  onMessageEntered: (message) {
+                    viewModel.onMessageEntered(messageController.text);
+                    messageController.clear();
                   },
-                ),
-              ),
-            ),
-            if (chatBotUserState == ChatBotUserState.waitForInput &&
-                chatMessageType == ChatMessageType.askForInputButton &&
-                userInputOptions.length > 3) ...[
-              ChatUserSelectItemWidget(
-                  buttons: userInputOptions,
-                  color: viewModel.colorPrimary,
-                  colorSecondary: viewModel.colorSecondary,
-                  onUserInputTriggered: (blockData) {
-                    viewModel.onUserInputTriggered(blockData);
-                  })
+                )
             ],
-            if (chatBotUserState == ChatBotUserState.waitForInput &&
-                chatMessageType == ChatMessageType.askForInputButton &&
-                userInputOptions.length <= 3) ...[
-              ChatWaitForInputButtonWidget(
-                  buttons: userInputOptions,
-                  color: viewModel.colorSecondary,
-                  onUserInputTriggered: (blockData) {
-                    viewModel.onUserInputTriggered(blockData);
-                  })
-            ],
-            if (chatBotUserState == ChatBotUserState.conversationClosed)
-              Container(
-                padding: EdgeInsets.symmetric(
-                    vertical: context.bottomPadding.bottom),
-                color: Colors.white,
-                width: double.infinity,
-                alignment: Alignment.center,
-                child: Text(
-                  'This conversation has ended',
-                  style: GoogleFonts.arimo(
-                      color: context.secondaryColor.mostlyBlack,
-                      fontSize: 14,
-                      height: 1.5,
-                      fontWeight: FontWeight.w800),
-                ),
-              ),
-            if (chatBotUserState != ChatBotUserState.conversationClosed &&
-                viewModel.chatMessageType == ChatMessageType.enterMessage)
-              ChatUserInputEditorWidget(
-                textEditingController: messageController,
-                onMessageEntered: (message) {
-                  viewModel.onMessageEntered(messageController.text);
-                  messageController.clear();
-                },
-              )
-          ],
+          ),
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:chatbot/core/widgets/idle_detector.dart';
 import 'package:chatbot/features/chatbot/model/conversation_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -9,15 +10,20 @@ import 'widgets/conversation_list_appbar.dart';
 showConversationPage(context,
     {required List<Conversation> conversationList,
     required Color colorPrimary,
-    required String taglineText}) {
+    required String taglineText,
+    required int idleTimeout}) {
   showDialog(
     context: context,
     barrierDismissible: false,
     useSafeArea: false,
-    builder: (context) => ConversationList(
-        conversationList: conversationList,
-        colorPrimary: colorPrimary,
-        taglineText: taglineText),
+    builder: (context) => IdleDetector(
+      idleTime: idleTimeout,
+      onIdle: () => context.pop(),
+      child: ConversationList(
+          conversationList: conversationList,
+          colorPrimary: colorPrimary,
+          taglineText: taglineText),
+    ),
   );
 }
 

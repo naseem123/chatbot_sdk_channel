@@ -45,16 +45,26 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         );
 
   void initUserSession() {
-    state = state.merge(
-      chatBotUiState: ChatBotUiState.setupLoading,
-    );
+    entity = entity.merge(
+        chatBotUiState: ChatBotUiState.setupLoading,
+        chatSessionState: ChatSessionState.sessionUnavailable);
 
     request(InitGuestUserGatewayOutput(),
         onSuccess: (InitGuestUserSuccessInput input) {
-      preference.put(PreferenceKey.sessionId, input.initData.user.sessionId);
-      loadConfigurations();
-      loadRecentConversationList(perPage: 100, page: 1);
-      initialiseWebSocket();
+      preference
+          .put(PreferenceKey.sessionId, input.initData.user.sessionId)
+          .then((value) {
+        // Assigning session Idle Time
+        final clearSessionAfter =
+            input.initData.app.inboundSettings.visitors.idleSessionsAfter;
+        entity = entity.merge(
+            idleTimeout: clearSessionAfter,
+            chatSessionState: ChatSessionState.sessionActive);
+        loadConfigurations();
+        loadRecentConversationList(perPage: 100, page: 1);
+        initialiseWebSocket();
+      });
+
       return entity.merge(
         chatBotUiState: ChatBotUiState.setupSuccess,
       );
@@ -81,7 +91,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     });
   }
 
-  Future<void> deleteConversation() async {
+  Future<void> clearSession() async {
     await preference.remove(PreferenceKey.sessionId);
     entity = entity.merge(chatList: []);
     initialise();
@@ -92,7 +102,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
   }
 
   void loadRecentConversationList({int page = 1, int perPage = 100}) {
-    state = state.merge(
+    entity = entity.merge(
       chatBotUiState: ChatBotUiState.conversationLoading,
     );
     request(ChatBotGatewayOutput(page: page, perPage: perPage),
@@ -109,7 +119,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
   }
 
   void initializeNewConversation() {
-    if (state.chatList.isEmpty) {
+    if (entity.chatList.isEmpty) {
       initWebsocketConversation();
     } else {
       startNewConversation();
@@ -118,7 +128,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
 
   //region chat conversation starts
   void startNewConversation() {
-    state = state.merge(
+    entity = entity.merge(
       chatDetailsUiState: ChatDetailsUiState.loading,
       chatDetailList: [],
     );
@@ -127,7 +137,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         onSuccess: (StartConversationSuccessInput input) {
       entity =
           entity.merge(chatTriggerId: input.data.app.newConversationBots.id);
-      initWebsocketCommand(chatTriggerId: state.chatTriggerId);
+      initWebsocketCommand(chatTriggerId: entity.chatTriggerId);
       return entity.merge(
         chatDetailsUiState: ChatDetailsUiState.success,
       );
@@ -140,7 +150,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
 
   // region realtime data requests
   void initialiseWebSocket() {
-    state = state.merge(
+    entity = entity.merge(
       chatDetailsUiState: ChatDetailsUiState.loading,
       userInputOptions: [],
       chatDetailList: [],
@@ -417,8 +427,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
   void sendUserInput({required Block inputData}) {
     entity = entity.merge(
         chatBotUserState: ChatBotUserState.idle,
-        chatMessageType: ChatMessageType.idle,
-        userInputOptions: []);
+        chatMessageType: ChatMessageType.idle);
     final messageuiData = MessageUiModel(
       message: "$sentMessageHead${inputData.label}",
       messageId: DateTime.now().toString(),
@@ -428,7 +437,6 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     entity = entity.merge(
         chatBotUserState: ChatBotUserState.idle,
         chatMessageType: ChatMessageType.idle,
-        userInputOptions: [],
         chatDetailList: [...entity.chatDetailList, messageuiData]);
     request(
         WebsocketInitCommandGatewayOutput(
@@ -466,7 +474,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
   }
 
   void loadChatHistory({required String conversationID}) {
-    state = state.merge(
+    entity = entity.merge(
       chatDetailsUiState: ChatDetailsUiState.loading,
       chatDetailList: [],
     );

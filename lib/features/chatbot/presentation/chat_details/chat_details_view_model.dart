@@ -19,6 +19,8 @@ class ChatDetailsViewModel extends ViewModel {
     required this.colorPrimary,
     required this.backButtonPressed,
     required this.chatAssignee,
+    required this.idleTimeout,
+    required this.onIdleSessionTimeout,
   });
 
   final ChatDetailsUiState uiState;
@@ -34,6 +36,8 @@ class ChatDetailsViewModel extends ViewModel {
   final List<Block> userInputOptions;
   final Function(Block input) onUserInputTriggered;
   final ChatAssignee chatAssignee;
+  final VoidCallback onIdleSessionTimeout;
+  final int idleTimeout;
 
   @override
   List<Object?> get props => [
@@ -46,5 +50,6 @@ class ChatDetailsViewModel extends ViewModel {
         colorPrimary,
         backButtonPressed,
         chatAssignee,
+        idleTimeout,
       ];
 }
