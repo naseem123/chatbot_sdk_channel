@@ -15,6 +15,8 @@ class ChatDetailsUIOutput extends Output {
     required this.userInputOptions,
     required this.appSettings,
     required this.chatAssignee,
+    required this.idleTimeout,
+    required this.chatSessionState,
   });
 
   final ChatDetailsUiState chatDetailsUiState;
@@ -25,6 +27,8 @@ class ChatDetailsUIOutput extends Output {
   final ChatMessageType chatMessageType;
   final List<Block> userInputOptions;
   final ChatAssignee chatAssignee;
+  final int idleTimeout;
+  final ChatSessionState chatSessionState;
 
   @override
   List<Object?> get props => [
@@ -35,5 +39,7 @@ class ChatDetailsUIOutput extends Output {
         userInputOptions,
         appSettings,
         chatAssignee,
+        idleTimeout,
+        chatSessionState,
       ];
 }

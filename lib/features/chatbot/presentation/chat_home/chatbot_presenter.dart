@@ -22,27 +22,32 @@ class ChatBotPresenter
   ChatBotViewModel createViewModel(
       ChatBotUseCase useCase, ChatBotUIOutput output) {
     return ChatBotViewModel(
-      chatList: output.chatList,
-      outputState: output.outBondUiState,
-      onRefresh: () async {
-        useCase.initialise();
-      },
-      onRetry: () {
-        useCase.initialise();
-      },
-      uiState: output.chatBotUiState,
-      title: output.appSettings.app.greetings,
-      tagline: output.appSettings.app.tagline,
-      logo: output.appSettings.app.logo,
-      colorPrimary: output.appSettings.app.customizationColors.primary.toColor,
-      colorSecondary:
-          output.appSettings.app.customizationColors.secondary.toColor,
-      introText: output.appSettings.app.intro,
-      inBusinessHours: output.appSettings.app.inBusinessHours,
-      onDeleteConversationPressed: () {
-        useCase.deleteConversation();
-      },
-    );
+        chatList: output.chatList,
+        outputState: output.outBondUiState,
+        onRefresh: () async {
+          useCase.initialise();
+        },
+        onRetry: () {
+          useCase.initialise();
+        },
+        uiState: output.chatBotUiState,
+        title: output.appSettings.app.greetings,
+        tagline: output.appSettings.app.tagline,
+        logo: output.appSettings.app.logo,
+        colorPrimary:
+            output.appSettings.app.customizationColors.primary.toColor,
+        colorSecondary:
+            output.appSettings.app.customizationColors.secondary.toColor,
+        introText: output.appSettings.app.intro,
+        inBusinessHours: output.appSettings.app.inBusinessHours,
+        onDeleteConversationPressed: () {
+          useCase.clearSession();
+        },
+        idleTimeout: output.idleTimeout,
+        onIdleSessionTimeout: () {
+          useCase.clearSession();
+        },
+        replyTime: output.appSettings.app.replyTime);
   }
 
   @override

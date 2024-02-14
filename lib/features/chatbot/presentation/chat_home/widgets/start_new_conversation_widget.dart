@@ -8,8 +8,10 @@ class StartNewConversationWidget extends StatelessWidget {
     this.buttonColor,
     required this.onStartConversationPressed,
     required this.onSeePreviousPressed,
+    required this.replyTime,
   });
 
+  final String replyTime;
   final VoidCallback onStartConversationPressed;
   final VoidCallback onSeePreviousPressed;
   final Color? buttonColor;
@@ -45,7 +47,7 @@ class StartNewConversationWidget extends StatelessWidget {
             ),
           ),
           Text(
-            'The team will respond as soon as possible',
+            replyTextMap[replyTime] ?? '',
             style: GoogleFonts.arimo(
               color: context.secondaryColor.gray52,
               fontSize: 13,
@@ -101,3 +103,11 @@ class StartNewConversationWidget extends StatelessWidget {
     );
   }
 }
+
+Map<String, dynamic> get replyTextMap => {
+      "auto": "The team will respond as soon as possible",
+      "minutes": "The team usually responds in minutes",
+      "hours": "The team usually responds in a matter of hours",
+      "day": "The team usually responds in one day",
+      "off": "",
+    };

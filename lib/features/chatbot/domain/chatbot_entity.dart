@@ -29,6 +29,10 @@ class ChatBotEntity extends Entity {
   final List<Block> userInputOptions;
   final ChatAssignee chatAssignee;
 
+  // Chat session fields
+  final ChatSessionState chatSessionState;
+  final int idleTimeout;
+
   const ChatBotEntity({
     this.chatBotUiState = ChatBotUiState.conversationLoading,
     this.outBondUiState = OutBondUiState.outBondStateIdle,
@@ -44,6 +48,8 @@ class ChatBotEntity extends Entity {
     this.messageKey = "",
     this.userInputOptions = const [],
     this.chatAssignee = const ChatAssignee(),
+    this.chatSessionState = ChatSessionState.sessionUnavailable,
+    this.idleTimeout = 10,
   });
 
   ChatBotEntity merge({
@@ -61,6 +67,8 @@ class ChatBotEntity extends Entity {
     List<Block>? userInputOptions,
     String? messageKey,
     ChatAssignee? chatAssignee,
+    ChatSessionState? chatSessionState,
+    int? idleTimeout,
   }) {
     return ChatBotEntity(
       chatBotUiState: chatBotUiState ?? this.chatBotUiState,
@@ -77,6 +85,8 @@ class ChatBotEntity extends Entity {
       userInputOptions: userInputOptions ?? this.userInputOptions,
       outBondUiState: outBondUiState ?? this.outBondUiState,
       chatAssignee: chatAssignee ?? this.chatAssignee,
+      chatSessionState: chatSessionState ?? this.chatSessionState,
+      idleTimeout: idleTimeout ?? this.idleTimeout,
     );
   }
 
@@ -93,5 +103,7 @@ class ChatBotEntity extends Entity {
         chatBotUserState,
         chatMessageType,
         userInputOptions,
+        chatSessionState,
+        idleTimeout,
       ];
 }
