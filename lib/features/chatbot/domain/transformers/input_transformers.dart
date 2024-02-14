@@ -70,10 +70,8 @@ class ChatDetailsGetMessageInputTransformer
         if (messageData.containsKey("blocks")) {
           final blockData = BlocksData.fromJson(messageData["blocks"]);
 
-          final isSameAPreviousInput = const IterableEquality()
+          final isSameAPreviousInputs = const IterableEquality()
               .equals(blockData.schema, entity.userInputOptions);
-          print(
-              'ChatDetailsGetMessageInputTransformer.transform ${isSameAPreviousInput}');
 
           if (blockData.label != null && blockData.label!.isNotEmpty) {
             final messageuiData = MessageUiModel(
@@ -89,7 +87,7 @@ class ChatDetailsGetMessageInputTransformer
                   chatDetailList: [...entity.chatDetailList, messageuiData]);
             }
           }
-          if (blockData.waitForInput && !isSameAPreviousInput) {
+          if (blockData.waitForInput && !isSameAPreviousInputs) {
             return entity.merge(
               conversationKey: conversationKey,
               messageKey: messageKey,
