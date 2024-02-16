@@ -19,6 +19,9 @@ class ChatBotViewModel extends ViewModel {
     required this.inBusinessHours,
     required this.tagline,
     required this.onDeleteConversationPressed,
+    required this.onIdleSessionTimeout,
+    required this.idleTimeout,
+    required this.replyTime,
   });
 
   final List<Conversation> chatList;
@@ -34,6 +37,9 @@ class ChatBotViewModel extends ViewModel {
   final VoidCallback onRetry;
   final AsyncCallback onRefresh;
   final VoidCallback onDeleteConversationPressed;
+  final VoidCallback onIdleSessionTimeout;
+  final int idleTimeout;
+  final String replyTime;
 
   @override
   List<Object?> get props => [
@@ -47,5 +53,7 @@ class ChatBotViewModel extends ViewModel {
         inBusinessHours,
         outputState,
         tagline,
+        idleTimeout,
+        replyTime,
       ];
 }

@@ -8,12 +8,14 @@ class ChatBotUIOutput extends Output {
   final OutBondUiState outBondUiState;
   final List<Conversation> chatList;
   final AppSettings appSettings;
+  final int idleTimeout;
 
   const ChatBotUIOutput({
     required this.chatBotUiState,
     required this.chatList,
     required this.outBondUiState,
     required this.appSettings,
+    required this.idleTimeout,
   });
 
   @override
@@ -22,5 +24,6 @@ class ChatBotUIOutput extends Output {
         chatList,
         appSettings,
         outBondUiState,
+        idleTimeout,
       ];
 }

@@ -11,7 +11,8 @@ class ChatBotUIOutputTransformer
         chatBotUiState: entity.chatBotUiState,
         chatList: entity.chatList,
         appSettings: entity.appSettings,
-        outBondUiState: entity.outBondUiState);
+        outBondUiState: entity.outBondUiState,
+        idleTimeout: entity.idleTimeout);
   }
 }
 
@@ -28,6 +29,8 @@ class ChatDetailsUIOutputTransformer
             .where((element) => element.label.isNotEmpty)
             .toList(),
         appSettings: entity.appSettings,
-        chatAssignee: entity.chatAssignee);
+        chatAssignee: entity.chatAssignee,
+        idleTimeout: entity.idleTimeout,
+        chatSessionState: entity.chatSessionState);
   }
 }

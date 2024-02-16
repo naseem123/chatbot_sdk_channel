@@ -9,6 +9,7 @@ import 'package:chatbot/features/chatbot/model/block_model.dart';
 import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
 import 'package:chatbot/providers/src/usecase_providers.dart';
 import 'package:clean_framework/clean_framework.dart';
+import 'package:collection/collection.dart';
 
 class ChatDetailsDisconnectMessageInputTransformer
     extends InputTransformer<ChatBotEntity, WebsocketDisconnectSuccessInput> {
@@ -68,6 +69,10 @@ class ChatDetailsGetMessageInputTransformer
         var message = "";
         if (messageData.containsKey("blocks")) {
           final blockData = BlocksData.fromJson(messageData["blocks"]);
+
+          final isSameAPreviousInputs = const IterableEquality()
+              .equals(blockData.schema, entity.userInputOptions);
+
           if (blockData.label != null && blockData.label!.isNotEmpty) {
             final messageuiData = MessageUiModel(
               message: blockData.label!,
@@ -82,7 +87,7 @@ class ChatDetailsGetMessageInputTransformer
                   chatDetailList: [...entity.chatDetailList, messageuiData]);
             }
           }
-          if (blockData.waitForInput) {
+          if (blockData.waitForInput && !isSameAPreviousInputs) {
             return entity.merge(
               conversationKey: conversationKey,
               messageKey: messageKey,

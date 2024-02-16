@@ -1,3 +1,4 @@
+import 'package:chatbot/core/widgets/idle_detector.dart';
 import 'package:chatbot/features/chatbot/model/conversation_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_presenter.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_view_model.dart';
@@ -49,7 +50,8 @@ class ChatBotUI extends UI<ChatBotViewModel> {
                       showConversationListPage(context,
                           chatList: viewModel.chatList,
                           color: viewModel.colorPrimary,
-                          taglineText: viewModel.tagline);
+                          taglineText: viewModel.tagline,
+                          idleTimeout: viewModel.idleTimeout);
                     },
                     onDeleteConversationPressed: () {
                       viewModel.onDeleteConversationPressed();
@@ -62,11 +64,13 @@ class ChatBotUI extends UI<ChatBotViewModel> {
                     onStartConversationPressed: () {
                       context.push("/chatDetail");
                     },
+                    replyTime:viewModel.replyTime,
                     onSeePreviousPressed: () {
                       showConversationListPage(context,
                           chatList: viewModel.chatList,
                           color: viewModel.colorPrimary,
-                          taglineText: viewModel.tagline);
+                          taglineText: viewModel.tagline,
+                          idleTimeout: viewModel.idleTimeout);
                     },
                   )
                 else
@@ -76,24 +80,30 @@ class ChatBotUI extends UI<ChatBotViewModel> {
         ),
       );
     }
-    return Scaffold(
-      appBar: ChatBotAppbar(
-        title: viewModel.title,
-        subtitle: viewModel.introText,
-        colorPrimary: viewModel.colorPrimary,
-        logo: viewModel.logo,
+    return IdleDetector(
+      idleTime: viewModel.idleTimeout,
+      onIdle: viewModel.onIdleSessionTimeout,
+      child: Scaffold(
+        appBar: ChatBotAppbar(
+          title: viewModel.title,
+          subtitle: viewModel.introText,
+          colorPrimary: viewModel.colorPrimary,
+          logo: viewModel.logo,
+        ),
+        body: child,
       ),
-      body: child,
     );
   }
 
   void showConversationListPage(BuildContext context,
       {required List<Conversation> chatList,
       required Color color,
-      required String taglineText}) {
+      required String taglineText,
+      required int idleTimeout}) {
     showConversationPage(context,
         conversationList: chatList,
         colorPrimary: color,
-        taglineText: taglineText);
+        taglineText: taglineText,
+        idleTimeout: idleTimeout);
   }
 }

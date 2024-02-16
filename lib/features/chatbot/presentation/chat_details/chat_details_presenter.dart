@@ -1,11 +1,13 @@
 import 'package:chatbot/core/extensions/string_extensions.dart';
 import 'package:chatbot/features/chatbot/domain/chat_details_ui_output.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_use_case.dart';
+import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
 import 'package:chatbot/features/chatbot/model/block_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_view_model.dart';
 import 'package:chatbot/providers/src/usecase_providers.dart';
 import 'package:clean_framework/clean_framework_legacy.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
     ChatDetailsUIOutput, ChatBotUseCase> {
@@ -48,7 +50,16 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
         useCase.loadRecentConversationList();
       },
       chatAssignee: output.chatAssignee,
+      idleTimeout: output.idleTimeout,
+      onIdleSessionTimeout: useCase.clearSession,
     );
+  }
+
+  @override
+  void onOutputUpdate(BuildContext context, ChatDetailsUIOutput output) {
+    if (output.chatSessionState == ChatSessionState.sessionUnavailable) {
+      context.pop();
+    }
   }
 
   @override
