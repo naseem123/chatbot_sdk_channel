@@ -19,17 +19,37 @@ class EnvReader {
     }
   }
 
+  late String _appId ;
+  late String _origin ;
+
   //TODO(naseem): need to refactor. Once the SDK has been setup these values needs to come from the main dynamic arguments
 
   String getAppID() {
-    return 'yB9BJmrcH3bM4CShtMKB5qrw';
+    return _appId;
+  }
+
+  void setAppId(String appId){
+    _appId = appId;
   }
 
   String getBaseUrl() {
-    return 'https://test.ca.digital-front-door.stg.gcp.trchq.com';
+    return 'https://$_origin';
+  }
+
+  void setBaseUrl(String baseUrl){
+    _origin = baseUrl;
   }
 
   String getWebsocketBaseUrl() {
-    return 'wss://test.ca.digital-front-door.stg.gcp.trchq.com/cable';
+    return 'wss://$_origin/cable';
   }
+
+  Future<void> init(String appID, String origin) async {
+    _appId = appID;
+    _origin = origin;
+  }
+
+
+
 }
+

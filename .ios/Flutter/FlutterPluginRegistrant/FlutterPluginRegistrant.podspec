@@ -22,5 +22,6 @@ Depends on all your plugins, and provides a function to register them.
   s.dependency 'path_provider_foundation'
   s.dependency 'shared_preferences_foundation'
   s.dependency 'sqflite'
+  s.dependency 'url_launcher_ios'
   s.dependency 'webview_flutter_wkwebview'
 end
