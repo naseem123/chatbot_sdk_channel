@@ -181,53 +181,43 @@ class DraftTextView extends StatelessWidget {
       List<Widget> children = [];
       String text = block.text;
       var entityMap = data.entityMap;
-      for (var range in block.entityRanges) {
-        var entity = entityMap["${range.key}"];
-        if (entity == null) continue;
-        switch (entity.type) {
-          case EntityType.image:
-            Image image = Image.network(
-              entity.data.url!,
-              width: MediaQuery.of(context).size.width,
-              fit: BoxFit.scaleDown,
-            );
-            children.add(image);
-            if (entity.data.name?.isNotEmpty ?? false) {
-              children.add(Text(entity.data.name!,
-                  style: textStyle, textAlign: TextAlign.center));
-            }
-            break;
-          case EntityType.divider:
-            Divider divider = const Divider();
-            children.add(divider);
-            break;
-          case EntityType.link:
-            textView = Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(text: text.substring(0, range.offset)),
+      final ranges = block.entityRanges;
+
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text.rich(
+            TextSpan(
+              children: [
+                for (int i = 0; i < ranges.length; i++) ...[
+                  if (i == 0)
+                    TextSpan(text: text.substring(0, ranges[0].offset))
+                  else
+                    TextSpan(
+                        text: text.substring(
+                            ranges[i - 1].offset + ranges[i - 1].length,
+                            ranges[i].offset)),
                   TextSpan(
                     text: text.substring(
-                        range.offset, range.offset + range.length),
+                        ranges[i].offset, ranges[i].offset + ranges[i].length),
                     style: textStyle.copyWith(
                         color: Colors.blue,
                         decoration: TextDecoration.underline),
                     recognizer: TapGestureRecognizer()
-                      ..onTap = () => onLinkTab?.call(entity.data.url ?? ""),
+                      ..onTap = () => onLinkTab
+                          ?.call(entityMap["${ranges[i].key}"]?.data.url ?? ""),
                   ),
-                  TextSpan(text: text.substring(range.offset + range.length)),
                 ],
-              ),
-              textAlign: block.data.textAlign,
-            );
-            children.add(textView);
-            break;
-        }
-      }
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: children,
+                TextSpan(
+                  text: text.substring(block.entityRanges.last.offset +
+                      block.entityRanges.last.length),
+                ),
+              ],
+            ),
+            textAlign: block.data.textAlign,
+          )
+        ],
       );
     }
     return textView;
