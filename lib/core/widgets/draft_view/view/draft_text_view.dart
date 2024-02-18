@@ -147,17 +147,6 @@ class DraftTextView extends StatelessWidget {
     }
     // 无序列表
     if (block.type == BlockType.bulletList) {
-      var size = TextUtil.measureText(' ', textStyle);
-      double dotSize = 5;
-      const solid = BoxDecoration(color: Colors.black, shape: BoxShape.circle);
-      var hollow = BoxDecoration(
-          shape: BoxShape.circle, border: Border.all(color: Colors.black));
-      Widget dot = Container(
-        width: dotSize,
-        height: dotSize,
-        margin: EdgeInsets.only(right: dotSize),
-        decoration: block.depth > 0 ? hollow : solid,
-      );
       return SizedBox(
         width: MediaQuery.of(context).size.width,
         child: textView,
@@ -178,7 +167,6 @@ class DraftTextView extends StatelessWidget {
       );
     }
     if (block.entityRanges.isNotEmpty) {
-      List<Widget> children = [];
       String text = block.text;
       var entityMap = data.entityMap;
       final ranges = block.entityRanges;
