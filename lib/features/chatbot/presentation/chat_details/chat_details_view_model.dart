@@ -21,10 +21,11 @@ class ChatDetailsViewModel extends ViewModel {
     required this.chatAssignee,
     required this.idleTimeout,
     required this.onIdleSessionTimeout,
+    required this.onSurveySubmitted,
   });
 
   final ChatDetailsUiState uiState;
-  final List<MessageUiModel> chatList;
+  final List<ChatMessage> chatList;
   final Function(String message) onMessageEntered;
   final VoidCallback backButtonPressed;
 
@@ -35,6 +36,7 @@ class ChatDetailsViewModel extends ViewModel {
   final ChatMessageType chatMessageType;
   final List<Block> userInputOptions;
   final Function(Block input) onUserInputTriggered;
+  final Function(Map input) onSurveySubmitted;
   final ChatAssignee chatAssignee;
   final VoidCallback onIdleSessionTimeout;
   final int idleTimeout;

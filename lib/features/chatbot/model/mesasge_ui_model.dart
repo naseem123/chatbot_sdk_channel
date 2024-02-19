@@ -1,7 +1,14 @@
 import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
 import 'package:clean_framework/clean_framework.dart';
 
-class MessageUiModel extends Equatable {
+abstract class ChatMessage extends Equatable {
+  const ChatMessage();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class MessageUiModel extends ChatMessage {
   final String message;
   final String messageId;
   final MessageSenderType messageSenderType;

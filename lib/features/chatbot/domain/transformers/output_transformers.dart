@@ -21,16 +21,17 @@ class ChatDetailsUIOutputTransformer
   @override
   ChatDetailsUIOutput transform(ChatBotEntity entity) {
     return ChatDetailsUIOutput(
-        chatDetailsUiState: entity.chatDetailsUiState,
-        chatDetailList: entity.chatDetailList,
-        chatBotUserState: entity.chatBotUserState,
-        chatMessageType: entity.chatMessageType,
-        userInputOptions: entity.userInputOptions
-            .where((element) => element.label.isNotEmpty)
-            .toList(),
-        appSettings: entity.appSettings,
-        chatAssignee: entity.chatAssignee,
-        idleTimeout: entity.idleTimeout,
-        chatSessionState: entity.chatSessionState);
+      chatDetailsUiState: entity.chatDetailsUiState,
+      chatDetailList: entity.chatDetailList,
+      chatBotUserState: entity.chatBotUserState,
+      chatMessageType: entity.chatMessageType,
+      userInputOptions: entity.userInputOptions
+          .where((element) => element.label.isNotEmpty)
+          .toList(),
+      appSettings: entity.appSettings,
+      chatAssignee: entity.chatAssignee,
+      idleTimeout: entity.idleTimeout,
+      chatSessionState: entity.chatSessionState,
+    );
   }
 }

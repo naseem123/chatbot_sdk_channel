@@ -1,4 +1,6 @@
 import 'package:chatbot/chatbot_app.dart';
+import 'package:chatbot/core/env/env_reader.dart';
+import 'package:chatbot/core/utils/shared_pref.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_entity.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_connect_gateway.dart';
@@ -7,6 +9,8 @@ import 'package:chatbot/features/chatbot/gateway/websocket/websocket_message_gat
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_send_message_gateway.dart';
 import 'package:chatbot/features/chatbot/model/block_model.dart';
 import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
+import 'package:chatbot/features/chatbot/model/survey_input.dart';
+import 'package:chatbot/providers.dart';
 import 'package:chatbot/providers/src/usecase_providers.dart';
 import 'package:clean_framework/clean_framework.dart';
 import 'package:collection/collection.dart';
@@ -56,8 +60,30 @@ class ChatDetailsGetMessageInputTransformer
         return entity.merge(
           conversationKey: conversationKey,
           messageKey: messageKey,
-          chatBotUserState: ChatBotUserState.waitForInput,
-          chatMessageType: ChatMessageType.enterMessage,
+          chatBotUserState: ChatBotUserState.survey,
+          chatMessageType: ChatMessageType.survey,
+        );
+      } else if (messageData.containsKey("blocks") &&
+          messageData["blocks"]["type"] != null &&
+          messageData["blocks"]["type"] != null &&
+          messageData["blocks"]["type"] == "app_package" &&
+          messageData["blocks"]["app_package"] == "Surveys") {
+        String? sessionId = preference.get<String>(PreferenceKey.sessionId, "");
+        final appId = providersContext().read(envReaderProvider).getAppID();
+
+        return entity.merge(
+          conversationKey: conversationKey,
+          messageKey: messageKey,
+          chatBotUserState: ChatBotUserState.survey,
+          chatMessageType: ChatMessageType.survey,
+          chatDetailList: [
+            ...entity.chatDetailList,
+            SurveyInput.fromJson(messageData["blocks"]["schema"],
+                messageKey: messageKey,
+                conversationKey: conversationKey,
+                appId: appId,
+                sessionId: sessionId),
+          ],
         );
       } else {
         chatBotUseCaseProvider

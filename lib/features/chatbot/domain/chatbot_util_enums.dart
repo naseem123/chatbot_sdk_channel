@@ -2,6 +2,7 @@
 enum ChatBotUserState {
   idle,
   waitForInput,
+  survey,
   conversationClosed,
 }
 
@@ -9,6 +10,7 @@ enum ChatMessageType {
   idle,
   askForInputButton,
   enterMessage,
+  survey,
 }
 
 enum MessageSenderType {

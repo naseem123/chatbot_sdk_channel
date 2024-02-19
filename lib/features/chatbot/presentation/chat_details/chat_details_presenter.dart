@@ -52,6 +52,7 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
       chatAssignee: output.chatAssignee,
       idleTimeout: output.idleTimeout,
       onIdleSessionTimeout: useCase.clearSession,
+      onSurveySubmitted: useCase.onSurveySubmitted,
     );
   }
 

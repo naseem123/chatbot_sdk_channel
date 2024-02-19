@@ -1,6 +1,8 @@
 import 'package:chatbot/core/extensions/context_extension.dart';
 import 'package:chatbot/core/widgets/idle_detector.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
+import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
+import 'package:chatbot/features/chatbot/model/survey_input.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_view_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_details_appbar.dart';
@@ -8,8 +10,10 @@ import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_user_select_item_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_wait_for_input_button_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/message_item_widget.dart';
+import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/survey_input_widget.dart';
 import 'package:clean_framework/clean_framework_legacy.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:resources/resources.dart';
 
@@ -34,7 +38,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
   @override
   Widget build(BuildContext context, ChatDetailsViewModel viewModel) {
     final viewInsets = MediaQuery.viewInsetsOf(context);
-    final messages = viewModel.chatList.toList();
+    final messages = viewModel.chatList;
     final isLoading = viewModel.uiState == ChatDetailsUiState.loading;
 
     final chatMessageType = viewModel.chatMessageType;
@@ -93,7 +97,24 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                     controller: _scrollController,
                     itemBuilder: (context, index) {
                       final message = messages[index];
-                      return MessageItemWidget(message: message);
+                      if (message is MessageUiModel) {
+                        return MessageItemWidget(message: message);
+                      } else {
+                        final surveyModel = message as SurveyInput;
+                        return SurveyInputWidget(
+                          title: surveyModel.title,
+                          subTitle: surveyModel.subtitle,
+                          labelText: surveyModel.buttonText,
+                          primaryColor: viewModel.colorPrimary,
+                          onSurveyStartClicked: () {
+                            context.push('/survey', extra: {
+                              'surveyData': surveyModel.surveyMap
+                            }).then((value) {
+                              // viewModel.onIdleSessionTimeout
+                            });
+                          },
+                        );
+                      }
                     },
                   ),
                 ),
@@ -143,7 +164,24 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                     viewModel.onMessageEntered(messageController.text);
                     messageController.clear();
                   },
-                )
+                ),
+              if (chatBotUserState == ChatBotUserState.survey &&
+                  viewModel.chatMessageType == ChatMessageType.survey)
+                Container(
+                  padding: EdgeInsets.symmetric(
+                      vertical: context.bottomPadding.bottom),
+                  color: Colors.white,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Reply above',
+                    style: GoogleFonts.arimo(
+                        color: context.secondaryColor.mostlyBlack,
+                        fontSize: 14,
+                        height: 1.5,
+                        fontWeight: FontWeight.w800),
+                  ),
+                ),
             ],
           ),
         ),

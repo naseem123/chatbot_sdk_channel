@@ -20,7 +20,7 @@ class ChatDetailsUIOutput extends Output {
   });
 
   final ChatDetailsUiState chatDetailsUiState;
-  final List<MessageUiModel> chatDetailList;
+  final List<ChatMessage> chatDetailList;
   final AppSettings appSettings;
 
   final ChatBotUserState chatBotUserState;

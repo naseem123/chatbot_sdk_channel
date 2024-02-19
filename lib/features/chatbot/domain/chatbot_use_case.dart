@@ -21,6 +21,7 @@ import 'package:chatbot/features/chatbot/gateway/websocket/websocket_send_messag
 import 'package:chatbot/features/chatbot/model/block_model.dart';
 import 'package:chatbot/features/chatbot/model/chat_assignee.dart';
 import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
+import 'package:chatbot/features/chatbot/model/survey_input.dart';
 import 'package:chatbot/features/chatbot/model/websocket/init_command_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_presenter.dart';
@@ -547,6 +548,36 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
           chatMessageType: ChatMessageType.askForInputButton,
         );
       }
+
+      //Handle for Seruver Input
+
+      if (messageData.containsKey("blocks") &&
+          messageData["blocks"] != null &&
+          messageData["blocks"]['type'] == 'app_package' &&
+          messageData["blocks"]['app_package'] == 'Surveys') {
+        //     "id": "Surveys",
+        // "message_key": "WKtcy9jJCt5w9AacHRbRMjxC",
+        // "conversation_key": "XoeW3HHco6BwcEXmYyppNTUw",
+        // "enc_data": {},
+        // "app_id": "yB9BJmrcH3bM4CShtMKB5qrw",
+        // "session_id": "4_NNCLACYaUPPsQw_-Gb7Q"
+        String? sessionId = preference.get<String>(PreferenceKey.sessionId, "");
+        final appId = providersContext().read(envReaderProvider).getAppID();
+
+        entity = entity.merge(
+          chatDetailList: [
+            ...entity.chatDetailList,
+            SurveyInput.fromJson(messageData["blocks"]['schema'],
+                messageKey: messageKey,
+                conversationKey: conversationKey,
+                appId: appId,
+                sessionId: sessionId)
+          ],
+          chatMessageType: ChatMessageType.survey,
+          chatBotUserState: ChatBotUserState.survey,
+        );
+      }
+
       if (messageData["state"] != null &&
           messageData["state"] == "replied" &&
           messageData["data"] != null &&
@@ -606,6 +637,10 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       chatMessageType: ChatMessageType.idle,
       userInputOptions: [],
     );
+  }
+
+  void onSurveySubmitted(Map<dynamic, dynamic> input) {
+
   }
 }
 
