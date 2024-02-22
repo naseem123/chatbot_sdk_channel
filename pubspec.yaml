@@ -1,7 +1,7 @@
 name: chatbot
 description: Flutter module for Thinkresearch Chatbot SDK
 #Chatbot SDK Version Updated
-version: 1.0.2+3
+version: 1.0.3+4
 
 environment:
   sdk: '>=3.0.5 <4.0.0'
