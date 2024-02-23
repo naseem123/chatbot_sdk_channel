@@ -93,7 +93,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                     controller: _scrollController,
                     itemBuilder: (context, index) {
                       final message = messages[index];
-                      return MessageItemWidget(message: message);
+                      return MessageItemWidget(message: message,secondaryColor:viewModel.colorSecondary);
                     },
                   ),
                 ),
