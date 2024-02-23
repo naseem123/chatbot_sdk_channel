@@ -40,7 +40,8 @@ class ChatDetailsGetMessageInputTransformer
       });
 
       return entity.merge(chatTriggerId: triggerId);
-    } else if (input.data["type"] == "conversations:update_state") {
+    } else if (input.data["type"] == "conversations:update_state" &&
+        input.data['data']['state'] == 'closed') {
       return entity.merge(
         chatBotUserState: ChatBotUserState.conversationClosed,
       );
