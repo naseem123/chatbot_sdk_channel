@@ -56,6 +56,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
         duration: const Duration(milliseconds: 300),
       );
     });
+    print('ChatDetailsUI.build ${viewModel.chatBotUserState} ${viewModel.userInputOptions} ${viewModel.chatMessageType}');
     return IdleDetector(
       idleTime: viewModel.idleTimeout,
       child: Scaffold(
