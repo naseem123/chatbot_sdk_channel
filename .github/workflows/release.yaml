@@ -1,11 +1,11 @@
 name: Publish
 
 on:
-  pull_request:
+  push:
     branches:
       - main
-    types:
-      - closed
+    # types:
+    #   - closed
 
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   release:
-    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
+    # if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.tag.outputs.version }}
@@ -42,7 +42,7 @@ jobs:
 
           
   xcframeworks:
-    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
+    # if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
     runs-on: macos-latest
     needs: release
     steps:
