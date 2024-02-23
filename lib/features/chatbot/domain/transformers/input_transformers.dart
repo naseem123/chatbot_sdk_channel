@@ -25,8 +25,6 @@ class ChatDetailsGetMessageInputTransformer
   @override
   ChatBotEntity transform(
       ChatBotEntity entity, WebsocketMessageSuccessInput input) {
-    print(
-        'ChatDetailsGetMessageInputTransformer.transform ${input.data["type"]}');
     if (input.data["type"] == "triggers:receive") {
       final triggerId = input.data["data"]["trigger"]["id"];
       Future.delayed(const Duration(milliseconds: 300), () {
