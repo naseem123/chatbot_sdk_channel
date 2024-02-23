@@ -25,6 +25,8 @@ class ChatDetailsGetMessageInputTransformer
   @override
   ChatBotEntity transform(
       ChatBotEntity entity, WebsocketMessageSuccessInput input) {
+    print(
+        'ChatDetailsGetMessageInputTransformer.transform ${input.data["type"]}');
     if (input.data["type"] == "triggers:receive") {
       final triggerId = input.data["data"]["trigger"]["id"];
       Future.delayed(const Duration(milliseconds: 300), () {
@@ -40,7 +42,8 @@ class ChatDetailsGetMessageInputTransformer
       });
 
       return entity.merge(chatTriggerId: triggerId);
-    } else if (input.data["type"] == "conversations:update_state") {
+    } else if (input.data["type"] == "conversations:update_state" &&
+        input.data['state'] == 'closed') {
       return entity.merge(
         chatBotUserState: ChatBotUserState.conversationClosed,
       );
