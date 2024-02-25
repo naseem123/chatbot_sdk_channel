@@ -1,11 +1,11 @@
 name: Publish
 
 on:
-  push:
+  pull_request:
     branches:
       - main
-    # types:
-    #   - closed
+    types:
+      - closed
 
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
@@ -39,50 +39,6 @@ jobs:
         with:
           tag: ${{ steps.tag.outputs.version }}
 
-
-          
-  xcframeworks:
-    # if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
-    runs-on: macos-latest
-    needs: release
-    steps:
-      - name: "Checkout TIKI SDK Flutter"
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Checkout current tag
-        run: |
-          git checkout ${{needs.release.outputs.tag}}
-
-      - name: "Setup Flutter"
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.13.3'
-
-      - name: "Setup XCode"
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
-
-      - name: 'Flutter pub get'
-        run: |
-          flutter pub get
-
-      - name: 'Add embed script in Xcode Project Build phases'
-        run: |
-          cd .ios
-          perl -i -p0e 's/shellScript = "\/bin\/sh \\"\$FLUTTER_ROOT\/packages\/flutter_tools\/bin\/xcode_backend\.sh\\" build";/shellScript = "\/bin\/sh \\"\$FLUTTER_ROOT\/packages\/flutter_tools\/bin\/xcode_backend\.sh\\" build\\n\/bin\/sh \\"\$FLUTTER_ROOT\/packages\/flutter_tools\/bin\/xcode_backend\.sh\\" embed\\n";/s' ./Runner.xcodeproj/project.pbxproj
-
-      - name: "Build Frameworks"
-        run: |
-          flutter build ios-framework --output=Frameworks --no-profile
-
-      - name: "Create pod"
-        run: |
-          pod trunk push chatbot_sdk_channel.podspec --allow-warnings   
-
-          
   aar:
     if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
     runs-on: ubuntu-latest
