@@ -1,0 +1,43 @@
+{
+  "navItems": {
+    "returnType": "object",
+    "variants": {
+      "public": ["home", "wallet", "finlit", "profile"],
+      "testing":  ["home", "wallet", "banking", "finlit", "profile"],
+      "dev":  ["home", "wallet", "banking", "finlit", "profile"]
+    },
+    "defaultVariant": "public",
+    "state": "enabled",
+    "rules": [
+      {
+        "action": {
+          "variant": "testing"
+        },
+        "conditions": [
+          {
+            "context": "email",
+            "op": "ends_with",
+            "value": [
+              "@getperch.app",
+              "@altro.io",
+              "@agilityio.com",
+              "@asnet.com.vn"
+            ]
+          }
+        ]
+      },
+      {
+        "action": {
+          "variant": "dev"
+        },
+        "conditions": [
+          {
+            "context": "email",
+            "op": "ends_with",
+            "value": "@acme-software.com"
+          }
+        ]
+      }
+    ]
+  }
+}
