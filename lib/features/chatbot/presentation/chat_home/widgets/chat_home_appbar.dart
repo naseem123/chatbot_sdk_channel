@@ -38,8 +38,7 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
               ),
               trailing: IconButton(
                 onPressed: () {
-                  //TODO(naseem) : need to exit from the bot once SDK setup is complete
-                  // Navigator.of(context).pop();
+                   Navigator.of(context).pop();
                 },
                 icon: const Icon(
                   Icons.close,
