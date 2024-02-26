@@ -133,7 +133,7 @@ jobs:
 
       - name: "Update podspce file"
         run: |
-          version=$(grep 'version:' pubspec.yaml | awk '{print $2}') sed -i '' "s/^  s.version.*$/  s.version = '$version'/g" chatbot_sdk_channel_test.podspec    
+          version=$(grep 'version:' pubspec.yaml | awk '{print $2}') awk -v new_version="$version" '  /s.version          =/ {$3 = "'"'"'" new_version "'"'"'"} 1' chatbot_sdk_channel_test.podspec > temp && mv temp chatbot_sdk_channel_test.podspec
 
       - name: "Register session"
         run: |
