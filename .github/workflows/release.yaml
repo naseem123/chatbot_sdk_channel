@@ -131,6 +131,10 @@ jobs:
         run: |
           flutter build ios-framework --output=Frameworks --no-profile
 
+      - name: "Update podspce file"
+        run: |
+          version=$(grep 'version:' pubspec.yaml | awk '{print $2}') sed -i '' "s/^  s.version.*$/  s.version = '$version'/g" chatbot_sdk_channel_test.podspec    
+
       - name: "Create pod"
         run: |
           pod trunk push chatbot_sdk_channel.podspec --allow-warnings   
