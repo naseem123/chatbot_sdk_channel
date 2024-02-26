@@ -13,7 +13,11 @@ void main(List<String> arguments) async {
       statusBarBrightness: Brightness.light,
     ),
   );
-  providersContext().read(envReaderProvider).init(arguments[0],arguments[1]);
+
+  final appID = arguments.isEmpty ? "yB9BJmrcH3bM4CShtMKB5qrw" : arguments[0];
+  final origin = arguments.isEmpty ? "test.ca.digital-front-door.stg.gcp.trchq.com" : arguments[1];
+
+  providersContext().read(envReaderProvider).init(appID,origin);
 
   loadProviders();
   await preference.init();

@@ -1,7 +1,7 @@
 name: chatbot
 description: Flutter module for Thinkresearch Chatbot SDK
-
-version: 1.0.0+1
+#Chatbot SDK Version Updated
+version: 1.0.6+6
 
 environment:
   sdk: '>=3.0.5 <4.0.0'
@@ -39,5 +39,5 @@ flutter:
   uses-material-design: true
   module:
     androidX: true
-    androidPackage: com.thinkresearch.chatbot
-    iosBundleIdentifier: com.thinkresearch.chatbot
+    androidPackage: com.thinkresearch.chatbot_native
+    iosBundleIdentifier: com.thinkresearch.chatbot_native

@@ -18,9 +18,11 @@ class MessageItemWidget extends StatelessWidget {
   const MessageItemWidget({
     super.key,
     required this.message,
+    required this.secondaryColor,
   });
 
   final MessageUiModel message;
+  final Color secondaryColor;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +52,7 @@ class MessageItemWidget extends StatelessWidget {
           child: DraftTextView.json(
             jsonDecode(message.message),
             padding: const EdgeInsets.symmetric(horizontal: 16),
+              secondaryColor:secondaryColor,
             defaultStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: context.secondaryColor.mostlyBlack,
                   fontSize: 18,

@@ -308,7 +308,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.thinkresearch.chatbot;
+				PRODUCT_BUNDLE_IDENTIFIER = com.thinkresearch.chatbot_native;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -431,7 +431,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.thinkresearch.chatbot;
+				PRODUCT_BUNDLE_IDENTIFIER = com.thinkresearch.chatbot_native;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -449,7 +449,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.thinkresearch.chatbot;
+				PRODUCT_BUNDLE_IDENTIFIER = com.thinkresearch.chatbot_native;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
