@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   release:
-    # if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
+    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.tag.outputs.version }}
@@ -117,6 +117,12 @@ jobs:
       - name: 'Flutter pub get'
         run: |
           flutter pub get
+
+      - name: 'Change Deployment Target in Xcode Project'
+        run: |
+          cd .ios
+          perl -i -pe 's/IPHONEOS_DEPLOYMENT_TARGET = 11.0;/IPHONEOS_DEPLOYMENT_TARGET = 13.0;/g' Runner.xcodeproj/project.pbxproj
+    
 
       - name: 'Add embed script in Xcode Project Build phases'
         run: |
