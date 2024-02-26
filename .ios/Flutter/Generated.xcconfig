@@ -2,14 +2,13 @@
 FLUTTER_ROOT=/Users/shivmohansingh/flutter
 FLUTTER_APPLICATION_PATH=/Users/shivmohansingh/Projects/flutter/chatbot_sdk_channel
 COCOAPODS_PARALLEL_CODE_SIGN=true
-FLUTTER_TARGET=/Users/shivmohansingh/Projects/flutter/chatbot_sdk_channel/lib/main.dart
+FLUTTER_TARGET=lib/main.dart
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.6
-FLUTTER_BUILD_NUMBER=10
+FLUTTER_BUILD_NUMBER=11
 EXCLUDED_ARCHS[sdk=iphonesimulator*]=i386
 EXCLUDED_ARCHS[sdk=iphoneos*]=armv7
-DART_DEFINES=RkxVVFRFUl9XRUJfQVVUT19ERVRFQ1Q9dHJ1ZQ==,RkxVVFRFUl9XRUJfQ0FOVkFTS0lUX1VSTD1odHRwczovL3d3dy5nc3RhdGljLmNvbS9mbHV0dGVyLWNhbnZhc2tpdC9iOGQzNTgxMGU5MWFiOGZjMzliYTVlN2E0MWJmZjZmNjk3ZThlM2E4Lw==
 DART_OBFUSCATION=false
 TRACK_WIDGET_CREATION=true
 TREE_SHAKE_ICONS=false
-PACKAGE_CONFIG=/Users/shivmohansingh/Projects/flutter/chatbot_sdk_channel/.dart_tool/package_config.json
+PACKAGE_CONFIG=.dart_tool/package_config.json
