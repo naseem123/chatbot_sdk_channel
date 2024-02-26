@@ -2,6 +2,7 @@ Pod::Spec.new do |s|
   s.name             = 'chatbot_sdk_channel_test'
   s.module_name      = 'chatbot_sdk_channel_test'
 
+
   s.version = '1.0.6+11'
 
   s.summary          = 'Your Pod Summary'
