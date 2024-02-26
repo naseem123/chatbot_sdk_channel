@@ -29,9 +29,9 @@ android {
         namespace 'com.thinkresearch.chatbot_native'
     }
 
-    compileSdkVersion 33
+    compileSdkVersion 31
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 16
     }
 }
 
