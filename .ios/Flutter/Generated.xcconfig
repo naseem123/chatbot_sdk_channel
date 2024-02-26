@@ -1,11 +1,11 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=F:\flutter
-FLUTTER_APPLICATION_PATH=F:\ArchitectPros\chatbot
+FLUTTER_ROOT=/Users/shivmohansingh/flutter
+FLUTTER_APPLICATION_PATH=/Users/shivmohansingh/Projects/flutter/chatbot_sdk_channel
 COCOAPODS_PARALLEL_CODE_SIGN=true
-FLUTTER_TARGET=lib\main.dart
+FLUTTER_TARGET=lib/main.dart
 FLUTTER_BUILD_DIR=build
-FLUTTER_BUILD_NAME=1.0.0
-FLUTTER_BUILD_NUMBER=1
+FLUTTER_BUILD_NAME=1.0.6
+FLUTTER_BUILD_NUMBER=12
 EXCLUDED_ARCHS[sdk=iphonesimulator*]=i386
 EXCLUDED_ARCHS[sdk=iphoneos*]=armv7
 DART_OBFUSCATION=false
