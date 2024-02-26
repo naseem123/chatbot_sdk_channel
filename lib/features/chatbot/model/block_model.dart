@@ -65,6 +65,8 @@ class BlocksData extends Equatable {
   @override
   List<Object?> get props => [schema, type, waitForInput];
 
+  bool get waitForReply => type == 'wait_for_reply';
+
   factory BlocksData.fromJson(Map<String, dynamic> json) {
     List<dynamic> schemaList = json['schema'];
     List<Block> schema = schemaList
