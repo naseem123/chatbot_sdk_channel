@@ -38,7 +38,7 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
               ),
               trailing: IconButton(
                 onPressed: () {
-                   Navigator.of(context).pop();
+                  Navigator.of(context).pop();
                 },
                 icon: const Icon(
                   Icons.close,
