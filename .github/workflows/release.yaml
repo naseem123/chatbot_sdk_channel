@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   release:
-    # if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
+    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.tag.outputs.version }}
