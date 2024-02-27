@@ -6,14 +6,14 @@ workflows:
       flutter: stable
 
     scripts:
+      - name: 'Flutter Pub Get'
+        script: flutter pub get
+
       - name: Run Flutter Analyzer
         script: flutter analyze
 
       - name: Run Unit Tests
         script: flutter test
-
-      - name: 'Flutter Pub Get'
-        script: flutter pub get
 
       - name: 'Flutter Build AAR'
         script: flutter build aar
