@@ -12,15 +12,12 @@ workflows:
       - name: Run Unit Tests
         script: flutter test
 
-      - name: Build Android SDK
-        script: flutter build apk
+      - name: 'Flutter Pub Get'
+        script: flutter pub get
 
-      - name: Publish to Google Artifactory Registry
-        script: |
-          # Your script to publish the Gradle build to Google Artifactory Registry
-          # Example commands:
-          # Replace placeholders with your actual values
-          ./gradlew assembleRelease
-          ./gradlew publishToGoogleArtifactoryRegistry
+      - name: 'Flutter Build AAR'
+        script: flutter build aar
+
+      
 
       # You can add more scripts or steps as needed
