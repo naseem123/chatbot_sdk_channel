@@ -545,7 +545,9 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
           messageKey: messageKey,
           userInputOptions: blockData.schema,
           chatBotUserState: ChatBotUserState.waitForInput,
-          chatMessageType: ChatMessageType.askForInputButton,
+          chatMessageType: blockData.waitForReply
+              ? ChatMessageType.enterMessage
+              : ChatMessageType.askForInputButton,
         );
       }
 

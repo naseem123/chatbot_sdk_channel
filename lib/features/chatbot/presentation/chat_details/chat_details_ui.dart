@@ -115,6 +115,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                           },
                         );
                       }
+                      return MessageItemWidget(message: message,secondaryColor:viewModel.colorSecondary);
                     },
                   ),
                 ),

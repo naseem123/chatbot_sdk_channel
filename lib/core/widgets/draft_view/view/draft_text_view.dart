@@ -15,13 +15,15 @@ class DraftTextView extends StatelessWidget {
   final double blockSpacing = 8;
   final ScrollController? controller;
   final EdgeInsets? padding;
+  final Color? secondaryColor;
 
   DraftTextView.json(dynamic json,
       {Key? key,
       this.onLinkTab,
       this.defaultStyle = const TextStyle(fontSize: 12, color: Colors.black),
       this.controller,
-      this.padding})
+      this.padding,
+      this.secondaryColor})
       : data = DraftData.fromJson(json),
         super(key: key);
 
@@ -30,6 +32,7 @@ class DraftTextView extends StatelessWidget {
       this.onLinkTab,
       this.defaultStyle = const TextStyle(fontSize: 12, color: Colors.black),
       this.controller,
+      this.secondaryColor,
       this.padding})
       : data = DraftData.fromJson(jsonDecode(json)),
         super(key: key);
@@ -38,6 +41,7 @@ class DraftTextView extends StatelessWidget {
       {Key? key,
       required this.data,
       this.onLinkTab,
+      this.secondaryColor,
       this.defaultStyle = const TextStyle(fontSize: 12, color: Colors.black),
       this.controller,
       this.padding})
@@ -176,6 +180,9 @@ class DraftTextView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text.rich(
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
             TextSpan(
               children: [
                 for (int i = 0; i < ranges.length; i++) ...[
@@ -190,7 +197,8 @@ class DraftTextView extends StatelessWidget {
                     text: text.substring(
                         ranges[i].offset, ranges[i].offset + ranges[i].length),
                     style: textStyle.copyWith(
-                        color: Colors.blue,
+                        color: secondaryColor,
+                        fontWeight: FontWeight.bold,
                         decoration: TextDecoration.underline),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () => onLinkTab
