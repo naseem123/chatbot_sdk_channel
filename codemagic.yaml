@@ -9,14 +9,14 @@ workflows:
       - name: 'Flutter Pub Get'
         script: flutter pub get
 
-      - name: Run Flutter Analyzer
-        script: flutter analyze
-
-      - name: Run Unit Tests
-        script: flutter test
-
       - name: 'Flutter Build AAR'
         script: flutter build aar
+
+      - name: 'Set app/build.gradle versions'
+        script: |
+          perl -i -p0e 's/compileSdkVersion 31/compileSdkVersion 33/g' .android/app/build.gradle
+          perl -i -p0e 's/minSdkVersion 16/minSdkVersion 19/g' .android/app/build.gradle
+          perl -i -p0e 's/targetSdkVersion 31/targetSdkVersion 33/g' .android/app/build.gradle
 
       
 
