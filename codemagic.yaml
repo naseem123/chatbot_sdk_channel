@@ -8,8 +8,8 @@ workflows:
     scripts:
       - name: Install Java 11
         script: |
-          sudo brew update
-          sudo brew install -y openjdk-11-jdk
+          brew update
+          brew install -y openjdk-11-jdk
           export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
       - name: Install Google Cloud CLI
