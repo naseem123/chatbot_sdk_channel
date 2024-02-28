@@ -41,25 +41,6 @@ workflows:
 
       - name: 'Append publish.gradle script'
         script: |
-          apply plugin: 'maven-publish'
-
-            publishing {
-              publications {
-                mavenJava(MavenPublication) {
-                    from components.java
-                 }
-               }
-                repositories {
-                   maven {
-                       name = "googleArtifactRegistry"
-                       url = uri("https://console.cloud.google.com/artifacts/maven/gcp-pocs-386219/northamerica-northeast2/think-research-maven-repo")
-                      credentials(HttpHeaderCredentials) {
-                         name = "terraform-service-account@gcp-pocs-386219.iam.gserviceaccount.com"
-                         value = "3750b13c75a4500e26b7837213d01fd409a5b6dd"
-                      }
-                   }
-                }
-            }
-
+          cat publish.gradle
 
       # You can add more scripts or steps as needed
