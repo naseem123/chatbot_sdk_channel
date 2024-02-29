@@ -1,17 +1,18 @@
-apply plugin: 'maven-publish'
-apply plugin: '"com.google.cloud.artifactregistry.gradle-plugin" version "2.1.4"'
-project.getGradle().projectsEvaluated {
-    allprojects {
-        publishing {
-            repositories {
-                maven {
-                    url = uri("https://console.cloud.google.com/artifacts/maven/gcp-pocs-386219/northamerica-northeast2/think-research-maven-repo")
-                    credentials(HttpHeaderCredentials) {
-                         name = "terraform-service-account@gcp-pocs-386219.iam.gserviceaccount.com"
-                         value = "3750b13c75a4500e26b7837213d01fd409a5b6dd"
-                    }
-                }
-            }
-        }
+plugins {
+  id "maven-publish"
+  id "com.google.cloud.artifactregistry.gradle-plugin" version "2.2.0"
+}
+
+publishing {
+  repositories {
+    maven {
+      url "artifactregistry://northamerica-northeast2-maven.pkg.dev/gcp-pocs-386219/think-research-maven-repo"
     }
+  }
+}
+
+repositories {
+  maven {
+    url "artifactregistry://northamerica-northeast2-maven.pkg.dev/gcp-pocs-386219/think-research-maven-repo"
+  }
 }
