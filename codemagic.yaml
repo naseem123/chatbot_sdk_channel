@@ -1,46 +1,73 @@
 workflows:
   main:
-    name: CI/CD Workflow
+    name: Publish Workflow
 
-    environment:
-      flutter: stable
+    # Triggers for the workflow
+    triggers:
+      - event: pull_request
+        branch: main
+        action: closed
 
-    scripts:
-      - name: Install Java 11
-        script: |
-          brew update
-          brew install -y openjdk-11-jdk
-          export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+    # Concurrency settings
+    concurrency:
+      group: $CI_COMMIT_REF_NAME-$CI_PIPELINE_ID
+      cancel-in-progress: true
 
-      - name: Install Google Cloud CLI
-        script: |
-          curl https://sdk.cloud.google.com | bash
-          exec -l $SHELL
-          gcloud init
+        environment:
+          flutter: stable
 
-      - name: Authenticate with Google Cloud
-        script: |
-          gcloud auth activate-service-account terraform-service-account@gcp-pocs-386219.iam.gserviceaccount.com --key-file=3750b13c75a4500e26b7837213d01fd409a5b6dd
-          gcloud config set project gcp-pocs-386219
+        scripts:
+          - name: Checkout
+            script: git clone $CI_REPOSITORY_URL .
 
-      - name: 'Flutter Pub Get'
-        script: flutter pub get
+          - name: Check a new tag
+            script: |
+              TAG_VERSION=$(grep version pubspec.yaml | awk -F ': ' '{print $2}')
+              echo "version=$TAG_VERSION" >> $CI_OUTPUT
+              echo $TAG_VERSION
+              git tag $TAG_VERSION
+              git push origin $TAG_VERSION
 
-      - name: 'Flutter Build AAR'
-        script: flutter build aar
+          - name: Install Java 11
+            script: |
+              brew update
+              brew install -y openjdk-11-jdk
+              export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
-      - name: 'Set app/build.gradle versions'
-        script: |
-          perl -i -p0e 's/compileSdkVersion 31/compileSdkVersion 33/g' .android/app/build.gradle
-          perl -i -p0e 's/minSdkVersion 16/minSdkVersion 19/g' .android/app/build.gradle
-          perl -i -p0e 's/targetSdkVersion 31/targetSdkVersion 33/g' .android/app/build.gradle
+          - name: Install Google Cloud CLI
+            script: |
+              curl https://sdk.cloud.google.com | bash
+              exec -l $SHELL
+              gcloud init
 
-      - name: 'Append build.gradle script'
-        script: |
-          cat .android/build.gradle
+          - name: 'Flutter Pub Get'
+            script: flutter pub get
 
-      - name: 'Append publish.gradle script'
-        script: |
-          cat publish.gradle
+          - name: 'Flutter Build AAR'
+            script: flutter build aar
 
-      # You can add more scripts or steps as needed
+          - name: 'Set app/build.gradle versions'
+            script: |
+              perl -i -p0e 's/compileSdkVersion 31/compileSdkVersion 33/g' .android/app/build.gradle
+              perl -i -p0e 's/minSdkVersion 16/minSdkVersion 19/g' .android/app/build.gradle
+              perl -i -p0e 's/targetSdkVersion 31/targetSdkVersion 33/g' .android/app/build.gradle
+
+          - name: 'Append build.gradle script'
+            script: |
+              cat .android/build.gradle
+
+          - name: Publish to Google Cloud
+            script: | 
+                echo $GCLOUD_STORAGE_KEY > $CM_BUILD_DIR/gcloud_storage_key.json
+                gcloud auth activate-service-account --key-file $CM_BUILD_DIR/gcloud_storage_key.json
+                gsutil cp $CM_BUILD_DIR/app/build/outputs/**/*.apk gs://think-research-maven-repo-bucket
+
+          - name: 'Append publish.gradle script'
+            script: |
+              cat publish.gradle
+
+
+          - name: 'Flutter Build AAR'
+            run: |
+              flutter build aar --no-debug --no-profile --build-number $TAG_VERSION
+            # You can add more scripts or steps as needed
