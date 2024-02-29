@@ -40,7 +40,6 @@ workflows:
           - name: 'Append build.gradle script'
             script: |
               cat publish.gradle >> .android/build.gradle
-              cat /Users/builder/clone/.android/build.gradle
 
           - name: 'Flutter Build AAR'
             script: |
