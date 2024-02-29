@@ -44,7 +44,7 @@ workflows:
 
           - name: 'Flutter Build AAR'
             script: |
-              flutter build aar --no-debug --no-profile --build-number $TAG_VERSION
+              flutter build aar --no-debug --no-profile --build-number $TAG_VERSION.$BUILD_NUMBER
             # You can add more scripts or steps as needed
           - name: Publish to Google Cloud
             script: | 
