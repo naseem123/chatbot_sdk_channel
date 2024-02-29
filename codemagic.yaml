@@ -47,8 +47,8 @@ workflows:
             script: |
               flutter build aar --no-debug --no-profile --build-number $PROJECT_BUILD_NUMBER
             # You can add more scripts or steps as needed
-          - name: Publish to Google Cloud
-            script: | 
-              echo $GCLOUD_STORAGE_KEY > $CM_BUILD_DIR/gcloud_storage_key.json
-              gcloud auth activate-service-account --key-file $CM_BUILD_DIR/gcloud_storage_key.json
-              gsutil cp $CM_BUILD_DIR/app/build/outputs/**/*.aar gs://think-research-maven-repo-bucket
+         # - name: Publish to Google Cloud
+         #  script: | 
+         #     echo $GCLOUD_STORAGE_KEY > $CM_BUILD_DIR/gcloud_storage_key.json
+         #     gcloud auth activate-service-account --key-file $CM_BUILD_DIR/gcloud_storage_key.json
+         #     gsutil cp $CM_BUILD_DIR/app/build/outputs/**/*.aar gs://think-research-maven-repo-bucket
