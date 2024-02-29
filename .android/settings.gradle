@@ -8,6 +8,9 @@ pluginManagement {
                 url = uri("https://plugins.gradle.org/m2/")
                     }  
         }
+        plugins {
+        id("com.google.cloud.artifactregistry.gradle-plugin")
+         }
  }
 include ':app'
 
