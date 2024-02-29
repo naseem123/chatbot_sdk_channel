@@ -8,11 +8,6 @@ workflows:
         branch: main
         action: closed
 
-    # Concurrency settings
-    concurrency:
-      group: $CI_COMMIT_REF_NAME-$CI_PIPELINE_ID
-      cancel-in-progress: true
-
         environment:
           flutter: stable
 
