@@ -8,8 +8,8 @@ workflows:
     scripts:
           - name: Check a new tag
             script: |
-              TAG_VERSION=$(grep version pubspec.yaml | awk '{printf "%s%s\n", $0, $BUILD_NUMBER}')
-              echo "version=$TAG_VERSION" >> $CI_OUTPUT
+              TAG_VERSION=$(grep version pubspec.yaml | awk '{print substr($0, 1, 4)}' | awk -v build="$BUILD_NUMBER" '{printf "%s%s\n", $0, build}')
+              echo "version=$TAG_VERSION"
               echo $TAG_VERSION
               git tag $TAG_VERSION
               git push origin $TAG_VERSION
