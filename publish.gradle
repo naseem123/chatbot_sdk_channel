@@ -1,18 +1,17 @@
-plugins {
-  id "maven-publish"
-  id "com.google.cloud.artifactregistry.gradle-plugin" version "2.2.0"
-}
-
-publishing {
-  repositories {
-    maven {
-      url "artifactregistry://northamerica-northeast2-maven.pkg.dev/gcp-pocs-386219/think-research-maven-repo"
+apply plugin: 'maven-publish'
+apply plugin: "com.google.cloud.artifactregistry.gradle-plugin"
+project.getGradle().projectsEvaluated {
+    allprojects {
+        publishing {
+            repositories {
+                maven {
+                    url = uri("artifactregistry://northamerica-northeast2-maven.pkg.dev/gcp-pocs-386219/think-research-maven-repo")
+                    credentials {
+                        username = _json_key
+                        password = "$System.env.GCLOUD_STORAGE_KEY"
+                    }
+                }
+            }
+        }
     }
-  }
-}
-
-repositories {
-  maven {
-    url "artifactregistry://northamerica-northeast2-maven.pkg.dev/gcp-pocs-386219/think-research-maven-repo"
-  }
 }

@@ -43,17 +43,3 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
-
-publishing {
-  repositories {
-    maven {
-      url "artifactregistry://northamerica-northeast2-maven.pkg.dev/gcp-pocs-386219/think-research-maven-repo"
-    }
-  }
-}
-
-repositories {
-  maven {
-    url "artifactregistry://northamerica-northeast2-maven.pkg.dev/gcp-pocs-386219/think-research-maven-repo"
-  }
-}
