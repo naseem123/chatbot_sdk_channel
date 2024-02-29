@@ -40,11 +40,7 @@ workflows:
 
           - name: 'Append build.gradle script'
             script: |
-              cat .android/build.gradle
-
-          - name: 'Append publish.gradle script'
-            script: |
-              cat publish.gradle
+              cat publish.gradle >> .android/build.gradle
 
           - name: 'Flutter Build AAR'
             script: |
