@@ -8,11 +8,11 @@ workflows:
     scripts:
           - name: Check a new tag
             script: |
-              TAG_VERSION=$(grep version pubspec.yaml | awk -F ': ' '{print $2}')
+              TAG_VERSION=$(grep version pubspec.yaml | awk'{printf "%s%s\n", $0, $BUILD_NUMBER}')
               echo "version=$TAG_VERSION" >> $CI_OUTPUT
-              echo $TAG_VERSION.$BUILD_NUMBER
-              git tag $TAG_VERSION.$BUILD_NUMBER
-              git push origin $TAG_VERSION.$BUILD_NUMBER
+              echo $TAG_VERSION
+              git tag $TAG_VERSION
+              git push origin $TAG_VERSION
 
           - name: Install Java 11
             script: |
@@ -41,10 +41,11 @@ workflows:
           - name: 'Append build.gradle script'
             script: |
               cat publish.gradle >> .android/build.gradle
+              cat /Users/builder/clone/.android/build.gradle
 
           - name: 'Flutter Build AAR'
             script: |
-              flutter build aar --no-debug --no-profile --build-number $TAG_VERSION.$BUILD_NUMBER
+              flutter build aar --no-debug --no-profile --build-number $TAG_VERSION
             # You can add more scripts or steps as needed
           - name: Publish to Google Cloud
             script: | 
