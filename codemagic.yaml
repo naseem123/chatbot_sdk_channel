@@ -8,8 +8,7 @@ workflows:
     scripts:
           - name: Check a new tag
             script: |
-              TAG_VERSION=$(grep version pubspec.yaml | awk '{print substr($0, 1, 4)}' | awk -v build="$BUILD_NUMBER" '{printf "%s%s\n", $0, build}')
-              echo "version=$TAG_VERSION"
+              TAG_VERSION=$(grep version pubspec.yaml | awk '{print substr($0, 1, 4)}' | awk -v build="$PROJECT_BUILD_NUMBER" '{printf "%s%s\n", $0, build}')
               echo $TAG_VERSION
               git tag $TAG_VERSION
               git push origin $TAG_VERSION
@@ -45,7 +44,7 @@ workflows:
 
           - name: 'Flutter Build AAR'
             script: |
-              flutter build aar --no-debug --no-profile --build-number $TAG_VERSION
+              flutter build aar --no-debug --no-profile --build-number $PROJECT_BUILD_NUMBER
             # You can add more scripts or steps as needed
           - name: Publish to Google Cloud
             script: | 
