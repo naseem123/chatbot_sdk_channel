@@ -6,9 +6,6 @@ workflows:
       flutter: stable
 
     scripts:
-          - name: Checkout
-            script: git clone git@bitbucket.org:chatbotsdk/think-research-chatbot.git.
-
           - name: Check a new tag
             script: |
               TAG_VERSION=$(grep version pubspec.yaml | awk -F ': ' '{print $2}')
