@@ -66,25 +66,38 @@ class ChatDetailsGetMessageInputTransformer
         );
       } else if (messageData.containsKey("blocks") &&
           messageData["blocks"]["type"] != null &&
-          messageData["blocks"]["type"] != null &&
           messageData["blocks"]["type"] == "app_package" &&
           messageData["blocks"]["app_package"] == "Surveys") {
         String? sessionId = preference.get<String>(PreferenceKey.sessionId, "");
         final appId = providersContext().read(envReaderProvider).getAppID();
+
+        final surveyMessage = SurveyMessage.fromJson(
+          messageData["blocks"]["schema"],
+          messageKey: messageKey,
+          conversationKey: conversationKey,
+          appId: appId,
+          sessionId: sessionId,
+        );
+
+        // remove previous survey start text
+        final currentChatList = entity.chatDetailList;
+
+        if (currentChatList.contains(surveyMessage)) {
+          return entity;
+        }
+
+        final hasSurveyInputChatItem = currentChatList.where(
+            (element) => element is SurveyMessage && element.isSurveySubmit);
+        if (hasSurveyInputChatItem.isNotEmpty) {
+          currentChatList.removeLast();
+        }
 
         return entity.merge(
           conversationKey: conversationKey,
           messageKey: messageKey,
           chatBotUserState: ChatBotUserState.survey,
           chatMessageType: ChatMessageType.survey,
-          chatDetailList: [
-            ...entity.chatDetailList,
-            SurveyInput.fromJson(messageData["blocks"]["schema"],
-                messageKey: messageKey,
-                conversationKey: conversationKey,
-                appId: appId,
-                sessionId: sessionId),
-          ],
+          chatDetailList: [...currentChatList, surveyMessage],
         );
       } else {
         chatBotUseCaseProvider
@@ -102,11 +115,11 @@ class ChatDetailsGetMessageInputTransformer
 
           if (blockData.label != null && blockData.label!.isNotEmpty) {
             final messageuiData = MessageUiModel(
-              message: blockData.label!,
-              messageId: messageData["id"].toString(),
-              imageUrl: input.data["data"]["app_user"]["avatar_url"],
-              messageSenderType: MessageSenderType.bot,
-            );
+                message: blockData.label!,
+                messageId: messageData["id"].toString(),
+                imageUrl: input.data["data"]["app_user"]["avatar_url"],
+                messageSenderType: MessageSenderType.bot,
+                messageType: MessageType.normalText);
             if (!entity.chatDetailList.contains(messageuiData)) {
               entity = entity.merge(
                   conversationKey: conversationKey,

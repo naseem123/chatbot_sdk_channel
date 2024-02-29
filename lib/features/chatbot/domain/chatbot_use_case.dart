@@ -474,6 +474,27 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     );
   }
 
+  InitCommandModel setUserInputCommandAsMap(Map inputData) {
+    final sessionId = preference.get<String>(PreferenceKey.sessionId, "");
+    return InitCommandModel(
+      command: socketMessage,
+      identifier: jsonEncode(Identifier(
+              app: providersContext().read(envReaderProvider).getAppID(),
+              channel: socketMessageChannel,
+              sessionId: sessionId ?? "",
+              encData: "{}",
+              sessionValue: null,
+              userData: "{}")
+          .toJson()),
+      data: jsonEncode({
+        'data': inputData,
+        'conversation_key': entity.conversationKey,
+        'message_key': entity.messageKey,
+        'action': socketActionSubmit,
+      }),
+    );
+  }
+
   void loadChatHistory({required String conversationID}) {
     entity = entity.merge(
       chatDetailsUiState: ChatDetailsUiState.loading,
@@ -569,11 +590,13 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         entity = entity.merge(
           chatDetailList: [
             ...entity.chatDetailList,
-            SurveyInput.fromJson(messageData["blocks"]['schema'],
-                messageKey: messageKey,
-                conversationKey: conversationKey,
-                appId: appId,
-                sessionId: sessionId)
+            SurveyMessage.fromJson(
+              messageData["blocks"]['schema'],
+              messageKey: messageKey,
+              conversationKey: conversationKey,
+              appId: appId,
+              sessionId: sessionId,
+            )
           ],
           chatMessageType: ChatMessageType.survey,
           chatBotUserState: ChatBotUserState.survey,
@@ -642,7 +665,18 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
   }
 
   void onSurveySubmitted(Map<dynamic, dynamic> input) {
+    entity = entity.merge(
+        chatBotUserState: ChatBotUserState.idle,
+        chatMessageType: ChatMessageType.idle);
 
+    request(
+        WebsocketInitCommandGatewayOutput(
+            messageToSend: setUserInputCommandAsMap(input)),
+        onSuccess: (WebsocketSendMessageSuccessInput input) {
+      return entity;
+    }, onFailure: (_) {
+      return entity;
+    });
   }
 }
 

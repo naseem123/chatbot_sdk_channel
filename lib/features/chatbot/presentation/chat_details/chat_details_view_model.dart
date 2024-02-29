@@ -36,7 +36,7 @@ class ChatDetailsViewModel extends ViewModel {
   final ChatMessageType chatMessageType;
   final List<Block> userInputOptions;
   final Function(Block input) onUserInputTriggered;
-  final Function(Map input) onSurveySubmitted;
+  final void Function(Map input) onSurveySubmitted;
   final ChatAssignee chatAssignee;
   final VoidCallback onIdleSessionTimeout;
   final int idleTimeout;

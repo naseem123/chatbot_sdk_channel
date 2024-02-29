@@ -1,21 +1,19 @@
+import 'package:chatbot/features/chatbot/model/survey_input.dart';
 import 'package:components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SurveyInputWidget extends StatelessWidget {
-  const SurveyInputWidget({
+class SurveyWidget extends StatelessWidget {
+  const SurveyWidget({
     super.key,
-    required this.title,
-    required this.subTitle,
-    required this.labelText,
+    required this.surveyModel,
     required this.onSurveyStartClicked,
     required this.primaryColor,
   });
 
-  final String title;
-  final String subTitle;
-  final String labelText;
-  final VoidCallback onSurveyStartClicked;
+  final SurveyMessage surveyModel;
+
+  final Function(Map) onSurveyStartClicked;
   final Color primaryColor;
 
   @override
@@ -38,45 +36,89 @@ class SurveyInputWidget extends StatelessWidget {
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text(
-            title,
-            style: GoogleFonts.arimo(
-              color: context.secondaryColor.mostlyBlack,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              height: 1.3,
-            ),
-          ),
-          Text(
-            subTitle,
-            style: GoogleFonts.arimo(
-              color: context.secondaryColor.mostlyBlack,
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-              height: 1.3,
-            ),
-          ),
-          SizedBox(
-            width: 92,
-            height: 32,
-            child: Button.accent(
-              primaryColor: primaryColor,
-              buttonRadius: 4,
-              onPressed: onSurveyStartClicked,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: surveyModel.children.map((e) {
+          if (e is SurveyInputText) {
+            return SizedBox(
+              width: double.infinity,
               child: Text(
-                labelText,
-                style: GoogleFonts.arimo(
-                  color: context.secondaryColor.mostlyWhite,
-                  fontSize: 16,
-                  fontWeight: FontWeight.normal,
-                  height: 1.3,
+                e.text,
+                style: getStyle(context, e.style),
+                textAlign: getTextAlign(e.align),
+              ),
+            );
+          } else if (e is SurveyInputSeparator) {
+            return Divider(
+              color: context.secondaryColor.gray52,
+            );
+          } else if (e is SurveyInputButton) {
+            return Container(
+              width: double.infinity,
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: 92,
+                height: 32,
+                child: Button.accent(
+                  primaryColor: primaryColor,
+                  buttonRadius: 4,
+                  onPressed: () => onSurveyStartClicked(e.surveyData),
+                  child: Text(
+                    e.label,
+                    style: GoogleFonts.arimo(
+                      color: context.secondaryColor.mostlyWhite,
+                      fontSize: 16,
+                      fontWeight: FontWeight.normal,
+                      height: 1.3,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          )
-        ],
+            );
+          }
+          return const SizedBox.shrink();
+        }).toList(),
       ),
     );
+  }
+
+  TextAlign getTextAlign(String align) {
+    if (align == 'center') {
+      return TextAlign.center;
+    }
+    if (['start', 'left'].contains(align)) {
+      return TextAlign.start;
+    }
+    if (['end', 'right'].contains(align)) {
+      return TextAlign.end;
+    }
+    return TextAlign.start;
+  }
+
+  TextStyle getStyle(BuildContext context, String style) {
+    TextStyle tStyle = GoogleFonts.arimo(
+      height: 1.3,
+    );
+    if (style == 'muted') {
+      tStyle = tStyle.copyWith(
+        color: context.secondaryColor.gray52,
+        fontSize: 14,
+        height: 1.3,
+      );
+    } else if (style == 'header') {
+      tStyle = tStyle.copyWith(
+        color: context.secondaryColor.mostlyBlack,
+        fontSize: 22,
+        fontWeight: FontWeight.bold,
+        height: 1.3,
+      );
+    } else if (style == 'paragraph') {
+      tStyle = tStyle.copyWith(
+        color: context.secondaryColor.mostlyBlack,
+        fontSize: 15,
+        fontWeight: FontWeight.w500,
+        height: 1.3,
+      );
+    }
+    return tStyle;
   }
 }

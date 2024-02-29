@@ -10,12 +10,13 @@ import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_user_select_item_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_wait_for_input_button_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/message_item_widget.dart';
-import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/survey_input_widget.dart';
 import 'package:clean_framework/clean_framework_legacy.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:resources/resources.dart';
+
+import 'widgets/survey_input_widget.dart';
 
 class ChatDetailsUI extends UI<ChatDetailsViewModel> {
   ChatDetailsUI({
@@ -65,14 +66,11 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
       child: Scaffold(
         backgroundColor: const Color(0xfff1f1f1),
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(
-            70,
-          ),
+          preferredSize: const Size.fromHeight(70),
           child: ChatBotAppbar(
-            title: "virtualcare bot",
+            title: viewModel.chatAssignee.assignee,
             subTitle: 'The team will respond as soon as possible',
-            logo:
-                "https://test.ca.digital-front-door.stg.gcp.trchq.com/assets/icons8-bot-50-ccd9ed66d2850c1bd0737308082e76890d697c8e.png",
+            logo: viewModel.chatAssignee.assigneeImage,
             colorPrimary: viewModel.colorPrimary,
             backButtonPressed: viewModel.backButtonPressed,
           ),
@@ -98,24 +96,25 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                     itemBuilder: (context, index) {
                       final message = messages[index];
                       if (message is MessageUiModel) {
-                        return MessageItemWidget(message: message);
-                      } else {
-                        final surveyModel = message as SurveyInput;
-                        return SurveyInputWidget(
-                          title: surveyModel.title,
-                          subTitle: surveyModel.subtitle,
-                          labelText: surveyModel.buttonText,
+                        return MessageItemWidget(
+                          message: message,
+                          secondaryColor: viewModel.colorSecondary,
+                        );
+                      } else if (message is SurveyMessage) {
+                        return SurveyWidget(
+                          surveyModel: message,
                           primaryColor: viewModel.colorPrimary,
-                          onSurveyStartClicked: () {
-                            context.push('/survey', extra: {
-                              'surveyData': surveyModel.surveyMap
-                            }).then((value) {
-                              // viewModel.onIdleSessionTimeout
+                          onSurveyStartClicked: (surveyMap) {
+                            context.push('/survey',
+                                extra: {'surveyData': surveyMap}).then((value) {
+                              if (value != null && value is Map) {
+                                viewModel.onSurveySubmitted(value);
+                              }
                             });
                           },
                         );
                       }
-                      return MessageItemWidget(message: message,secondaryColor:viewModel.colorSecondary);
+                      return const SizedBox.shrink();
                     },
                   ),
                 ),

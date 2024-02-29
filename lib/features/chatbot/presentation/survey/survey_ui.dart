@@ -43,7 +43,7 @@ class _SurveyUiState extends State<SurveyUi> {
 
                 surveyMap = result[0];
                 Future.delayed(const Duration(milliseconds: 600)).then((value) {
-                  context.pop(surveyData);
+                  context.pop(surveyMap);
                 });
 
                 // Handle the result from JavaScript here
