@@ -10,9 +10,9 @@ workflows:
             script: |
               TAG_VERSION=$(grep version pubspec.yaml | awk -F ': ' '{print $2}')
               echo "version=$TAG_VERSION" >> $CI_OUTPUT
-              echo $TAG_VERSION
-              git tag $TAG_VERSION
-              git push origin $TAG_VERSION
+              echo $TAG_VERSION.$BUILD_NUMBER
+              git tag $TAG_VERSION.$BUILD_NUMBER
+              git push origin $TAG_VERSION.$BUILD_NUMBER
 
           - name: Install Java 11
             script: |
