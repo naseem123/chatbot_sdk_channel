@@ -18,7 +18,7 @@ buildscript {
 }
 plugins {
   id "maven-publish"
-  id "com.google.cloud.artifactregistry.gradle-plugin" version "2.2.0"
+  id "com.google.cloud.artifactregistry.gradle-plugin" version "2.2.1"
 }
 
 allprojects {
