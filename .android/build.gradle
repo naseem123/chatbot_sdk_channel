@@ -30,6 +30,7 @@ allprojects {
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.google.cloud.artifactregistry.gradle-plugin'
 
 android {
     // Conditional for compatibility with AGP <4.2.
