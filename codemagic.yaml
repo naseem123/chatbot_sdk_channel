@@ -14,12 +14,12 @@ workflows:
               git tag $TAG_VERSION
               git push origin $TAG_VERSION
 
-          - name: Install Java 11
+          - name: Install Java 17
             script: |
               echo $VERSION
               brew update
-              brew install -y openjdk-11-jdk
-              export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+              brew install openjdk-17-jdk
+              export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 
           - name: Install Google Cloud CLI
             script: |
@@ -39,9 +39,9 @@ workflows:
               perl -i -p0e 's/minSdkVersion 16/minSdkVersion 19/g' .android/app/build.gradle
               perl -i -p0e 's/targetSdkVersion 31/targetSdkVersion 33/g' .android/app/build.gradle
 
-          #- name: 'Append build.gradle script'
-          #  script: |
-          #    cat publish.gradle >> .android/build.gradle
+          - name: 'Append build.gradle script'
+            script: |
+              cat publish.gradle >> .android/build.gradle
 
           - name: 'Flutter Build AAR'
             script: |
