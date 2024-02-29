@@ -2,16 +2,10 @@ workflows:
   main:
     name: Publish Workflow
 
-    # Triggers for the workflow
-    triggers:
-      - event: pull_request
-        branch: main
-        action: closed
+    environment:
+      flutter: stable
 
-        environment:
-          flutter: stable
-
-        scripts:
+    scripts:
           - name: Checkout
             script: git clone $CI_REPOSITORY_URL .
 
@@ -61,8 +55,7 @@ workflows:
             script: |
               cat publish.gradle
 
-
           - name: 'Flutter Build AAR'
-            run: |
+            script: |
               flutter build aar --no-debug --no-profile --build-number $TAG_VERSION
             # You can add more scripts or steps as needed
