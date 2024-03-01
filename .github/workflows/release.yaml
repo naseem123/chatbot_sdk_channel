@@ -89,9 +89,9 @@ jobs:
           GITHUB_USER: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-
   xcframeworks:
-    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
+    # if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
+    # pod trunk push chatbot_sdk_channel_v2.podspec --allow-warnings --verbose 
     runs-on: macos-latest
     needs: release
     steps:
@@ -133,16 +133,14 @@ jobs:
 
       - name: "Update podspce file"
         run: |
-          version=$(grep 'version:' pubspec.yaml | awk '{print $2}') awk -v new_version="$version" '  /s.version          =/ {$3 = "'"'"'" new_version "'"'"'"} 1' chatbot_sdk_channel_test.podspec > temp && mv temp chatbot_sdk_channel_test.podspec
+          version=$(grep 'version:' pubspec.yaml | awk '{print $2}') awk -v new_version="$version" '  /s.version = / {$3 = "'"'"'" new_version "'"'"'"} 1' chatbot_sdk_channel_v2.podspec > temp && mv temp chatbot_sdk_channel_v2.podspec
 
-      - name: "Register session"
+
+      - name: "Deploy to Cocoapods"
         run: |
-          pod trunk register ShivMohan1889 'Shiv' --description='GitHub Actions'   
-
-      - name: "Create pod"
-        run: |
-          pod trunk push chatbot_sdk_channel.podspec --allow-warnings   
-
-      
+          set -eo pipefail
+          pod trunk push chatbot_sdk_channel_v2.podspec --allow-warnings --verbose
+        env:
+          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}  
 
 

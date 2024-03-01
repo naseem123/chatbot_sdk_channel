@@ -1,6 +1,6 @@
 // This is a generated file; do not edit or check into version control.
 FLUTTER_ROOT=/Users/shivmohansingh/flutter
-FLUTTER_APPLICATION_PATH=/Users/shivmohansingh/Projects/flutter/chatbot_sdk_channel
+FLUTTER_APPLICATION_PATH=/Users/shivmohansingh/Desktop/naseem_repo
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_TARGET=lib/main.dart
 FLUTTER_BUILD_DIR=build

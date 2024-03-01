@@ -22,11 +22,11 @@
 		</data>
 		<key>Modules/path_provider_foundation.swiftmodule/Project/arm64-apple-ios-simulator.swiftsourceinfo</key>
 		<data>
-		LfbPJg1Zg6ayAm5vuRyb7pfKzEE=
+		KB721J1rohh+XOscXWyH7COFqX4=
 		</data>
 		<key>Modules/path_provider_foundation.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo</key>
 		<data>
-		fF1IHzuQUrB0RQuNNFcRKYCga2o=
+		NFe/LkT5X7dK2sWwh7zaMrl0EOw=
 		</data>
 		<key>Modules/path_provider_foundation.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
@@ -46,7 +46,7 @@
 		</data>
 		<key>Modules/path_provider_foundation.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		XRCrxwM6DkyzGdjCShcDTY4HB0I=
+		eSWWJWdFGlogG2sf8/sraEteXHY=
 		</data>
 		<key>Modules/path_provider_foundation.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
@@ -66,7 +66,7 @@
 		</data>
 		<key>Modules/path_provider_foundation.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		i0mBGucYzzHzE7LCenPWbS/9+x0=
+		LmI0HyZJyA25VGjwu6ddSKvJYYM=
 		</data>
 		<key>path_provider_foundation_privacy.bundle/Info.plist</key>
 		<data>
@@ -104,14 +104,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			R/UTOklVzvI2auf0257va/ttBzuPcR8u1+h0ePqv3S0=
+			jHSXay9yvSmfUV477jNsZICWozyJM/2pJFvX7NqG0r8=
 			</data>
 		</dict>
 		<key>Modules/path_provider_foundation.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ee0QEI4ZyaN9vgCHpfQ3zDlgHiZiEfPHzUGoqy4xxLQ=
+			zFrrQyHGY39LEEO9KslOjEEBIQxh7KKg4x8wztaVE1c=
 			</data>
 		</dict>
 		<key>Modules/path_provider_foundation.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
@@ -146,7 +146,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			WF4+/2JpYZWighgwMHlG21opR3l0YYIYIHgb9vSEbog=
+			3JfpxbbwQxG5tgg0bfmeqHsVhIvImWOjF/e8oGeHt+I=
 			</data>
 		</dict>
 		<key>Modules/path_provider_foundation.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
@@ -181,7 +181,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ol28M5l5SQA2CDXNaiTjn7C5XP+g4oZ4rLCxOMFzzG8=
+			0xeecHQlhVC33bGMkQ0U6Vag7u1ztlkkC4u9KBE8lRc=
 			</data>
 		</dict>
 		<key>path_provider_foundation_privacy.bundle/Info.plist</key>
