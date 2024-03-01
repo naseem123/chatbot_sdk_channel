@@ -3,7 +3,7 @@ name: Publish
 on:
   push:
     branches:
-      - iOS
+      - release/iOS
     # types:
     #   - closed
 
@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          ref: 'iOS'
+          ref: 'release/iOS'
 
       - name: Check a new tag
         id: tag
