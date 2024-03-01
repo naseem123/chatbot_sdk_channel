@@ -7,8 +7,8 @@ buildscript {
         mavenCentral()
         gradlePluginPortal()
         maven {
-                url = uri("https://plugins.gradle.org/m2/")
-                 }
+                url "artifactregistry://northamerica-northeast2-maven.pkg.dev/gcp-pocs-386219/think-research-maven-repo"
+                }
     }
 
     dependencies {
@@ -19,7 +19,7 @@ buildscript {
 }
 plugins {
   id "maven-publish"
-  id "com.google.cloud.artifactregistry.gradle-plugin" version "2.1.5"
+  id "com.google.cloud.artifactregistry.gradle-plugin" version "2.2.0"
 }
 
 allprojects {

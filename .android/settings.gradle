@@ -5,11 +5,11 @@ pluginManagement {
             google()         
             mavenCentral() 
             maven {
-                url = uri("https://plugins.gradle.org/m2/")
-                    }  
+                url "artifactregistry://northamerica-northeast2-maven.pkg.dev/gcp-pocs-386219/think-research-maven-repo"
+                } 
         }
         plugins {
-        id("com.google.cloud.artifactregistry.gradle-plugin")
+                id("com.google.cloud.artifactregistry.gradle-plugin" version "2.2.0")
          }
  }
 include ':app'
