@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 
-const MethodChannel _channel = MethodChannel('com.ra.print.channel');
+const MethodChannel _channel = MethodChannel('com.chatbot.channel');
 
 class Channel {
   static void callNativeMethod() {
