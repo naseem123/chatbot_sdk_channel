@@ -22,11 +22,11 @@
 		</data>
 		<key>Modules/url_launcher_ios.swiftmodule/Project/arm64-apple-ios-simulator.swiftsourceinfo</key>
 		<data>
-		Y1sXECJlyQLdCCsUmHVuY18OPwY=
+		hR8FJkU6jUt4sIu7BZC/0pJtoms=
 		</data>
 		<key>Modules/url_launcher_ios.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo</key>
 		<data>
-		4UzUq46y6IKP8w3hOU3g/pvnFmw=
+		D7CtNsmUK8J9DFLkRmQQzXY2dAs=
 		</data>
 		<key>Modules/url_launcher_ios.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
@@ -46,7 +46,7 @@
 		</data>
 		<key>Modules/url_launcher_ios.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		2aRLhQg1t8rkPpNJwgBXyADqfWE=
+		OG2dhQhzHFlcs8eGR1MCPZiVpKw=
 		</data>
 		<key>Modules/url_launcher_ios.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
@@ -66,7 +66,7 @@
 		</data>
 		<key>Modules/url_launcher_ios.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		h0Ej59hc8KPgExssYRFcIAHk6LQ=
+		KnB+rsWo4dd9Et/eKExnatuUlus=
 		</data>
 		<key>url_launcher_ios_privacy.bundle/Info.plist</key>
 		<data>
@@ -104,14 +104,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			tcm57fVcWYAqBwL/uoXrgE1VyN8Xy0H8drO6ZFLAuBU=
+			Glb/29AbQBQzC9hbyfhETJhmuNNqjno9sEEf1rZkTKw=
 			</data>
 		</dict>
 		<key>Modules/url_launcher_ios.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			FZp/A7JHbhxS5vReYyu56m2XLBpxWjz1uvD+ia//3kw=
+			xjSNLypQJTjD9vGqiciSnP22ogKhKWBON4lUp1fLgsc=
 			</data>
 		</dict>
 		<key>Modules/url_launcher_ios.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
@@ -146,7 +146,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			+KYQDVFHTHNiW7jFfjVWcnxASiXDHQmQYcO08RM3cj0=
+			vVcHeXSjghFnzBgAzizR69niRb1hvga4tAir/PHHWdg=
 			</data>
 		</dict>
 		<key>Modules/url_launcher_ios.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
@@ -181,7 +181,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			RGqFh4QmGJu1s34uVNqwYz6K3tJccY5bcIBCycVv/qI=
+			NL000frQRXWZQJlG88z8FiWEVIDn+FmsZuiq4Vhdjzw=
 			</data>
 		</dict>
 		<key>url_launcher_ios_privacy.bundle/Info.plist</key>
