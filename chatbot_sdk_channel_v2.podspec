@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
 
   s.summary          = 'Your Pod Summary'
   s.description      = 'Your Pod Description'
-  s.homepage         = 'github.com/naseem123/chatbot_sdk_channel'
+  s.homepage         = 'https://github.com/naseem123/chatbot_sdk_channel'
   s.license          = "MIT"
   s.author           = { 'Your Name' => 'email@gmail.com' }
   s.platforms        = { :ios => '13.0' }
