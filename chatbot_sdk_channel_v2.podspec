@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
 
 
   #don't add tabs on this next line or change add spacing 
-  s.version          = '2.4.0'
+  s.version          = '2.5.0'
 
   s.summary          = 'Your Pod Summary'
   s.description      = 'Your Pod Description'
