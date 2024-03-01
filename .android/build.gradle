@@ -1,35 +1,19 @@
 // Generated file. Do not edit.
-
-buildscript {
-    ext.kotlin_version = '1.7.10'
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-        maven {
-                url "artifactregistry://northamerica-northeast2-maven.pkg.dev/gcp-pocs-386219/think-research-maven-repo"
-                }
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath("gradle.plugin.com.google.cloud.artifactregistry:artifactregistry-gradle-plugin:2.2.0")
-    }
-}
 plugins {
   id "maven-publish"
+  id "com.google.cloud.artifactregistry.gradle-plugin"
+
 }
 
 allprojects {
     repositories {
         google()
         mavenCentral()
+        maven {
+                url "artifactregistry://northamerica-northeast2-maven.pkg.dev/gcp-pocs-386219/think-research-maven-repo"
+                } 
     }
 }
-
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 
 android {
     // Conditional for compatibility with AGP <4.2.

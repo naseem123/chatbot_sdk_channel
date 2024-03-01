@@ -12,8 +12,38 @@ pluginManagement {
                 id("com.google.cloud.artifactregistry.gradle-plugin" version "2.2.0")
          }
  }
-include ':app'
+ dependencyResolutionManagement {
+    repositories {
+        maven {
+            url "artifactregistry://northamerica-northeast2-maven.pkg.dev/gcp-pocs-386219/think-research-maven-repo"
+        }
+        mavenCentral()
+        gradlePluginPortal() // so that external plugins can be resolved in dependencies section
+        mavenLocal()
+        google()
+    }
+}
+buildscript {
+    ext.kotlin_version = '1.7.10'
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven {
+                url "artifactregistry://northamerica-northeast2-maven.pkg.dev/gcp-pocs-386219/think-research-maven-repo"
+                }
+    }
 
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath("gradle.plugin.com.google.cloud.artifactregistry:artifactregistry-gradle-plugin:2.2.0")
+    }
+}
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: '"com.google.cloud.artifactregistry.gradle-plugin" version "2.2.0"'
+include ':app'
 rootProject.name = 'android_generated'
 setBinding(new Binding([gradle: this]))
 evaluate(new File(settingsDir, 'include_flutter.groovy'))
