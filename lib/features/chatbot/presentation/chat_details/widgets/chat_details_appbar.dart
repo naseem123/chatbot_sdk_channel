@@ -28,7 +28,7 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
       color: colorPrimary,
       child: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -51,7 +51,7 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       buildLogo(),
-                      Gap(14),
+                      const Gap(14),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,18 +61,20 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
                               title,
                               style: GoogleFonts.arimo(
                                 color: Colors.white,
-                                fontSize: 20,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Text(
-                              subTitle,
-                              style: GoogleFonts.arimo(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
+                            if (subTitle.isNotEmpty) ...[
+                              Text(
+                                subTitle,
+                                style: GoogleFonts.arimo(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
+                            ],
                           ],
                         ),
                       ),

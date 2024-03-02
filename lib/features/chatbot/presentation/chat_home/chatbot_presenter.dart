@@ -5,6 +5,7 @@ import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_view_mod
 import 'package:chatbot/providers/src/usecase_providers.dart';
 import 'package:clean_framework/clean_framework_legacy.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ChatBotPresenter
     extends Presenter<ChatBotViewModel, ChatBotUIOutput, ChatBotUseCase> {
@@ -15,53 +16,54 @@ class ChatBotPresenter
 
   @override
   void onLayoutReady(BuildContext context, ChatBotUseCase useCase) {
-    useCase.initialise();
+    useCase.initUserSession();
   }
 
   @override
   ChatBotViewModel createViewModel(
       ChatBotUseCase useCase, ChatBotUIOutput output) {
     return ChatBotViewModel(
-        chatList: output.chatList,
-        outputState: output.outBondUiState,
-        onRefresh: () async {
-          useCase.initialise();
-        },
-        onRetry: () {
-          useCase.initialise();
-        },
-        uiState: output.chatBotUiState,
-        title: output.appSettings.app.greetings,
-        tagline: output.appSettings.app.tagline,
-        logo: output.appSettings.app.logo,
-        colorPrimary:
-            output.appSettings.app.customizationColors.primary.toColor,
-        colorSecondary:
-            output.appSettings.app.customizationColors.secondary.toColor,
-        introText: output.appSettings.app.intro,
-        inBusinessHours: output.appSettings.app.inBusinessHours,
-        onDeleteConversationPressed: () {
-          useCase.clearSession();
-        },
-        idleTimeout: output.idleTimeout,
-        onIdleSessionTimeout: () {
-          useCase.clearSession();
-        },
-        replyTime: output.appSettings.app.replyTime);
+      chatList: output.chatList,
+      outputState: output.outBondUiState,
+      onRefresh: () async {
+        useCase.initUserSession();
+      },
+      onRetry: () {
+        useCase.initUserSession();
+      },
+      uiState: output.chatBotUiState,
+      title: output.appSettings.app.greetings,
+      tagline: output.appSettings.app.tagline,
+      logo: output.appSettings.app.logo,
+      colorPrimary: output.appSettings.app.customizationColors.primary.toColor,
+      colorSecondary:
+          output.appSettings.app.customizationColors.secondary.toColor,
+      introText: output.appSettings.app.intro,
+      inBusinessHours: output.appSettings.app.inBusinessHours,
+      onDeleteConversationPressed: () {
+        useCase.clearSession();
+      },
+      idleTimeout: output.idleTimeout,
+      onIdleSessionTimeout: () {
+        useCase.clearSession();
+      },
+      replyTime: output.appSettings.app.replyTime,
+      isInboundEnabled: output.isInboundEnabled,
+      conversationsListUiState: output.conversationsListUiState,
+    );
   }
 
   @override
   void onOutputUpdate(BuildContext context, ChatBotUIOutput output) {
     final state = output.chatBotUiState;
 
-    if (state == ChatBotUiState.conversationSuccess &&
-        output.chatList.isEmpty) {
-      /* Future.delayed(const Duration(seconds: 4)).then((value) {
+    if (state == ChatBotUiState.triggerReceived) {
+      Future.delayed(const Duration(milliseconds: 100)).then((value) {
         if (GoRouter.of(context).routeInformationProvider.value.location !=
             "/chatDetail") {
           context.push("/chatDetail");
         }
-      });*/
+      });
     }
   }
 
@@ -80,10 +82,17 @@ enum OutBondUiState {
 }
 
 enum ChatBotUiState {
+  idle,
   conversationLoading,
   conversationSuccess,
   conversationFailure,
   setupLoading,
   setupSuccess,
-  setupFailure
+  setupFailure,
+  triggerReceived,
+}
+
+enum ConversationsListUiState {
+  idle,
+  loading,
 }

@@ -40,6 +40,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
     final chatMessageType = viewModel.chatMessageType;
     final chatBotUserState = viewModel.chatBotUserState;
     final userInputOptions = viewModel.userInputOptions;
+    final chatBotAssignee = viewModel.chatAssignee;
 
     if (isLoading) {
       return const Scaffold(
@@ -56,7 +57,6 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
         duration: const Duration(milliseconds: 300),
       );
     });
-    print('ChatDetailsUI.build ${viewModel.chatBotUserState} ${viewModel.userInputOptions} ${viewModel.chatMessageType}');
     return IdleDetector(
       idleTime: viewModel.idleTimeout,
       child: Scaffold(
@@ -66,10 +66,9 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
             70,
           ),
           child: ChatBotAppbar(
-            title: "virtualcare bot",
-            subTitle: 'The team will respond as soon as possible',
-            logo:
-                "https://test.ca.digital-front-door.stg.gcp.trchq.com/assets/icons8-bot-50-ccd9ed66d2850c1bd0737308082e76890d697c8e.png",
+            title: chatBotAssignee.assignee,
+            subTitle: '',
+            logo: chatBotAssignee.assigneeImage,
             colorPrimary: viewModel.colorPrimary,
             backButtonPressed: viewModel.backButtonPressed,
           ),
@@ -94,7 +93,9 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                     controller: _scrollController,
                     itemBuilder: (context, index) {
                       final message = messages[index];
-                      return MessageItemWidget(message: message,secondaryColor:viewModel.colorSecondary);
+                      return MessageItemWidget(
+                          message: message,
+                          secondaryColor: viewModel.colorSecondary);
                     },
                   ),
                 ),
@@ -122,8 +123,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
               ],
               if (chatBotUserState == ChatBotUserState.conversationClosed)
                 Container(
-                  padding: EdgeInsets.symmetric(
-                      vertical: context.bottomPadding.bottom),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                   color: Colors.white,
                   width: double.infinity,
                   alignment: Alignment.center,

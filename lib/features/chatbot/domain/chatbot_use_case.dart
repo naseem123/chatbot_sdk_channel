@@ -65,9 +65,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         initialiseWebSocket();
       });
 
-      return entity.merge(
-        chatBotUiState: ChatBotUiState.setupSuccess,
-      );
+      return entity;
     }, onFailure: (_) {
       return entity.merge(
         chatBotUiState: ChatBotUiState.setupFailure,
@@ -79,7 +77,6 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     request(const ConfigurationGatewayOutput(),
         onSuccess: (SDKConfigurationSuccessInput input) {
       return entity.merge(
-          chatBotUiState: ChatBotUiState.setupSuccess,
           outBondUiState: input.appSettings.app.inBusinessHours
               ? OutBondUiState.outBondStateOpen
               : OutBondUiState.outBondStateClose,
@@ -94,35 +91,31 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
   Future<void> clearSession() async {
     await preference.remove(PreferenceKey.sessionId);
     entity = entity.merge(chatList: []);
-    initialise();
-  }
-
-  void initialise() {
     initUserSession();
   }
 
   void loadRecentConversationList({int page = 1, int perPage = 100}) {
     entity = entity.merge(
-      chatBotUiState: ChatBotUiState.conversationLoading,
-    );
+        conversationsListUiState: ConversationsListUiState.loading);
     request(ChatBotGatewayOutput(page: page, perPage: perPage),
         onSuccess: (ChatBotSuccessInput input) {
       return entity.merge(
-        chatBotUiState: ChatBotUiState.conversationSuccess,
         chatList: input.chatList.conversations,
+        conversationsListUiState: ConversationsListUiState.idle,
       );
     }, onFailure: (_) {
       return entity.merge(
+        conversationsListUiState: ConversationsListUiState.idle,
         chatBotUiState: ChatBotUiState.conversationFailure,
       );
     });
   }
 
   void initializeNewConversation() {
-    if (entity.chatList.isEmpty) {
-      initWebsocketConversation();
-    } else {
+    if (entity.chatTriggerId.isEmpty) {
       startNewConversation();
+    } else {
+      initWebsocketCommand(chatTriggerId: entity.chatTriggerId);
     }
   }
 
@@ -151,7 +144,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
   // region realtime data requests
   void initialiseWebSocket() {
     entity = entity.merge(
-      chatDetailsUiState: ChatDetailsUiState.loading,
+      chatBotUiState: ChatBotUiState.setupLoading,
       userInputOptions: [],
       chatDetailList: [],
     );
@@ -159,12 +152,10 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     request(WebsocketConnectGatewayOutput(),
         onSuccess: (WebsocketConnectSuccessInput input) {
       listenForMessages();
-      return entity.merge(
-        chatDetailsUiState: ChatDetailsUiState.success,
-      );
+      return entity;
     }, onFailure: (_) {
       return entity.merge(
-        chatDetailsUiState: ChatDetailsUiState.failure,
+        chatBotUiState: ChatBotUiState.setupFailure,
       );
     });
   }
@@ -172,13 +163,13 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
   void listenForMessages() {
     request(WebsocketMessageGatewayOutput(),
         onSuccess: (WebsocketMessageSuccessInput input) {
-      return entity;
-    }, onFailure: (_) {
-      return entity;
-    });
-    Future.delayed(const Duration(seconds: 2), () {
       subscribeToPresenceChannel();
       subscribeToMessengerChannel();
+      return entity;
+    }, onFailure: (_) {
+      return entity.merge(
+        chatBotUiState: ChatBotUiState.setupFailure,
+      );
     });
   }
 
@@ -214,7 +205,9 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
             messageToSend:
                 getInitWebsocketCommandData(chatTriggerId: chatTriggerId)),
         onSuccess: (WebsocketSendMessageSuccessInput input) {
-      return entity;
+      return entity.merge(
+        chatDetailsUiState: ChatDetailsUiState.success,
+      );
     }, onFailure: (_) {
       return entity;
     });
@@ -229,7 +222,9 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       sendTriggerInitiateMessage();
       return entity;
     }, onFailure: (_) {
-      return entity;
+      return entity.merge(
+        chatBotUiState: ChatBotUiState.setupFailure,
+      );
     });
   }
 
@@ -238,9 +233,20 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         WebsocketInitCommandGatewayOutput(
             messageToSend: getEngageAppUserChannel()),
         onSuccess: (WebsocketSendMessageSuccessInput input) {
+      dismissProgressAfterTwoSeconds();
       return entity;
     }, onFailure: (_) {
-      return entity;
+      return entity.merge(
+        chatBotUiState: ChatBotUiState.setupFailure,
+      );
+    });
+  }
+
+  void dismissProgressAfterTwoSeconds() {
+    Future.delayed(const Duration(milliseconds: 2300), () {
+      entity = entity.merge(
+        chatBotUiState: ChatBotUiState.setupSuccess,
+      );
     });
   }
 
@@ -370,7 +376,9 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         onSuccess: (WebsocketSendMessageSuccessInput input) {
       return entity;
     }, onFailure: (_) {
-      return entity;
+      return entity.merge(
+        chatBotUiState: ChatBotUiState.setupFailure,
+      );
     });
   }
 
@@ -381,13 +389,15 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         onSuccess: (WebsocketSendMessageSuccessInput input) {
       return entity;
     }, onFailure: (_) {
-      return entity;
+      return entity.merge(
+        chatBotUiState: ChatBotUiState.setupFailure,
+      );
     });
   }
 
   void getNextConversationMessage(
       {required String conversationKey, required String messageKey}) {
-    Future.delayed(const Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 250), () {
       request(
           WebsocketInitCommandGatewayOutput(
               messageToSend: getNextConversationCommandData(
@@ -607,7 +617,11 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       chatBotUserState: ChatBotUserState.idle,
       chatMessageType: ChatMessageType.idle,
       userInputOptions: [],
+      chatTriggerId: "",
+      chatBotUiState: ChatBotUiState.setupSuccess,
+      chatAssignee: const ChatAssignee(assignee: "", assigneeImage: ""),
     );
+    loadRecentConversationList();
   }
 }
 

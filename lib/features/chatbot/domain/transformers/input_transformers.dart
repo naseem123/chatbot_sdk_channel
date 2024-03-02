@@ -6,7 +6,9 @@ import 'package:chatbot/features/chatbot/gateway/websocket/websocket_disconnect_
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_message_gateway.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_send_message_gateway.dart';
 import 'package:chatbot/features/chatbot/model/block_model.dart';
+import 'package:chatbot/features/chatbot/model/chat_assignee.dart';
 import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
+import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_presenter.dart';
 import 'package:chatbot/providers/src/usecase_providers.dart';
 import 'package:clean_framework/clean_framework.dart';
 import 'package:collection/collection.dart';
@@ -25,26 +27,36 @@ class ChatDetailsGetMessageInputTransformer
   @override
   ChatBotEntity transform(
       ChatBotEntity entity, WebsocketMessageSuccessInput input) {
-    if (input.data["type"] == "triggers:receive") {
-      final triggerId = input.data["data"]["trigger"]["id"];
-      Future.delayed(const Duration(milliseconds: 300), () {
+    if (input.data["type"] == "confirm_subscription") {
+      Future.delayed(const Duration(milliseconds: 50), () {
         chatBotUseCaseProvider
             .getUseCaseFromContext(providersContext)
-            .initWebsocketCommand(chatTriggerId: triggerId);
-
-        Future.delayed(const Duration(milliseconds: 2000), () {
-          chatBotUseCaseProvider
-              .getUseCaseFromContext(providersContext)
-              .loadRecentConversationList(page: 1, perPage: 100);
-        });
+            .initWebsocketConversation();
       });
-
-      return entity.merge(chatTriggerId: triggerId);
+      return entity;
+    } else if (input.data["type"] == "triggers:receive") {
+      final String triggerId =
+          input.data.containsKey("data") && input.data["data"] != null
+              ? input.data["data"]["trigger"]["id"]
+              : "";
+      return entity.merge(
+        chatTriggerId: triggerId,
+        chatBotUiState:
+            triggerId.isNotEmpty ? ChatBotUiState.triggerReceived : null,
+      );
     } else if (input.data["type"] == "conversations:update_state" &&
         input.data['data']['state'] == 'closed') {
       return entity.merge(
         chatBotUserState: ChatBotUserState.conversationClosed,
       );
+    } else if (input.data["type"] == "conversations:update_state" &&
+        (input.data['data'] as Map).containsKey("assignee") &&
+        input.data['data']["assignee"]["display_name"] != null) {
+      final assigneeMap = input.data['data']["assignee"];
+      final assignee = ChatAssignee(
+          assignee: assigneeMap["display_name"],
+          assigneeImage: assigneeMap["avatar_url"]);
+      return entity = entity.merge(chatAssignee: assignee);
     } else if (input.data["type"] == "conversations:conversation_part") {
       final conversationKey = input.data["data"]["conversation_key"];
       final messageKey = input.data["data"]["key"];
@@ -70,6 +82,14 @@ class ChatDetailsGetMessageInputTransformer
         var message = "";
         if (messageData.containsKey("blocks")) {
           final blockData = BlocksData.fromJson(messageData["blocks"]);
+
+          final assigneeMap = input.data["data"]["app_user"];
+          final assignee = ChatAssignee(
+              assignee: assigneeMap["display_name"],
+              assigneeImage: assigneeMap["avatar_url"]);
+          if (assigneeMap["kind"] != "lead") {
+            entity = entity.merge(chatAssignee: assignee);
+          }
 
           final isSameAPreviousInputs = const IterableEquality()
               .equals(blockData.schema, entity.userInputOptions);
@@ -114,6 +134,18 @@ class ChatDetailsGetMessageInputTransformer
             entity = entity.merge(
                 chatBotUserState: ChatBotUserState.waitForInput,
                 chatMessageType: ChatMessageType.enterMessage);
+          }
+
+          if (messageData.containsKey("action") &&
+              messageData["action"] == "assigned") {
+          } else {
+            final assigneeMap = input.data["data"]["app_user"];
+            final assignee = ChatAssignee(
+                assignee: assigneeMap["display_name"],
+                assigneeImage: assigneeMap["avatar_url"]);
+            if (assigneeMap["kind"] != "lead") {
+              entity = entity.merge(chatAssignee: assignee);
+            }
           }
           final messageuiData = MessageUiModel(
             message: message,

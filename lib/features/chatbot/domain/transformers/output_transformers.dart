@@ -8,11 +8,14 @@ class ChatBotUIOutputTransformer
   @override
   ChatBotUIOutput transform(ChatBotEntity entity) {
     return ChatBotUIOutput(
-        chatBotUiState: entity.chatBotUiState,
-        chatList: entity.chatList,
-        appSettings: entity.appSettings,
-        outBondUiState: entity.outBondUiState,
-        idleTimeout: entity.idleTimeout);
+      chatBotUiState: entity.chatBotUiState,
+      chatList: entity.chatList,
+      appSettings: entity.appSettings,
+      outBondUiState: entity.outBondUiState,
+      idleTimeout: entity.idleTimeout,
+      conversationsListUiState: entity.conversationsListUiState,
+      isInboundEnabled: entity.appSettings.app.inboundSettings.enabled,
+    );
   }
 }
 

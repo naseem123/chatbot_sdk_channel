@@ -15,6 +15,7 @@ class ChatBotEntity extends Entity {
   final ConversationMeta conversationMeta;
   final List<Conversation> chatList;
   final AppSettings appSettings;
+  final ConversationsListUiState conversationsListUiState;
 
   //Chat details fields
   final ChatDetailsUiState chatDetailsUiState;
@@ -36,6 +37,7 @@ class ChatBotEntity extends Entity {
   const ChatBotEntity({
     this.chatBotUiState = ChatBotUiState.conversationLoading,
     this.outBondUiState = OutBondUiState.outBondStateIdle,
+    this.conversationsListUiState = ConversationsListUiState.idle,
     this.chatList = const [],
     this.conversationMeta = const ConversationMeta(),
     this.appSettings = const AppSettings(),
@@ -55,6 +57,7 @@ class ChatBotEntity extends Entity {
   ChatBotEntity merge({
     ChatBotUiState? chatBotUiState,
     OutBondUiState? outBondUiState,
+    ConversationsListUiState? conversationsListUiState,
     List<Conversation>? chatList,
     ConversationMeta? conversationMeta,
     AppSettings? appSettings,
@@ -72,6 +75,8 @@ class ChatBotEntity extends Entity {
   }) {
     return ChatBotEntity(
       chatBotUiState: chatBotUiState ?? this.chatBotUiState,
+      conversationsListUiState:
+          conversationsListUiState ?? this.conversationsListUiState,
       chatList: chatList ?? this.chatList,
       conversationMeta: conversationMeta ?? this.conversationMeta,
       appSettings: appSettings ?? this.appSettings,
@@ -94,6 +99,7 @@ class ChatBotEntity extends Entity {
   List<Object?> get props => [
         chatBotUiState,
         outBondUiState,
+        conversationsListUiState,
         chatList,
         appSettings,
         chatDetailsUiState,
@@ -105,5 +111,8 @@ class ChatBotEntity extends Entity {
         userInputOptions,
         chatSessionState,
         idleTimeout,
+        chatAssignee,
+        messageKey,
+        conversationMeta,
       ];
 }

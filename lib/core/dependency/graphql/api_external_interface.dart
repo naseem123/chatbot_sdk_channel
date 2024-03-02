@@ -13,9 +13,11 @@ class APIExternalInterface extends ChatBotGraphQLExternalInterface {
   APIExternalInterface({
     required String link,
     required String appId,
+    required String origin,
     required super.gatewayConnections,
   })  : _baseURL = link,
         _appID = appId,
+        _origin = origin,
         super(
           link: '$link/api/graphql',
           persistence: APIPersistence(),
@@ -25,6 +27,7 @@ class APIExternalInterface extends ChatBotGraphQLExternalInterface {
 
   final String _baseURL;
   final String _appID;
+  final String _origin;
 
   @override
   void handleRequest() {
@@ -93,7 +96,7 @@ class APIExternalInterface extends ChatBotGraphQLExternalInterface {
     _headers = {
       'app': _appID,
       'session-id': sessionId,
-      'origin': _baseURL,
+      'origin': _origin,
       'content-type': "application/json"
     };
   }

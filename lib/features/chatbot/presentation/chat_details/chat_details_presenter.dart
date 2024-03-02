@@ -47,7 +47,7 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
           output.appSettings.app.customizationColors.secondary.toColor,
       colorPrimary: output.appSettings.app.customizationColors.primary.toColor,
       backButtonPressed: () {
-        useCase.loadRecentConversationList();
+        //  useCase.loadRecentConversationList();
       },
       chatAssignee: output.chatAssignee,
       idleTimeout: output.idleTimeout,
