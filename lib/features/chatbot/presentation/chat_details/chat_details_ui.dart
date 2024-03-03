@@ -4,6 +4,7 @@ import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_view_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_details_appbar.dart';
+import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_list_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_user_input_editor_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_user_select_item_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_wait_for_input_button_widget.dart';
@@ -21,7 +22,6 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
 
   final String conversationID;
   final messageController = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
 
   @override
   ChatDetailsPresenter create(PresenterBuilder<ChatDetailsViewModel> builder) {
@@ -50,13 +50,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
       );
     }
     // Scroll to bottom when list size changes or widget is first built
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        curve: Curves.easeOut,
-        duration: const Duration(milliseconds: 300),
-      );
-    });
+
     return IdleDetector(
       idleTime: viewModel.idleTimeout,
       child: Scaffold(
@@ -82,21 +76,15 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
             children: [
               Expanded(
                 child: SafeArea(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: const ClampingScrollPhysics(),
-                    padding: const EdgeInsets.only(
-                      left: 16.0,
-                      right: 16.0,
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: ChatListWidget(
+                      currentPage: viewModel.currentPage,
+                      totalPage: viewModel.totalPages,
+                      messages: messages,
+                      secondaryColor: viewModel.colorSecondary,
+                      loadMoreChats: viewModel.loadMoreChats,
                     ),
-                    itemCount: messages.length,
-                    controller: _scrollController,
-                    itemBuilder: (context, index) {
-                      final message = messages[index];
-                      return MessageItemWidget(
-                          message: message,
-                          secondaryColor: viewModel.colorSecondary);
-                    },
                   ),
                 ),
               ),
@@ -137,11 +125,15 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                   ),
                 ),
               if (chatBotUserState != ChatBotUserState.conversationClosed &&
-                  viewModel.chatMessageType == ChatMessageType.enterMessage)
+                      viewModel.chatMessageType ==
+                          ChatMessageType.enterMessage ||
+                  viewModel.chatMessageType ==
+                      ChatMessageType.enterMessageAndTrigger)
                 ChatUserInputEditorWidget(
                   textEditingController: messageController,
                   onMessageEntered: (message) {
-                    viewModel.onMessageEntered(messageController.text);
+                    viewModel.onMessageEntered(
+                        messageController.text, viewModel.chatMessageType);
                     messageController.clear();
                   },
                 )

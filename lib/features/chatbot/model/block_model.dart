@@ -32,6 +32,46 @@ class Block extends Equatable {
   List<Object?> get props => [element, id, label, nextStepUuid, pathId, rules];
 }
 
+class BlockInput extends Equatable {
+  final String label;
+  final String nextStepUuid;
+  final String pathId;
+  final String htmlContent;
+  final String serializedContent;
+  final String textContent;
+
+  const BlockInput({
+    required this.label,
+    required this.nextStepUuid,
+    required this.pathId,
+    required this.htmlContent,
+    required this.serializedContent,
+    required this.textContent,
+  });
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {
+      'label': label,
+      'nextStepUuid': nextStepUuid,
+      'pathId': pathId,
+      "html_content": htmlContent,
+      "serialized_content": serializedContent,
+      "text_content": textContent,
+    };
+    return data;
+  }
+
+  @override
+  List<Object?> get props => [
+        label,
+        nextStepUuid,
+        pathId,
+        htmlContent,
+        serializedContent,
+        textContent
+      ];
+}
+
 class Rule extends Equatable {
   final String action;
   final String attribute;
@@ -66,6 +106,7 @@ class BlocksData extends Equatable {
   List<Object?> get props => [schema, type, waitForInput];
 
   bool get waitForReply => type == 'wait_for_reply';
+  bool get askForInput => type == 'ask_option';
 
   factory BlocksData.fromJson(Map<String, dynamic> json) {
     List<dynamic> schemaList = json['schema'];

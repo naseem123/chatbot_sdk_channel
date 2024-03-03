@@ -110,19 +110,3 @@ class _MessageLogger extends NetworkLogger {
     printInLines(prettyMap(data));
   }
 }
-
-var map = {
-  "conversation_key": "TeCM3zJ1nXm87nRrThkRymfH",
-  "message_key": "c28pwGb7umwvx5G38Ns1ccBP",
-  "trigger": "2091",
-  "path_id": "800acc6e-34ba-4792-9699-9866951599b4",
-  "step": "7741dfa5-bd13-4a81-98ea-243f4fc8d469",
-  "reply": {
-    "element": "button",
-    "id": "1b0fc2b4-a808-455b-9590-780f89840b05",
-    "label": "Enter input",
-    "nextStepUuid": "7741dfa5-bd13-4a81-98ea-243f4fc8d469",
-    "pathId": "800acc6e-34ba-4792-9699-9866951599b4"
-  },
-  "action": "trigger_step"
-};

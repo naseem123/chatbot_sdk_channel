@@ -173,21 +173,50 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     });
   }
 
-  void sendMessage({required String messageData}) {
-    request(
-        SendMessageGatewayOutput(
-            conversationId: entity.conversationKey,
-            appKey: providersContext().read(envReaderProvider).getAppID(),
-            message: {
-              "html": messageData,
-              "text": messageData,
-              "serialized":
-                  "{\"blocks\":[{\"key\":\"${getRandomKey(length: 5)}\",\"text\":\"$messageData\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
-            }), onSuccess: (SendMessageSuccessInput input) {
-      return entity;
-    }, onFailure: (_) {
-      return entity;
-    });
+  void sendMessage(
+      {required String messageData, required ChatMessageType messageType}) {
+    if (messageType == ChatMessageType.enterMessage) {
+      request(
+          SendMessageGatewayOutput(
+              conversationId: entity.conversationKey,
+              appKey: providersContext().read(envReaderProvider).getAppID(),
+              message: {
+                "html": messageData,
+                "text": messageData,
+                "serialized": serializedContent(messageData),
+              }), onSuccess: (SendMessageSuccessInput input) {
+        return entity;
+      }, onFailure: (_) {
+        return entity;
+      });
+    } else {
+      entity = entity.merge(
+          chatBotUserState: ChatBotUserState.idle,
+          chatMessageType: ChatMessageType.idle);
+      final messageuiData = MessageUiModel(
+        message: messageData,
+        messageId: DateTime.now().toString(),
+        messageSenderType: MessageSenderType.user,
+        createdAt: DateTime.now().toString(),
+      );
+      entity = entity.merge(
+          chatBotUserState: ChatBotUserState.idle,
+          chatMessageType: ChatMessageType.idle,
+          chatDetailList: [messageuiData, ...entity.chatDetailList]);
+      request(
+          WebsocketInitCommandGatewayOutput(
+              messageToSend:
+                  getNextMessageAfterUserInputCommandData(messageData)),
+          onSuccess: (WebsocketSendMessageSuccessInput input) {
+        return entity;
+      }, onFailure: (_) {
+        return entity;
+      });
+    }
+  }
+
+  String serializedContent(String message) {
+    return "{\"blocks\":[{\"key\":\"${getRandomKey(length: 5)}\",\"text\":\"$message\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}";
   }
 
   void disconnectMessageChannel() {
@@ -397,7 +426,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
 
   void getNextConversationMessage(
       {required String conversationKey, required String messageKey}) {
-    Future.delayed(const Duration(milliseconds: 250), () {
+    Future.delayed(const Duration(milliseconds: 300), () {
       request(
           WebsocketInitCommandGatewayOutput(
               messageToSend: getNextConversationCommandData(
@@ -434,6 +463,36 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     );
   }
 
+  InitCommandModel getNextMessageAfterUserInputCommandData(String message) {
+    final sessionId = preference.get<String>(PreferenceKey.sessionId, "");
+    return InitCommandModel(
+      command: socketMessage,
+      identifier: jsonEncode(Identifier(
+              app: providersContext().read(envReaderProvider).getAppID(),
+              channel: socketMessageChannel,
+              sessionId: sessionId ?? "",
+              encData: "{}",
+              sessionValue: null,
+              userData: "{}")
+          .toJson()),
+      data: jsonEncode(Data(
+          action: socketActionReceiveConversation,
+          conversation: null,
+          conversationKey: entity.conversationKey,
+          messageKey: entity.messageKey,
+          trigger: entity.chatTriggerId,
+          step: entity.chatStepId,
+          replyInput: BlockInput(
+            pathId: entity.chatPathId,
+            nextStepUuid: entity.chatNextStepUUID,
+            label: "wait_for_reply",
+            htmlContent: message,
+            serializedContent: serializedContent(message),
+            textContent: message,
+          )).toJson()),
+    );
+  }
+
   void sendUserInput({required Block inputData}) {
     entity = entity.merge(
         chatBotUserState: ChatBotUserState.idle,
@@ -447,7 +506,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     entity = entity.merge(
         chatBotUserState: ChatBotUserState.idle,
         chatMessageType: ChatMessageType.idle,
-        chatDetailList: [...entity.chatDetailList, messageuiData]);
+        chatDetailList: [messageuiData, ...entity.chatDetailList]);
     request(
         WebsocketInitCommandGatewayOutput(
             messageToSend: setUserInputCommand(inputData)),
@@ -483,23 +542,38 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     );
   }
 
-  void loadChatHistory({required String conversationID}) {
-    entity = entity.merge(
-      chatDetailsUiState: ChatDetailsUiState.loading,
-      chatDetailList: [],
+  void loadMoreChats() {
+    if (entity.chatDetailList.isEmpty ||
+        entity.chatListUiState == ChatListUiState.loading) {
+      return;
+    }
+    entity = entity.merge(chatListUiState: ChatListUiState.loading);
+    loadChatHistory(
+      conversationID: entity.conversationKey,
+      currentPage: entity.currentPage + 1,
     );
+  }
 
+  void loadChatHistory({required String conversationID, int currentPage = 1}) {
+    if (currentPage == 1) {
+      entity = entity.merge(
+        chatDetailsUiState: ChatDetailsUiState.loading,
+        chatDetailList: [],
+      );
+    }
     request(
         ConversationHistoryGatewayOutput(
+          page: currentPage,
           conversationID: conversationID,
         ), onSuccess: (ConversationHistorySuccessInput input) {
       parseConversationHistory(input.data, conversationID);
       return entity.merge(
-        chatDetailsUiState: ChatDetailsUiState.success,
-      );
+          chatDetailsUiState: ChatDetailsUiState.success,
+          chatListUiState: ChatListUiState.idle);
     }, onFailure: (_) {
       return entity.merge(
         chatDetailsUiState: ChatDetailsUiState.failure,
+        chatListUiState: ChatListUiState.idle,
       );
     });
   }
@@ -510,11 +584,30 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         data["messenger"]["conversation"]["messages"]["collection"];
     final assigneeMap = data["messenger"]["conversation"]['assignee'];
     final assignee = ChatAssignee.fromJson(assigneeMap);
-    entity = entity.merge(chatAssignee: assignee);
-    for (dynamic item in conversationList.reversed) {
-      parseHistoryMessage(item, conversationID);
-    }
+    final curPage =
+        data["messenger"]["conversation"]["messages"]["meta"]["current_page"];
+    final totalPages =
+        data["messenger"]["conversation"]["messages"]["meta"]["total_pages"];
+    entity = entity.merge(
+        chatAssignee: assignee, currentPage: curPage, totalPages: totalPages);
 
+    final itemList =
+        curPage == 1 ? conversationList.reversed : conversationList;
+
+    for (dynamic item in itemList) {
+      parseHistoryMessage(item, conversationID, curPage);
+    }
+    if (curPage == 1) {
+      final lastItem = itemList.last;
+      if ((lastItem["message"] as Map).containsKey("textContent") &&
+          (lastItem["message"] as Map)["textContent"] != "--***--" &&
+          (lastItem["message"] as Map)["textContent"] != null &&
+          (lastItem["message"] as Map)["textContent"] != "") {
+        entity = entity.merge(
+            chatBotUserState: ChatBotUserState.waitForInput,
+            chatMessageType: ChatMessageType.enterMessage);
+      }
+    }
     // Handle if the thread is closed
 
     if (data["messenger"]["conversation"]['state'] == 'closed') {
@@ -524,31 +617,48 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     }
   }
 
-  void parseHistoryMessage(Map<String, dynamic> data, String conversationID) {
+  void parseHistoryMessage(
+      Map<String, dynamic> data, String conversationID, int curPage) {
     final conversationKey = conversationID;
     final messageKey = data["key"];
-    entity = entity.merge(chatTriggerId: data["triggerId"]);
+    entity = entity.merge(
+      chatTriggerId: data["triggerId"],
+      chatStepId: data["step_id"],
+    );
     Map<String, dynamic> messageData = data["message"];
     var message = "";
 
     if (messageData.containsKey("blocks") && messageData["blocks"] != null) {
+      MessageUiModel messageBlockLabel;
+      final bool hasReplied =
+          (messageData["state"] != null && messageData["state"] == "replied");
       final blockData = BlocksData.fromJson(messageData["blocks"]);
       if (blockData.label != null && blockData.label!.isNotEmpty) {
-        final messageuiData = MessageUiModel(
+        messageBlockLabel = MessageUiModel(
           message: blockData.label!,
           messageId: messageData["id"].toString(),
           messageSenderType: MessageSenderType.bot,
           imageUrl: data["appUser"]["avatarUrl"],
           createdAt: data["createdAt"],
         );
-        if (!entity.chatDetailList.contains(messageuiData)) {
-          entity = entity.merge(
-              conversationKey: conversationKey,
-              messageKey: messageKey,
-              chatDetailList: [...entity.chatDetailList, messageuiData]);
+        if (!entity.chatDetailList.contains(messageBlockLabel)) {
+          if (curPage == 1 || (curPage != 1 && !hasReplied)) {
+            entity = entity.merge(
+                conversationKey: conversationKey,
+                messageKey: messageKey,
+                chatDetailList: curPage == 1
+                    ? [
+                        messageBlockLabel,
+                        ...entity.chatDetailList,
+                      ]
+                    : [
+                        ...entity.chatDetailList,
+                        messageBlockLabel,
+                      ]);
+          }
         }
       }
-      if (blockData.waitForInput) {
+      if (curPage == 1 && blockData.waitForInput) {
         entity = entity.merge(
           conversationKey: conversationKey,
           messageKey: messageKey,
@@ -559,17 +669,74 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
               : ChatMessageType.askForInputButton,
         );
       }
-      if (messageData["state"] != null &&
-          messageData["state"] == "replied" &&
-          messageData["data"] != null &&
-          messageData["data"]["label"] != null) {
-        final messageuiData = MessageUiModel(
-          message: "$sentMessageHead${messageData["data"]["label"]}",
-          messageId: DateTime.now().toString(),
-          messageSenderType: MessageSenderType.user,
+      if (messageData["state"] != null && messageData["state"] == "replied") {
+        if (blockData.askForInput &&
+            messageData["data"] != null &&
+            messageData["data"]["label"] != null) {
+          final messageuiData = MessageUiModel(
+            message: "$sentMessageHead${messageData["data"]["label"]}",
+            messageId: DateTime.now().toString(),
+            messageSenderType: MessageSenderType.user,
+          );
+          entity = entity.merge(
+              chatDetailList: curPage == 1
+                  ? [
+                      messageuiData,
+                      ...entity.chatDetailList,
+                    ]
+                  : [
+                      ...entity.chatDetailList,
+                      messageuiData,
+                    ]);
+        } else if (blockData.waitForReply &&
+            messageData["data"] != null &&
+            messageData["data"]["text_content"] != null) {
+          final messageuiData = MessageUiModel(
+            message: "$sentMessageHead${messageData["data"]["text_content"]}",
+            messageId: DateTime.now().toString(),
+            messageSenderType: MessageSenderType.user,
+          );
+          entity = entity.merge(
+              chatDetailList: curPage == 1
+                  ? [
+                      messageuiData,
+                      ...entity.chatDetailList,
+                    ]
+                  : [
+                      ...entity.chatDetailList,
+                      messageuiData,
+                    ]);
+        }
+        messageBlockLabel = MessageUiModel(
+          message: blockData.label!,
+          messageId: messageData["id"].toString(),
+          messageSenderType: MessageSenderType.bot,
+          imageUrl: data["appUser"]["avatarUrl"],
+          createdAt: data["createdAt"],
         );
-        entity = entity
-            .merge(chatDetailList: [...entity.chatDetailList, messageuiData]);
+
+        if (blockData.label != null &&
+            blockData.label!.isNotEmpty &&
+            curPage != 1 &&
+            hasReplied &&
+            !entity.chatDetailList.contains(messageBlockLabel)) {
+          entity = entity.merge(
+              conversationKey: conversationKey,
+              messageKey: messageKey,
+              chatDetailList: [
+                ...entity.chatDetailList,
+                messageBlockLabel,
+              ]);
+        }
+      } else if (blockData.waitForReply) {
+        entity = entity.merge(
+          conversationKey: conversationKey,
+          messageKey: messageKey,
+          chatBotUserState: ChatBotUserState.waitForInput,
+          chatMessageType: ChatMessageType.enterMessageAndTrigger,
+          chatNextStepUUID: messageData["next_step_uuid"],
+          chatPathId: messageData["path_id"],
+        );
       }
     } else {
       if (messageData["htmlContent"] != null &&
@@ -582,7 +749,8 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
           messageData["textContent"] != "--***--") {
         message = messageData["textContent"];
       } else if (messageData.containsKey("action") &&
-          messageData["action"] == "assigned") {
+          messageData["action"] == "assigned" &&
+          curPage == 1) {
         message = "Assigned to ${messageData["data"]["name"]}";
         entity = entity.merge(
             chatBotUserState: ChatBotUserState.waitForInput,
@@ -599,11 +767,20 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         entity = entity.merge(
             conversationKey: conversationKey,
             messageKey: messageKey,
-            chatDetailList: [...entity.chatDetailList, messageuiData]);
+            chatDetailList: curPage == 1
+                ? [
+                    messageuiData,
+                    ...entity.chatDetailList,
+                  ]
+                : [
+                    ...entity.chatDetailList,
+                    messageuiData,
+                  ]);
       }
       if (messageData['data'] != null &&
           (messageData['data'] as Map).containsKey('next_step_uuid') &&
-          messageData['data']['next_step_uuid'] == null) {
+          messageData['data']['next_step_uuid'] == null &&
+          curPage == 1) {
         entity = entity.merge(
             chatBotUserState: ChatBotUserState.waitForInput,
             chatMessageType: ChatMessageType.enterMessage);
@@ -620,12 +797,12 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       chatTriggerId: "",
       chatBotUiState: ChatBotUiState.setupSuccess,
       chatAssignee: const ChatAssignee(assignee: "", assigneeImage: ""),
+      chatStepId: "",
+      chatPathId: "",
+      chatNextStepUUID: "",
     );
     loadRecentConversationList();
   }
 }
 
 const sentMessageHead = 'You replied : ';
-/*
-{"conversation_key":"mKm2qfY28jLT2BR8uDB7LtVT","message_key":"FuxWQSQeXzZCfSwxhkjaWvTk","trigger":"2025","step":"51e87c9a-4402-4413-9540-8cb80077962d","reply":{"id":"e7100e18-f2e2-43fd-b976-b85951388479","label":"I need care","element":"button","path_id":"d2642fc1-942b-41f8-ba81-db4d7edc73fd","next_step_uuid":"51e87c9a-4402-4413-9540-8cb80077962d"},"action":"trigger_step"}
- */

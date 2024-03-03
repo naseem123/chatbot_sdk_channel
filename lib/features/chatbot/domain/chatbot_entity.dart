@@ -29,10 +29,17 @@ class ChatBotEntity extends Entity {
   final String messageKey;
   final List<Block> userInputOptions;
   final ChatAssignee chatAssignee;
+  final int currentPage;
+  final int totalPages;
+  final ChatListUiState chatListUiState;
 
   // Chat session fields
   final ChatSessionState chatSessionState;
   final int idleTimeout;
+
+  final String chatStepId;
+  final String chatPathId;
+  final String chatNextStepUUID;
 
   const ChatBotEntity({
     this.chatBotUiState = ChatBotUiState.conversationLoading,
@@ -52,6 +59,12 @@ class ChatBotEntity extends Entity {
     this.chatAssignee = const ChatAssignee(),
     this.chatSessionState = ChatSessionState.sessionUnavailable,
     this.idleTimeout = 10,
+    this.currentPage = 1,
+    this.totalPages = 1,
+    this.chatListUiState = ChatListUiState.idle,
+    this.chatStepId = "",
+    this.chatPathId = "",
+    this.chatNextStepUUID = "",
   });
 
   ChatBotEntity merge({
@@ -72,6 +85,12 @@ class ChatBotEntity extends Entity {
     ChatAssignee? chatAssignee,
     ChatSessionState? chatSessionState,
     int? idleTimeout,
+    int? currentPage,
+    int? totalPages,
+    ChatListUiState? chatListUiState,
+    String? chatStepId,
+    String? chatPathId,
+    String? chatNextStepUUID,
   }) {
     return ChatBotEntity(
       chatBotUiState: chatBotUiState ?? this.chatBotUiState,
@@ -92,6 +111,12 @@ class ChatBotEntity extends Entity {
       chatAssignee: chatAssignee ?? this.chatAssignee,
       chatSessionState: chatSessionState ?? this.chatSessionState,
       idleTimeout: idleTimeout ?? this.idleTimeout,
+      currentPage: currentPage ?? this.currentPage,
+      totalPages: totalPages ?? this.totalPages,
+      chatListUiState: chatListUiState ?? this.chatListUiState,
+      chatStepId: chatStepId ?? this.chatStepId,
+      chatPathId: chatPathId ?? this.chatPathId,
+      chatNextStepUUID: chatNextStepUUID ?? this.chatNextStepUUID,
     );
   }
 
@@ -114,5 +139,9 @@ class ChatBotEntity extends Entity {
         chatAssignee,
         messageKey,
         conversationMeta,
+        chatListUiState,
+        chatStepId,
+        chatPathId,
+        chatNextStepUUID,
       ];
 }

@@ -21,12 +21,17 @@ class ChatDetailsViewModel extends ViewModel {
     required this.chatAssignee,
     required this.idleTimeout,
     required this.onIdleSessionTimeout,
+    required this.loadMoreChats,
+    required this.currentPage,
+    required this.totalPages,
   });
 
   final ChatDetailsUiState uiState;
   final List<MessageUiModel> chatList;
-  final Function(String message) onMessageEntered;
+  final Function(String message, ChatMessageType chatMessageType)
+      onMessageEntered;
   final VoidCallback backButtonPressed;
+  final VoidCallback loadMoreChats;
 
   final Color colorSecondary;
   final Color colorPrimary;
@@ -38,6 +43,8 @@ class ChatDetailsViewModel extends ViewModel {
   final ChatAssignee chatAssignee;
   final VoidCallback onIdleSessionTimeout;
   final int idleTimeout;
+  final int currentPage;
+  final int totalPages;
 
   @override
   List<Object?> get props => [
@@ -51,5 +58,7 @@ class ChatDetailsViewModel extends ViewModel {
         backButtonPressed,
         chatAssignee,
         idleTimeout,
+        currentPage,
+        totalPages,
       ];
 }

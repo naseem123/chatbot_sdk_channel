@@ -9,6 +9,7 @@ enum ChatMessageType {
   idle,
   askForInputButton,
   enterMessage,
+  enterMessageAndTrigger,
 }
 
 enum MessageSenderType {

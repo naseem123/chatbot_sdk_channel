@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatbot/core/extensions/date_extensions.dart';
 import 'package:chatbot/core/extensions/string_extensions.dart';

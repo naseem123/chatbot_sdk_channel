@@ -70,7 +70,11 @@ class ChatDetailsGetMessageInputTransformer
           conversationKey: conversationKey,
           messageKey: messageKey,
           chatBotUserState: ChatBotUserState.waitForInput,
-          chatMessageType: ChatMessageType.enterMessage,
+          chatMessageType: ChatMessageType.enterMessageAndTrigger,
+          chatTriggerId: input.data["data"]["trigger_id"],
+          chatStepId: input.data["data"]["step_id"],
+          chatNextStepUUID: messageData["next_step_uuid"],
+          chatPathId: messageData["path_id"],
         );
       } else {
         chatBotUseCaseProvider
@@ -105,7 +109,10 @@ class ChatDetailsGetMessageInputTransformer
               entity = entity.merge(
                   conversationKey: conversationKey,
                   messageKey: messageKey,
-                  chatDetailList: [...entity.chatDetailList, messageuiData]);
+                  chatDetailList: [
+                    messageuiData,
+                    ...entity.chatDetailList,
+                  ]);
             }
           }
           if (blockData.waitForInput && !isSameAPreviousInputs) {
@@ -157,7 +164,10 @@ class ChatDetailsGetMessageInputTransformer
             return entity.merge(
                 conversationKey: conversationKey,
                 messageKey: messageKey,
-                chatDetailList: [...entity.chatDetailList, messageuiData]);
+                chatDetailList: [
+                  messageuiData,
+                  ...entity.chatDetailList,
+                ]);
           }
           if (messageData['data'] != null &&
               (messageData['data'] as Map).containsKey('next_step_uuid') &&
