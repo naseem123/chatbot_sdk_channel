@@ -1,4 +1,6 @@
 import 'package:chatbot/chatbot_app.dart';
+import 'package:chatbot/core/env/env_reader.dart';
+import 'package:chatbot/core/utils/shared_pref.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_entity.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
 import 'package:chatbot/features/chatbot/gateway/websocket/websocket_connect_gateway.dart';
@@ -8,7 +10,9 @@ import 'package:chatbot/features/chatbot/gateway/websocket/websocket_send_messag
 import 'package:chatbot/features/chatbot/model/block_model.dart';
 import 'package:chatbot/features/chatbot/model/chat_assignee.dart';
 import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
+import 'package:chatbot/features/chatbot/model/survey_input.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_presenter.dart';
+import 'package:chatbot/providers.dart';
 import 'package:chatbot/providers/src/usecase_providers.dart';
 import 'package:clean_framework/clean_framework.dart';
 import 'package:collection/collection.dart';
@@ -76,6 +80,52 @@ class ChatDetailsGetMessageInputTransformer
           chatNextStepUUID: messageData["next_step_uuid"],
           chatPathId: messageData["path_id"],
         );
+      } else if (messageData.containsKey("blocks") &&
+          messageData["blocks"]["type"] != null &&
+          messageData["blocks"]["type"] == "app_package" &&
+          messageData["blocks"]["app_package"] == "Surveys") {
+        String? sessionId = preference.get<String>(PreferenceKey.sessionId, "");
+        final appId = providersContext().read(envReaderProvider).getAppID();
+
+        final surveyMessage = SurveyMessage.fromJson(
+          messageData["blocks"]["schema"],
+          messageKey: messageKey,
+          conversationKey: conversationKey,
+          appId: appId,
+          sessionId: sessionId,
+        );
+
+        // remove previous survey start text
+        final currentChatList = List.of(entity.chatDetailList);
+
+        print(
+            '========  $conversationKey <-> $messageKey ${currentChatList.contains(surveyMessage)} ${surveyMessage.isSurveyStartMsg}');
+
+        if (messageKey == entity.messageKey) {
+          final itemIdx = currentChatList.indexWhere(
+            (element) => element.messageId == messageKey,
+          );
+
+          if (itemIdx != -1) {
+            currentChatList[itemIdx] = surveyMessage;
+
+            return entity.merge(chatDetailList: currentChatList);
+          }
+        }
+        //
+        // final hasSurveyInputChatItem = currentChatList.where(
+        //     (element) => element is SurveyMessage && element.isSurveyStartMsg);
+        // if (hasSurveyInputChatItem.isNotEmpty) {
+        //   currentChatList.removeAt(0);
+        // }
+
+        return entity.merge(
+          conversationKey: conversationKey,
+          messageKey: messageKey,
+          chatBotUserState: ChatBotUserState.survey,
+          chatMessageType: ChatMessageType.survey,
+          chatDetailList: [surveyMessage, ...currentChatList],
+        );
       } else {
         chatBotUseCaseProvider
             .getUseCaseFromContext(providersContext)
@@ -100,11 +150,11 @@ class ChatDetailsGetMessageInputTransformer
 
           if (blockData.label != null && blockData.label!.isNotEmpty) {
             final messageuiData = MessageUiModel(
-              message: blockData.label!,
-              messageId: messageData["id"].toString(),
-              imageUrl: input.data["data"]["app_user"]["avatar_url"],
-              messageSenderType: MessageSenderType.bot,
-            );
+                message: blockData.label!,
+                messageId: messageData["id"].toString(),
+                imageUrl: input.data["data"]["app_user"]["avatar_url"],
+                messageSenderType: MessageSenderType.bot,
+                messageType: MessageType.normalText);
             if (!entity.chatDetailList.contains(messageuiData)) {
               entity = entity.merge(
                   conversationKey: conversationKey,

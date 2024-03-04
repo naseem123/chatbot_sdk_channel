@@ -10,6 +10,7 @@ class Button extends StatelessWidget {
     required this.onPressed,
     this.icon,
     this.primaryColor,
+    this.buttonRadius = 26,
     this.state = ButtonState.active,
   });
 
@@ -18,7 +19,8 @@ class Button extends StatelessWidget {
       required Widget child,
       required VoidCallback onPressed,
       ButtonState state,
-      Color? primaryColor}) = _AccentButton;
+      Color? primaryColor,
+      double buttonRadius}) = _AccentButton;
 
   const factory Button.destructive({
     Key? key,
@@ -56,6 +58,7 @@ class Button extends StatelessWidget {
   final Widget? icon;
   final ButtonState state;
   final Color? primaryColor;
+  final double buttonRadius;
 
   ButtonStyle get _style {
     return ElevatedButton.styleFrom(
@@ -141,6 +144,7 @@ class _AccentButton extends Button {
       required super.child,
       required super.onPressed,
       super.state,
+      super.buttonRadius,
       super.primaryColor});
 
   @override
@@ -158,7 +162,7 @@ class _AccentButton extends Button {
             ? context.colorScheme.primary
             : context.colorScheme.surface,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25.0),
+          borderRadius: BorderRadius.circular(buttonRadius),
         ),
       );
     }
@@ -291,7 +295,6 @@ class _IconButton extends Button {
 
   @override
   Widget build(BuildContext context) {
-
     return IgnorePointer(
       ignoring: isInactive,
       child: IconButton(

@@ -27,6 +27,8 @@ dependencies:
   gap: ^3.0.1
   url_launcher: ^6.1.14
   google_fonts: ^6.1.0
+  collection: ^1.17.2
+  flutter_inappwebview: ^6.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,10 @@
 import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
+import 'package:chatbot/features/chatbot/model/survey_input.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/message_item_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import 'survey_input_widget.dart';
 
 class ChatListWidget extends StatefulWidget {
   const ChatListWidget({
@@ -9,13 +13,18 @@ class ChatListWidget extends StatefulWidget {
     required this.totalPage,
     required this.messages,
     required this.secondaryColor,
+    required this.colorPrimary,
     required this.loadMoreChats,
+    required this.onSurveyStartClicked,
   });
+
   final int currentPage;
   final int totalPage;
-  final List<MessageUiModel> messages;
+  final List<ChatMessage> messages;
   final Color secondaryColor;
+  final Color colorPrimary;
   final VoidCallback loadMoreChats;
+  final void Function(Map) onSurveyStartClicked;
 
   @override
   State<ChatListWidget> createState() => _ChatListWidgetState();
@@ -62,8 +71,26 @@ class _ChatListWidgetState extends State<ChatListWidget>
       controller: _listScrollController,
       itemBuilder: (context, index) {
         final message = widget.messages[index];
-        return MessageItemWidget(
-            message: message, secondaryColor: widget.secondaryColor);
+        if (message is MessageUiModel) {
+          return MessageItemWidget(
+            message: message,
+            secondaryColor: widget.secondaryColor,
+          );
+        } else if (message is SurveyMessage) {
+          return SurveyWidget(
+            surveyModel: message,
+            primaryColor: widget.colorPrimary,
+            onSurveyStartClicked: (surveyMap) {
+              context.push('/survey', extra: {'surveyData': surveyMap}).then(
+                  (value) {
+                if (value != null && value is Map) {
+                  widget.onSurveyStartClicked(value);
+                }
+              });
+            },
+          );
+        }
+        return const SizedBox.shrink();
       },
     );
   }

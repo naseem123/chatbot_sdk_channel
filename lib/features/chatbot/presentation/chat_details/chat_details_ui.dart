@@ -8,7 +8,6 @@ import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_user_input_editor_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_user_select_item_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_wait_for_input_button_widget.dart';
-import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/message_item_widget.dart';
 import 'package:clean_framework/clean_framework_legacy.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,7 +33,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
   @override
   Widget build(BuildContext context, ChatDetailsViewModel viewModel) {
     final viewInsets = MediaQuery.viewInsetsOf(context);
-    final messages = viewModel.chatList.toList();
+    final messages = viewModel.chatList;
     final isLoading = viewModel.uiState == ChatDetailsUiState.loading;
 
     final chatMessageType = viewModel.chatMessageType;
@@ -56,9 +55,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
       child: Scaffold(
         backgroundColor: const Color(0xfff1f1f1),
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(
-            70,
-          ),
+          preferredSize: const Size.fromHeight(70),
           child: ChatBotAppbar(
             title: chatBotAssignee.assignee,
             subTitle: '',
@@ -83,7 +80,9 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                       totalPage: viewModel.totalPages,
                       messages: messages,
                       secondaryColor: viewModel.colorSecondary,
+                      colorPrimary: viewModel.colorPrimary,
                       loadMoreChats: viewModel.loadMoreChats,
+                      onSurveyStartClicked: viewModel.onSurveySubmitted,
                     ),
                   ),
                 ),
@@ -136,7 +135,24 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                         messageController.text, viewModel.chatMessageType);
                     messageController.clear();
                   },
-                )
+                ),
+              if (chatBotUserState == ChatBotUserState.survey &&
+                  viewModel.chatMessageType == ChatMessageType.survey)
+                Container(
+                  padding: EdgeInsets.symmetric(
+                      vertical: context.bottomPadding.bottom),
+                  color: Colors.white,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Reply above',
+                    style: GoogleFonts.arimo(
+                        color: context.secondaryColor.mostlyBlack,
+                        fontSize: 14,
+                        height: 1.5,
+                        fontWeight: FontWeight.w800),
+                  ),
+                ),
             ],
           ),
         ),

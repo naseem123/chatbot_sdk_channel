@@ -21,6 +21,7 @@ import 'package:chatbot/features/chatbot/gateway/websocket/websocket_send_messag
 import 'package:chatbot/features/chatbot/model/block_model.dart';
 import 'package:chatbot/features/chatbot/model/chat_assignee.dart';
 import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
+import 'package:chatbot/features/chatbot/model/survey_input.dart';
 import 'package:chatbot/features/chatbot/model/websocket/init_command_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_presenter.dart';
@@ -577,6 +578,27 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       );
     });
   }
+  InitCommandModel setUserInputCommandAsMap(Map inputData) {
+    final sessionId = preference.get<String>(PreferenceKey.sessionId, "");
+    return InitCommandModel(
+      command: socketMessage,
+      identifier: jsonEncode(Identifier(
+              app: providersContext().read(envReaderProvider).getAppID(),
+              channel: socketMessageChannel,
+              sessionId: sessionId ?? "",
+              encData: "{}",
+              sessionValue: null,
+              userData: "{}")
+          .toJson()),
+      data: jsonEncode({
+        'data': inputData,
+        'conversation_key': entity.conversationKey,
+        'message_key': entity.messageKey,
+        'action': socketActionSubmit,
+      }),
+    );
+  }
+
 
   void parseConversationHistory(
       Map<String, dynamic> data, String conversationID) {
@@ -669,6 +691,44 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
               : ChatMessageType.askForInputButton,
         );
       }
+      //Handle for Server Input
+
+      if (messageData.containsKey("blocks") &&
+          messageData["blocks"] != null &&
+          messageData["blocks"]['type'] == 'app_package' &&
+          messageData["blocks"]['app_package'] == 'Surveys') {
+        String? sessionId = preference.get<String>(PreferenceKey.sessionId, "");
+        final appId = providersContext().read(envReaderProvider).getAppID();
+
+        entity = entity.merge(
+          chatDetailList: curPage == 1
+              ? [
+                  SurveyMessage.fromJson(
+                    messageData["blocks"]['schema'],
+                    messageKey: messageKey,
+                    conversationKey: conversationKey,
+                    appId: appId,
+                    sessionId: sessionId,
+                  ),
+                  ...entity.chatDetailList,
+                ]
+              : [
+                  ...entity.chatDetailList,
+                  SurveyMessage.fromJson(
+                    messageData["blocks"]['schema'],
+                    messageKey: messageKey,
+                    conversationKey: conversationKey,
+                    appId: appId,
+                    sessionId: sessionId,
+                  ),
+                ],
+          chatMessageType: curPage == 1 ? ChatMessageType.survey : null,
+          chatBotUserState: curPage == 1 ? ChatBotUserState.survey : null,
+        );
+      }
+
+
+
       if (messageData["state"] != null && messageData["state"] == "replied") {
         if (blockData.askForInput &&
             messageData["data"] != null &&
@@ -802,6 +862,21 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       chatNextStepUUID: "",
     );
     loadRecentConversationList();
+  }
+
+  void onSurveySubmitted(Map<dynamic, dynamic> input) {
+    entity = entity.merge(
+        chatBotUserState: ChatBotUserState.idle,
+        chatMessageType: ChatMessageType.idle);
+
+    request(
+        WebsocketInitCommandGatewayOutput(
+            messageToSend: setUserInputCommandAsMap(input)),
+        onSuccess: (WebsocketSendMessageSuccessInput input) {
+      return entity;
+    }, onFailure: (_) {
+      return entity;
+    });
   }
 }
 

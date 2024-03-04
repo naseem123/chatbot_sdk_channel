@@ -24,12 +24,12 @@ class ChatDetailsViewModel extends ViewModel {
     required this.loadMoreChats,
     required this.currentPage,
     required this.totalPages,
+    required this.onSurveySubmitted,
   });
 
   final ChatDetailsUiState uiState;
-  final List<MessageUiModel> chatList;
-  final Function(String message, ChatMessageType chatMessageType)
-      onMessageEntered;
+  final List<ChatMessage> chatList;
+  final Function(String message,  ChatMessageType chatMessageType) onMessageEntered;
   final VoidCallback backButtonPressed;
   final VoidCallback loadMoreChats;
 
@@ -40,6 +40,7 @@ class ChatDetailsViewModel extends ViewModel {
   final ChatMessageType chatMessageType;
   final List<Block> userInputOptions;
   final Function(Block input) onUserInputTriggered;
+  final void Function(Map input) onSurveySubmitted;
   final ChatAssignee chatAssignee;
   final VoidCallback onIdleSessionTimeout;
   final int idleTimeout;
