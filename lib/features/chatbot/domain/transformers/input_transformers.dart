@@ -11,8 +11,8 @@ import 'package:chatbot/features/chatbot/model/block_model.dart';
 import 'package:chatbot/features/chatbot/model/chat_assignee.dart';
 import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
 import 'package:chatbot/features/chatbot/model/survey_input.dart';
-import 'package:chatbot/providers.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_presenter.dart';
+import 'package:chatbot/providers.dart';
 import 'package:chatbot/providers/src/usecase_providers.dart';
 import 'package:clean_framework/clean_framework.dart';
 import 'package:collection/collection.dart';
@@ -79,8 +79,6 @@ class ChatDetailsGetMessageInputTransformer
           chatStepId: input.data["data"]["step_id"],
           chatNextStepUUID: messageData["next_step_uuid"],
           chatPathId: messageData["path_id"],
-          chatBotUserState: ChatBotUserState.survey,
-          chatMessageType: ChatMessageType.survey,
         );
       } else if (messageData.containsKey("blocks") &&
           messageData["blocks"]["type"] != null &&
@@ -98,24 +96,35 @@ class ChatDetailsGetMessageInputTransformer
         );
 
         // remove previous survey start text
-        final currentChatList = entity.chatDetailList;
+        final currentChatList = List.of(entity.chatDetailList);
 
-        if (currentChatList.contains(surveyMessage)) {
-          return entity;
-        }
+        print(
+            '========  $conversationKey <-> $messageKey ${currentChatList.contains(surveyMessage)} ${surveyMessage.isSurveyStartMsg}');
 
-        final hasSurveyInputChatItem = currentChatList.where(
-            (element) => element is SurveyMessage && element.isSurveySubmit);
-        if (hasSurveyInputChatItem.isNotEmpty) {
-          currentChatList.removeLast();
+        if (messageKey == entity.messageKey) {
+          final itemIdx = currentChatList.indexWhere(
+            (element) => element.messageId == messageKey,
+          );
+
+          if (itemIdx != -1) {
+            currentChatList[itemIdx] = surveyMessage;
+
+            return entity.merge(chatDetailList: currentChatList);
+          }
         }
+        //
+        // final hasSurveyInputChatItem = currentChatList.where(
+        //     (element) => element is SurveyMessage && element.isSurveyStartMsg);
+        // if (hasSurveyInputChatItem.isNotEmpty) {
+        //   currentChatList.removeAt(0);
+        // }
 
         return entity.merge(
           conversationKey: conversationKey,
           messageKey: messageKey,
           chatBotUserState: ChatBotUserState.survey,
           chatMessageType: ChatMessageType.survey,
-          chatDetailList: [...currentChatList, surveyMessage],
+          chatDetailList: [surveyMessage, ...currentChatList],
         );
       } else {
         chatBotUseCaseProvider

@@ -1,8 +1,6 @@
 import 'package:chatbot/core/extensions/context_extension.dart';
 import 'package:chatbot/core/widgets/idle_detector.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
-import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
-import 'package:chatbot/features/chatbot/model/survey_input.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_view_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_details_appbar.dart';
@@ -10,14 +8,10 @@ import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_user_input_editor_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_user_select_item_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_wait_for_input_button_widget.dart';
-import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/message_item_widget.dart';
 import 'package:clean_framework/clean_framework_legacy.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:resources/resources.dart';
-
-import 'widgets/survey_input_widget.dart';
 
 class ChatDetailsUI extends UI<ChatDetailsViewModel> {
   ChatDetailsUI({
@@ -86,33 +80,10 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                       totalPage: viewModel.totalPages,
                       messages: messages,
                       secondaryColor: viewModel.colorSecondary,
+                      colorPrimary: viewModel.colorPrimary,
                       loadMoreChats: viewModel.loadMoreChats,
+                      onSurveyStartClicked: viewModel.onSurveySubmitted,
                     ),
-                    itemCount: messages.length,
-                    controller: _scrollController,
-                    itemBuilder: (context, index) {
-                      final message = messages[index];
-                      if (message is MessageUiModel) {
-                        return MessageItemWidget(
-                          message: message,
-                          secondaryColor: viewModel.colorSecondary,
-                        );
-                      } else if (message is SurveyMessage) {
-                        return SurveyWidget(
-                          surveyModel: message,
-                          primaryColor: viewModel.colorPrimary,
-                          onSurveyStartClicked: (surveyMap) {
-                            context.push('/survey',
-                                extra: {'surveyData': surveyMap}).then((value) {
-                              if (value != null && value is Map) {
-                                viewModel.onSurveySubmitted(value);
-                              }
-                            });
-                          },
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
                   ),
                 ),
               ),

@@ -697,28 +697,33 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
           messageData["blocks"] != null &&
           messageData["blocks"]['type'] == 'app_package' &&
           messageData["blocks"]['app_package'] == 'Surveys') {
-        //     "id": "Surveys",
-        // "message_key": "WKtcy9jJCt5w9AacHRbRMjxC",
-        // "conversation_key": "XoeW3HHco6BwcEXmYyppNTUw",
-        // "enc_data": {},
-        // "app_id": "yB9BJmrcH3bM4CShtMKB5qrw",
-        // "session_id": "4_NNCLACYaUPPsQw_-Gb7Q"
         String? sessionId = preference.get<String>(PreferenceKey.sessionId, "");
         final appId = providersContext().read(envReaderProvider).getAppID();
 
         entity = entity.merge(
-          chatDetailList: [
-            ...entity.chatDetailList,
-            SurveyMessage.fromJson(
-              messageData["blocks"]['schema'],
-              messageKey: messageKey,
-              conversationKey: conversationKey,
-              appId: appId,
-              sessionId: sessionId,
-            )
-          ],
-          chatMessageType: ChatMessageType.survey,
-          chatBotUserState: ChatBotUserState.survey,
+          chatDetailList: curPage == 1
+              ? [
+                  SurveyMessage.fromJson(
+                    messageData["blocks"]['schema'],
+                    messageKey: messageKey,
+                    conversationKey: conversationKey,
+                    appId: appId,
+                    sessionId: sessionId,
+                  ),
+                  ...entity.chatDetailList,
+                ]
+              : [
+                  ...entity.chatDetailList,
+                  SurveyMessage.fromJson(
+                    messageData["blocks"]['schema'],
+                    messageKey: messageKey,
+                    conversationKey: conversationKey,
+                    appId: appId,
+                    sessionId: sessionId,
+                  ),
+                ],
+          chatMessageType: curPage == 1 ? ChatMessageType.survey : null,
+          chatBotUserState: curPage == 1 ? ChatBotUserState.survey : null,
         );
       }
 

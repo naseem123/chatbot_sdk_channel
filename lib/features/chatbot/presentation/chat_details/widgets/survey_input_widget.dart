@@ -13,7 +13,7 @@ class SurveyWidget extends StatelessWidget {
 
   final SurveyMessage surveyModel;
 
-  final Function(Map) onSurveyStartClicked;
+  final void Function(Map) onSurveyStartClicked;
   final Color primaryColor;
 
   @override

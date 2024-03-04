@@ -3,7 +3,8 @@ import 'mesasge_ui_model.dart';
 class SurveyMessage extends ChatMessage {
   final List<SurveyMessage> children;
 
-  const SurveyMessage({super.messageType, this.children = const []});
+  const SurveyMessage(
+      {super.messageType, this.children = const [], super.messageId});
 
   static SurveyMessage fromJson(
     List<dynamic> json, {
@@ -57,10 +58,13 @@ class SurveyMessage extends ChatMessage {
     }
 
     return SurveyMessage(
-        children: messageArray, messageType: MessageType.surveyMessage);
+        children: messageArray,
+        messageType: MessageType.surveyMessage,
+        messageId: messageKey);
   }
 
-  bool get isSurveySubmit => children.whereType<SurveyInputButton>().isNotEmpty;
+  bool get isSurveyStartMsg =>
+      children.whereType<SurveyInputButton>().isNotEmpty;
 
   @override
   List<Object?> get props => [children];
