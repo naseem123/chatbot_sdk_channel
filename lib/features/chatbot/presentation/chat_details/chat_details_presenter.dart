@@ -55,6 +55,7 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
       loadMoreChats: useCase.loadMoreChats,
       currentPage: output.currentPage,
       totalPages: output.totalPages,
+      onSurveySubmitted: useCase.onSurveySubmitted,
     );
   }
 

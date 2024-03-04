@@ -19,7 +19,7 @@ class ChatBotEntity extends Entity {
 
   //Chat details fields
   final ChatDetailsUiState chatDetailsUiState;
-  final List<MessageUiModel> chatDetailList;
+  final List<ChatMessage> chatDetailList;
   final ChatBotUserState chatBotUserState;
   final ChatMessageType chatMessageType;
 
@@ -75,7 +75,7 @@ class ChatBotEntity extends Entity {
     ConversationMeta? conversationMeta,
     AppSettings? appSettings,
     ChatDetailsUiState? chatDetailsUiState,
-    List<MessageUiModel>? chatDetailList,
+    List<ChatMessage>? chatDetailList,
     String? chatTriggerId,
     String? conversationKey,
     ChatBotUserState? chatBotUserState,
