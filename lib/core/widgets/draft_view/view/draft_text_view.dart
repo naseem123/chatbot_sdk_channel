@@ -5,6 +5,7 @@ import 'package:chatbot/core/widgets/draft_view/type/block_type.dart';
 import 'package:chatbot/core/widgets/draft_view/util/text_util.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 typedef OnLinkTab = void Function(String url);
 
@@ -52,6 +53,7 @@ class DraftTextView extends StatelessWidget {
     return ListView.builder(
       padding: padding,
       controller: controller,
+      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: itemBuilder,
       itemCount: data.blocks.length,
       shrinkWrap: true,
@@ -69,6 +71,7 @@ class DraftTextView extends StatelessWidget {
   Widget blockBuilder(BuildContext context, Block block) {
     Text textView;
     var textTheme = Theme.of(context).textTheme;
+
     TextStyle textStyle;
     switch (block.type) {
       case BlockType.h1:
@@ -108,6 +111,10 @@ class DraftTextView extends StatelessWidget {
         textStyle = textTheme.bodyMedium ?? defaultStyle;
         break;
     }
+    textStyle = textStyle.copyWith(
+        height: 1.4,
+        fontFamily: GoogleFonts.arimo().fontFamily,
+        color: Colors.black);
     if (block.inlineStyle.isNotEmpty) {
       var styleMap = block.textStyleMap(textStyle);
       textView = Text.rich(
@@ -197,9 +204,9 @@ class DraftTextView extends StatelessWidget {
                     text: text.substring(
                         ranges[i].offset, ranges[i].offset + ranges[i].length),
                     style: textStyle.copyWith(
-                        color: secondaryColor,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline),
+                      color: secondaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () => onLinkTab
                           ?.call(entityMap["${ranges[i].key}"]?.data.url ?? ""),

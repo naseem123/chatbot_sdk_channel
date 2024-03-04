@@ -17,10 +17,12 @@ class ChatDetailsUIOutput extends Output {
     required this.chatAssignee,
     required this.idleTimeout,
     required this.chatSessionState,
+    required this.currentPage,
+    required this.totalPages,
   });
 
   final ChatDetailsUiState chatDetailsUiState;
-  final List<MessageUiModel> chatDetailList;
+  final List<ChatMessage> chatDetailList;
   final AppSettings appSettings;
 
   final ChatBotUserState chatBotUserState;
@@ -28,6 +30,8 @@ class ChatDetailsUIOutput extends Output {
   final List<Block> userInputOptions;
   final ChatAssignee chatAssignee;
   final int idleTimeout;
+  final int currentPage;
+  final int totalPages;
   final ChatSessionState chatSessionState;
 
   @override
@@ -41,5 +45,7 @@ class ChatDetailsUIOutput extends Output {
         chatAssignee,
         idleTimeout,
         chatSessionState,
+        currentPage,
+        totalPages,
       ];
 }

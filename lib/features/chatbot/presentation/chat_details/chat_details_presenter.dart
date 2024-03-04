@@ -34,8 +34,8 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
     return ChatDetailsViewModel(
       uiState: output.chatDetailsUiState,
       chatList: output.chatDetailList,
-      onMessageEntered: (String message) {
-        useCase.sendMessage(messageData: message);
+      onMessageEntered: (String message, ChatMessageType chatMessageType) {
+        useCase.sendMessage(messageData: message, messageType: chatMessageType);
       },
       chatMessageType: output.chatMessageType,
       chatBotUserState: output.chatBotUserState,
@@ -47,11 +47,15 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
           output.appSettings.app.customizationColors.secondary.toColor,
       colorPrimary: output.appSettings.app.customizationColors.primary.toColor,
       backButtonPressed: () {
-        useCase.loadRecentConversationList();
+        //  useCase.loadRecentConversationList();
       },
       chatAssignee: output.chatAssignee,
       idleTimeout: output.idleTimeout,
       onIdleSessionTimeout: useCase.clearSession,
+      loadMoreChats: useCase.loadMoreChats,
+      currentPage: output.currentPage,
+      totalPages: output.totalPages,
+      onSurveySubmitted: useCase.onSurveySubmitted,
     );
   }
 
@@ -74,4 +78,9 @@ enum ChatDetailsUiState {
   loading,
   success,
   failure,
+}
+
+enum ChatListUiState {
+  idle,
+  loading,
 }

@@ -127,11 +127,7 @@ class _ChatUserSelectItemWidgetState extends State<ChatUserSelectItemWidget> {
                           child: const Text('Cancel'),
                         ),
                       ),
-                    ).then((value) {
-                      if (value != null) {
-                        print('Selected option: $value');
-                      }
-                    });
+                    );
                   },
                   child: Row(
                     children: [

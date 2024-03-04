@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatbot/core/extensions/date_extensions.dart';
 import 'package:chatbot/core/extensions/string_extensions.dart';
@@ -26,25 +24,10 @@ class MessageItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final size = MediaQuery.sizeOf(context);
-
-    /* final alignment = (message.senderUserId != userId1)
-        ? Alignment.centerRight
-        : Alignment.centerLeft;
-
-    final color = (message.senderUserId == userId1)
-        ? Theme.of(context).colorScheme.primary
-        : Theme.of(context).colorScheme.secondary;
-
-    final textColor = (message.senderUserId == userId1)
-        ? Theme.of(context).colorScheme.onPrimary
-        : Theme.of(context).colorScheme.onSecondary;
-*/
     Widget messageWidget;
     final isBot = message.messageSenderType == MessageSenderType.bot;
 
     if (message.message.contains("blocks")) {
-      log("message = $message");
       messageWidget = SizedBox(
         width: MediaQuery.of(context).size.width - 30,
         child: Padding(
@@ -52,7 +35,7 @@ class MessageItemWidget extends StatelessWidget {
           child: DraftTextView.json(
             jsonDecode(message.message),
             padding: const EdgeInsets.symmetric(horizontal: 16),
-              secondaryColor:secondaryColor,
+            secondaryColor: secondaryColor,
             defaultStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: context.secondaryColor.mostlyBlack,
                   fontSize: 18,
