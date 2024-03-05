@@ -54,7 +54,7 @@ workflows:
               jf project init
               echo $CM_BUILD_DIR
               cd build/host/outputs/repo/com/tekartik/sqflite/sqflite_release  
-              jf rt upload "./1.0.8/*.*" trc1-gradle-dev-local/com/tekartik/sqflite/sqflite_release/ --user babiraman@architech.ca --password cmVmdGtuOjAxOjE3NDEyMDcxNzY6cHYzSkljUFNnMHZ1YkpHTTBxOFByY25SaEFG --url https://archisys.jfrog.io/artifactory/
+              jf rt upload "./$VERSION/*.*" trc1-gradle-dev-local/com/tekartik/sqflite/sqflite_release/ --user babiraman@architech.ca --password cmVmdGtuOjAxOjE3NDEyMDcxNzY6cHYzSkljUFNnMHZ1YkpHTTBxOFByY25SaEFG --url https://archisys.jfrog.io/artifactory/
 
 
 
