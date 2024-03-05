@@ -36,6 +36,10 @@ workflows:
           - name: 'Flutter Build AAR'
             script: |
               flutter build aar --no-debug --no-profile --build-number $VERSION
+          - name: Publish
+            script: |
+              SDK_VERSION=$VERSION
+              ./gradlew publish
             # You can add more scripts or steps as needed
          # - name: Publish to Google Cloud
          #  script: | 
