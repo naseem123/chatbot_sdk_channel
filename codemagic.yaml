@@ -37,20 +37,15 @@ workflows:
             script: |
               flutter build aar --no-debug --no-profile --build-number $VERSION
 
-    artifacts:
-       - build/**/outputs/**/com/tekartik/sqflite/sqflite_release/**/*.aar
-       - build/**/outputs/**/com/thinkresearch/chatbot/flutter_release/**/*.aar
-       - build/**/outputs/**/io/flutter/plugins/pathprovider/path_provider_release/**/*.aar
-       - build/**/outputs/**/io/flutter/plugins/sharedpreferences/shared_preferences_android_release/**/*.aar
-       - build/**/outputs/**/io/flutter/plugins/urllauncher/url_launcher_android_release/**/*.aar
-       - build/**/outputs/**/io/flutter/plugins/webviewflutter/web_view_flutter_release/**/*.aar
+          - name: Publish
+            script: |
+              SDK_VERSION=$VERSION
+              cd .android
+              chmod +x gradlew
+              ./gradlew publish
 
 
-#          - name: Publish
-#            script: |
-#              SDK_VERSION=$VERSION
- #             ./gradlew publish
-            # You can add more scripts or steps as needed
+  # You can add more scripts or steps as needed
          # - name: Publish to Google Cloud
          #  script: | 
          #     echo $GCLOUD_STORAGE_KEY > $CM_BUILD_DIR/gcloud_storage_key.json
