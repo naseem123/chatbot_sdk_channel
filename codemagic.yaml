@@ -53,7 +53,8 @@ workflows:
               jf config add --password=cmVmdGtuOjAxOjE3NDEyMDcxNzY6cHYzSkljUFNnMHZ1YkpHTTBxOFByY25SaEFG --url=https://archisys.jfrog.io/ --interactive=false trc1-gradle-dev3 --user=babiraman@architech.ca
               jf project init
               echo $CM_BUILD_DIR
-              jfrog rt upload "$CM_BUILD_DIR/build/host/outputs/repo/com/tekartik/sqflite/sqflite_release/$VERSION/*.*" trc1-gradle-dev-local/com/tekartik/sqflite/sqflite_release/ \n 
+              cd build/host/outputs/repo/com/tekartik/sqflite/sqflite_release  
+              jf rt upload "./1.0.8/*.*" trc1-gradle-dev-local/com/tekartik/sqflite/sqflite_release/ --user babiraman@architech.ca --password cmVmdGtuOjAxOjE3NDEyMDcxNzY6cHYzSkljUFNnMHZ1YkpHTTBxOFByY25SaEFG --url https://archisys.jfrog.io/artifactory/
 
 
 
