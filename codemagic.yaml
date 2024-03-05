@@ -21,12 +21,6 @@ workflows:
               brew install openjdk-17-jdk
               export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 
-          - name: Install Google Cloud CLI
-            script: |
-              curl https://sdk.cloud.google.com | bash
-              exec -l $SHELL
-              gcloud init
-
           - name: 'Flutter Pub Get'
             script: flutter pub get
 
@@ -38,10 +32,6 @@ workflows:
               perl -i -p0e 's/compileSdkVersion 31/compileSdkVersion 33/g' .android/app/build.gradle
               perl -i -p0e 's/minSdkVersion 16/minSdkVersion 19/g' .android/app/build.gradle
               perl -i -p0e 's/targetSdkVersion 31/targetSdkVersion 33/g' .android/app/build.gradle
-
-          - name: 'Append build.gradle script'
-            script: |
-              cat publish.gradle >> .android/build.gradle
 
           - name: 'Flutter Build AAR'
             script: |
