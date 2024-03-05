@@ -42,7 +42,7 @@ workflows:
               SDK_VERSION=$VERSION
               cd .android
               chmod +x gradlew
-              ./gradlew publish
+              ./gradlew clean build
 
 
   # You can add more scripts or steps as needed
