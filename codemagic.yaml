@@ -11,8 +11,8 @@ workflows:
               TAG_VERSION=$(grep version pubspec.yaml |  awk -F  ': ' '{print $2}'| awk '{print substr($0, 1, 4)}'| awk -v build="$PROJECT_BUILD_NUMBER" '{printf "%s%s\n", $0, build}')
               echo $TAG_VERSION
               echo "VERSION=$TAG_VERSION" >> $CM_ENV
-              git tag $TAG_VERSION
-              git push origin $TAG_VERSION
+#              git tag $TAG_VERSION
+#              git push origin $TAG_VERSION
 
           - name: Install Java 17
             script: |
