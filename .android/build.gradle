@@ -9,6 +9,16 @@ buildscript {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
+//        maven {
+//            url "https://northamerica-northeast2-maven.pkg.dev/gcp-pocs-386219/think-research-maven-repo"
+//            credentials {
+//                username = "_json_key_base64"
+//                password = ""
+//            }
+//            authentication {
+//                basic(BasicAuthentication)
+//            }
+//        }
     }
 
     dependencies {
@@ -52,48 +62,87 @@ dependencies {
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.artifactory'
 
-subprojects {
-    apply plugin: 'maven-publish'
-    apply plugin: 'com.jfrog.artifactory'
 
-    afterEvaluate {
-        plugins.withId('com.android.library') {
-            println(project.name)
+//artifactoryPublish.skip = true
 
-            publishing {
-                publications {
-                    release(MavenPublication) {
-                        groupId = 'com.balaji'
-                        artifactId = project.getName()
-                        version = $PROJECT_BUILD_NUMBER
 
-                        afterEvaluate {
-                            from components.release
-                        }
 
-                        pom {
-                            name = 'test sdk'
-                                    description = 'test sdk desc'
-                                    url = 'http://google.com'
-                                    developers {
-                                        developer {
-                                            id = '123'
-                                            name = 'balaji'
-                                            email = 'b@a.com'
-                                        }
-                                    }
-                        }
-                    }
-                }
+//project('app') {
+//    artifactoryPublish.dependsOn('build')
+//    publishing {
+//        publications {
+//            app(MavenPublication) {
+//                groupId = 'com.tekartik.sqflite'
+//                artifactId = 'sqflite_release'
+//                version = '1.10'
+//
+//            }
+//        }
+//    }
+//
+//    artifactoryPublish {
+//        publications(publishing.publications.app)
+//    }
+//}
 
-                repositories {
-                    maven {
-                        url = 'https://archisys.jfrog.io/artifactory/trc1-gradle-dev-local/'
+//project('library') {
+//    artifactoryPublish.dependsOn('build')
+//    publishing {
+//        publications {
+//            aar(MavenPublication) {
+//                groupId = 'com.tekartik.sqflite'
+//                artifactId = 'sqflite_release'
+//                version = '1.10'
+//                // Tell maven to prepare the generated "*.aar" file for publishing
+//                artifact("build/host/outputs/repo/aar/com/tekartik/sqflite-release/1.10/sqflite-release*.aar")
+//            }
+//        }
+//    }
+//
+//    artifactoryPublish {
+//        publications(publishing.publications.aar)
+//    }
+//}
+//
 
-                        credentials {
-                            username = "babiraman@architech.ca"
-                            password = "Seshadri@1"
-                        }
+
+
+artifactory {
+    contextUrl = "https://archisys.jfrog.io/artifactory/trc1-gradle-dev-local/"
+    //The base Artifactory URL if not overridden by the publisher/resolver
+    publish {
+        repository {
+            repoKey = 'trc1-gradle-dev-local'
+            username = "babiraman@architech.ca"
+            password = "Seshadri@1"
+        }
+        defaults {
+            publications('mavenJava')
+            publishArtifacts = true
+            properties = ['qa.level': 'basic', 'dev.team': 'core']
+            publishPom = false
+
+        }
+    }
+}
+//    resolve {
+//        repository {
+//            repoKey = 'trc1-gradle-dev'
+//            username = "babiraman@architech.ca"
+//            password = "Seshadri@1"
+//            maven = true
+//        }
+//    }
+
+project.getGradle().projectsEvaluated {
+    allprojects {
+        publishing {
+            repositories {
+                maven {
+                    url "https://archisys.jfrog.io/artifactory/trc1-gradle-dev-local/"
+                    credentials {
+                        username = "babiraman@architech.ca"
+                        password = "Seshadri@1"
                     }
                 }
             }
