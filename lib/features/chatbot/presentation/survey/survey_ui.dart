@@ -20,6 +20,7 @@ class _SurveyUiState extends State<SurveyUi> {
   final Completer<WebViewController> _controller =
   Completer<WebViewController>();
   late WebViewController _mycontroller;
+  bool isLoading=true;
 
   @override
   void initState() {
@@ -37,31 +38,42 @@ class _SurveyUiState extends State<SurveyUi> {
       backgroundColor: Colors.white,
       appBar: AppBar(),
       body: SafeArea(
-        child: WebView(
-          javascriptMode: JavascriptMode.unrestricted,
-          initialUrl: url,
-          onWebViewCreated: (webviewcontroller) {
-            _controller.complete(_mycontroller = webviewcontroller);
-          },
-          onPageFinished: (string) {
-            _mycontroller.runJavascript('''
+        child:
+        Stack(
+          children:[
+            WebView(
+              backgroundColor: Colors.white,
+              javascriptMode: JavascriptMode.unrestricted,
+              initialUrl: url,
+              onWebViewCreated: (webviewcontroller) {
+                _controller.complete(_mycontroller = webviewcontroller);
+              },
+              onPageFinished: (string) {
+       setState(() {
+         isLoading = false;
+      });
+                _mycontroller.runJavascript('''
         window.addEventListener('message', function(event) {
           chatbotMessageChannel.postMessage(JSON.stringify(event.data));
           }); 
         ''');
-          },
-          javascriptChannels: {
-            JavascriptChannel(
-              name: 'chatbotMessageChannel',
-              onMessageReceived: (JavascriptMessage message) {
-                surveyMap = jsonDecode(message.message);
-                Future.delayed(const Duration(milliseconds: 600)).then((value) {
-                  context.pop(surveyMap);
-                });
               },
-            )
-          },
-        ),
+              javascriptChannels: {
+                JavascriptChannel(
+                  name: 'chatbotMessageChannel',
+                  onMessageReceived: (JavascriptMessage message) {
+                    surveyMap = jsonDecode(message.message);
+                    Future.delayed(const Duration(milliseconds: 400)).then((value) {
+                      context.pop(surveyMap);
+                    });
+                  },
+                )
+              },
+            ),
+            if (isLoading) const Center(child: CircularProgressIndicator())
+          ]
+        )
+
       ),
     );
   }
