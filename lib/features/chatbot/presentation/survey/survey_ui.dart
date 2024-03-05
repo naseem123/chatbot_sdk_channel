@@ -1,19 +1,25 @@
+import 'dart:async';
 import 'dart:convert';
+
+import 'package:chatbot/chatbot_app.dart';
+import 'package:chatbot/core/env/env_reader.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:go_router/go_router.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class SurveyUi extends StatefulWidget {
   const SurveyUi({super.key, required, required this.surveyData});
 
-  final Map<String, dynamic> surveyData;
+final Map<String, dynamic> surveyData;
 
-  @override
-  State<SurveyUi> createState() => _SurveyUiState();
+@override
+State<SurveyUi> createState() => _SurveyUiState();
 }
 
 class _SurveyUiState extends State<SurveyUi> {
-  InAppWebViewController? _webViewController;
+  final Completer<WebViewController> _controller =
+  Completer<WebViewController>();
+  late WebViewController _mycontroller;
 
   @override
   void initState() {
@@ -25,44 +31,35 @@ class _SurveyUiState extends State<SurveyUi> {
   @override
   Widget build(BuildContext context) {
     final surveyData = Uri.encodeComponent(jsonEncode(widget.surveyData));
+    final url =
+        '${providersContext().read(envReaderProvider).getBaseUrl()}/package_iframe/surveys?data=$surveyData';
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(),
       body: SafeArea(
-        child: InAppWebView(
-            initialOptions: InAppWebViewGroupOptions(
-                crossPlatform: InAppWebViewOptions(
-                    transparentBackground: true)),
-          initialUrlRequest: URLRequest(
-              url: WebUri.uri(Uri.parse(
-                  'https://test.ca.digital-front-door.stg.gcp.trchq.com/package_iframe/surveys?data=$surveyData'))),
-
-          onWebViewCreated: (InAppWebViewController controller) {
-            _webViewController = controller;
-            _webViewController?.addJavaScriptHandler(
-              handlerName: 'onMessageReceived',
-              callback: (result) {
-                surveyMap = result[0];
+        child: WebView(
+          javascriptMode: JavascriptMode.unrestricted,
+          initialUrl: url,
+          onWebViewCreated: (webviewcontroller) {
+            _controller.complete(_mycontroller = webviewcontroller);
+          },
+          onPageFinished: (string) {
+            _mycontroller.runJavascript('''
+        window.addEventListener('message', function(event) {
+          chatbotMessageChannel.postMessage(JSON.stringify(event.data));
+          }); 
+        ''');
+          },
+          javascriptChannels: {
+            JavascriptChannel(
+              name: 'chatbotMessageChannel',
+              onMessageReceived: (JavascriptMessage message) {
+                surveyMap = jsonDecode(message.message);
                 Future.delayed(const Duration(milliseconds: 600)).then((value) {
                   context.pop(surveyMap);
                 });
-
-                // Handle the result from JavaScript here
               },
-            );
-          },
-          onLoadStop: (controller, url) async {
-            // Inject JavaScript code to set up a listener for post messages
-            await controller.evaluateJavascript(source: '''
-          window.addEventListener('message', function(event) {
-           window.flutter_inappwebview.callHandler('onMessageReceived', event.data);
-            if (event.data && event.data.status == 'OK') {
-              var result = event.data.result;
-              // Handle the result here in Flutter
-              window.flutter_inappwebview.callHandler('onMessageReceived', result);
-            }
-          });
-        ''');
+            )
           },
         ),
       ),
