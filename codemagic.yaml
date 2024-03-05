@@ -1,0 +1,64 @@
+workflows:
+  main:
+    name: Publish Workflow
+
+    environment:
+      flutter: stable
+
+    scripts:
+          - name: Check a new tag
+            script: |
+              TAG_VERSION=$(grep version pubspec.yaml |  awk -F  ': ' '{print $2}'| awk '{print substr($0, 1, 4)}'| awk -v build="$PROJECT_BUILD_NUMBER" '{printf "%s%s\n", $0, build}')
+              echo $TAG_VERSION
+              echo "VERSION=$TAG_VERSION" >> $CM_ENV
+              git tag $TAG_VERSION
+              git push origin $TAG_VERSION
+
+          - name: Install Java 17
+            script: |
+              echo $VERSION
+              brew update
+              brew install openjdk-17-jdk
+              export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+
+          - name: Install Google Cloud CLI
+            script: |
+              curl https://sdk.cloud.google.com | bash
+              exec -l $SHELL
+              gcloud init
+
+          - name: 'Flutter Pub Get'
+            script: flutter pub get
+
+          - name: 'Flutter Build AAR'
+            script: flutter build aar
+
+          - name: 'Set app/build.gradlemulti versions'
+            script: |
+              perl -i -p0e 's/compileSdkVersion 31/compileSdkVersion 33/g' .android/app/build.gradle
+              perl -i -p0e 's/minSdkVersion 16/minSdkVersion 19/g' .android/app/build.gradle
+              perl -i -p0e 's/targetSdkVersion 31/targetSdkVersion 33/g' .android/app/build.gradle
+
+          - name: 'Append build.gradlemulti script'
+            script: |
+              cat publish.gradle >> .android/build.gradle
+
+          - name: 'Flutter Build AAR'
+            script: |
+              flutter build aar --no-debug --no-profile --build-number $VERSION
+
+#          - name: 'Publish to Jfrog'
+#            script: |
+#              curl -fL "https://install-cli.jfrog.io" | sh; jf setup eyJ1cmwiOiJodHRwczovL2FyY2hpc3lzLmpmcm9nLmlvLyIsInVzZXIiOiJiYWJpcmFtYW5AYXJjaGl0ZWNoLmNhIn0=
+#              jf project init
+#              jfrog rt upload "CM_BUILD_DIR//$VERSION/*.*" trc1-gradle-dev-local/com/tekartik/sqflite/sqflite_release/ \n 
+
+
+
+
+            # You can add more scripts or steps as needed
+         # - name: Publish to Google Cloud
+         #  script: | 
+         #     echo $GCLOUD_STORAGE_KEY > $CM_BUILD_DIR/gcloud_storage_key.json
+         #     gcloud auth activate-service-account --key-file $CM_BUILD_DIR/gcloud_storage_key.json
+         #     gsutil cp $CM_BUILD_DIR/app/build/outputs/**/*.aar gs://think-research-maven-repo-bucket
