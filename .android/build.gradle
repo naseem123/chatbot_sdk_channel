@@ -52,35 +52,48 @@ dependencies {
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.artifactory'
 
-artifactory {
-    contextUrl = "https://archisys.jfrog.io/artifactory/trc1-gradle-dev-local/"
-    //The base Artifactory URL if not overridden by the publisher/resolver
-    publish {
-        repository {
-            repoKey = 'trc1-gradle-dev-local'
-            username = "babiraman@architech.ca"
-            password = "Seshadri@1"
-        }
-        defaults {
-            publications('mavenJava')
-            publishArtifacts = true
-            properties = ['qa.level': 'basic', 'dev.team': 'core']
-            publishPom = false
+subprojects {
+    apply plugin: 'maven-publish'
+    apply plugin: 'com.jfrog.artifactory'
 
-        }
-    }
-}
+    afterEvaluate {
+        plugins.withId('com.android.library') {
+            println(project.name)
 
+            publishing {
+                publications {
+                    release(MavenPublication) {
+                        groupId = 'com.balaji'
+                        artifactId = project.getName()
+                        version = $PROJECT_BUILD_NUMBER
 
-project.getGradle().projectsEvaluated {
-    allprojects {
-        publishing {
-            repositories {
-                maven {
-                    url "https://archisys.jfrog.io/artifactory/trc1-gradle-dev-local/"
-                    credentials {
-                        username = "babiraman@architech.ca"
-                        password = "Seshadri@1"
+                        afterEvaluate {
+                            from components.release
+                        }
+
+                        pom {
+                            name = 'test sdk'
+                                    description = 'test sdk desc'
+                                    url = 'http://google.com'
+                                    developers {
+                                        developer {
+                                            id = '123'
+                                            name = 'balaji'
+                                            email = 'b@a.com'
+                                        }
+                                    }
+                        }
+                    }
+                }
+
+                repositories {
+                    maven {
+                        url = 'https://archisys.jfrog.io/artifactory/trc1-gradle-dev-local/'
+
+                        credentials {
+                            username = "babiraman@architech.ca"
+                            password = "Seshadri@1"
+                        }
                     }
                 }
             }
