@@ -39,9 +39,9 @@ workflows:
               perl -i -p0e 's/minSdkVersion 16/minSdkVersion 19/g' .android/app/build.gradle
               perl -i -p0e 's/targetSdkVersion 31/targetSdkVersion 33/g' .android/app/build.gradle
 
-          - name: 'Append build.gradlemulti script'
-            script: |
-              cat publish.gradle >> .android/build.gradle
+#          - name: 'Append build.gradlemulti script'
+#            script: |
+#              cat publish.gradle >> .android/build.gradle
 
           - name: 'Flutter Build AAR'
             script: |
