@@ -42,7 +42,8 @@ workflows:
               SDK_VERSION=$VERSION
               cd .android
               chmod +x gradlew
-              ./gradlew clean build
+              ./gradlew clean build api:artifactoryPublish shared:artifactoryPublish
+
 
 
   # You can add more scripts or steps as needed
