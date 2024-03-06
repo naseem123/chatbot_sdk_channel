@@ -52,7 +52,7 @@ workflows:
           - name: 'Publish sqflite_release aar to Jfrog'
             script: |
               curl -fL "https://install-cli.jfrog.io" | sh;
-              jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
+              jf config add --password=$JF_PASSWORD  --artifactory-url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
               jf project init
               echo $CM_BUILD_DIR
               cd build/host/outputs/repo/com/tekartik/sqflite/sqflite_release  
