@@ -52,7 +52,6 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
     return IdleDetector(
       idleTime: viewModel.idleTimeout,
       child: Scaffold(
-        backgroundColor: const Color(0xfff1f1f1),
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(70),
           child: ChatBotAppbar(
@@ -110,7 +109,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
               if (chatBotUserState == ChatBotUserState.conversationClosed)
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 15),
-                  color: Colors.white,
+                  color: context.secondaryColor.ligthRed,
                   width: double.infinity,
                   alignment: Alignment.center,
                   child: Text(
@@ -139,7 +138,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                   viewModel.chatMessageType == ChatMessageType.survey)
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 15),
-                  color: Colors.white,
+                  color: context.secondaryColor.ligthRed,
                   width: double.infinity,
                   alignment: Alignment.center,
                   child: Text(

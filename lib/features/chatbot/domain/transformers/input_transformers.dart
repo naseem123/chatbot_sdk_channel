@@ -153,7 +153,10 @@ class ChatDetailsGetMessageInputTransformer
                 message: blockData.label!,
                 messageId: messageData["id"].toString(),
                 imageUrl: input.data["data"]["app_user"]["avatar_url"],
-                messageSenderType: MessageSenderType.bot,
+                messageSenderType:
+                    input.data["data"]["app_user"]['kind'] == 'agent'
+                        ? MessageSenderType.bot
+                        : MessageSenderType.user,
                 messageType: MessageType.normalText);
             if (!entity.chatDetailList.contains(messageuiData)) {
               entity = entity.merge(
@@ -208,7 +211,9 @@ class ChatDetailsGetMessageInputTransformer
             message: message,
             messageId: messageKey,
             imageUrl: input.data["data"]["app_user"]["avatar_url"],
-            messageSenderType: MessageSenderType.bot,
+            messageSenderType: input.data["data"]["app_user"]['kind'] == 'agent'
+                ? MessageSenderType.bot
+                : MessageSenderType.user,
           );
           if (!entity.chatDetailList.contains(messageuiData)) {
             return entity.merge(

@@ -19,33 +19,28 @@ class ConversationAppBar extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: colorPrimary),
+      decoration: BoxDecoration(
+        color: context.secondaryColor.lightWhite,
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.black.withOpacity(.1),
+            width: 1.0,
+          ),
+        ),
+      ),
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(bottom: 8),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               buildLogo(context),
               Text(
                 title,
                 style: context.textTheme.captionBold.copyWith(
-                  color: context.secondaryColor.lightWhite,
-                  fontSize: 22,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 10.0),
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(
-                    Icons.close,
-                    size: 38,
-                    color: Colors.white,
-                  ),
-                ),
+                    color: context.secondaryColor.mostlyBlack,
+                    fontSize: 18,
+                    height: 1.2),
               )
             ],
           ),
@@ -57,10 +52,11 @@ class ConversationAppBar extends StatelessWidget
   Widget buildLogo(BuildContext context) {
     return IconButton(
       onPressed: context.pop,
+      padding: EdgeInsets.zero,
       icon: const Icon(
         Icons.chevron_left,
-        size: 38,
-        color: Colors.white,
+        size: 28,
+        color: Colors.black,
       ),
     );
   }

@@ -14,14 +14,15 @@ class SelfReplyMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isReplyMessage = message.message.startsWith(sentMessageHead);
     Widget messageWidget;
-    final tStyle = GoogleFonts.arimo(
+    final tStyle = GoogleFonts.inter(
       color: context.secondaryColor.mostlyBlack,
       fontSize: 16,
       height: 1.5,
     );
 
-    if (message.message.startsWith(sentMessageHead)) {
+    if (isReplyMessage) {
       messageWidget = RichText(
         text: TextSpan(
           children: [
@@ -29,37 +30,41 @@ class SelfReplyMessageWidget extends StatelessWidget {
               text: sentMessageHead,
               style: tStyle,
             ),
-            // Normal text
             TextSpan(
                 text: message.message.replaceAll(sentMessageHead, ''),
                 style: tStyle.copyWith(fontWeight: FontWeight.w600)),
           ],
         ),
       );
-      Text(
-        message.message,
-        style: GoogleFonts.arimo(
-          color: context.secondaryColor.mostlyBlack,
-          fontSize: 16,
-          height: 1.5,
-        ),
-      );
     } else {
-      messageWidget = Text(
-        message.message,
-        style: GoogleFonts.arimo(
-          color: context.secondaryColor.mostlyBlack,
-          fontSize: 16,
-          height: 1.5,
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8),
+        child: Text(
+          message.message,
+          style: GoogleFonts.arimo(
+            color: context.secondaryColor.lightWhite,
+            fontSize: 16,
+            height: 1.5,
+          ),
         ),
       );
     }
-    return SizedBox(
-      width: MediaQuery.of(context).size.width - 30,
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: messageWidget,
-      ),
+    return Container(
+      padding: const EdgeInsets.all(12.0),
+      width: double.infinity,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          color: const Color(0xFFf9f9f9),
+          borderRadius: BorderRadius.circular(6),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 2,
+              blurRadius: 3,
+              offset: const Offset(0, 2), // changes position of shadow
+            ),
+          ]),
+      child: messageWidget,
     );
   }
 }

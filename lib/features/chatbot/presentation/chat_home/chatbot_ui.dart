@@ -53,20 +53,7 @@ class ChatBotUI extends UI<ChatBotViewModel> {
                         child: CircularProgressIndicator()),
                   ),
                 ),
-              ] else if (viewModel.chatList.isNotEmpty)
-                ConversationWidget(
-                    chatList: viewModel.chatList.take(3).toList(),
-                    onSeeConversationListPressed: () {
-                      showConversationListPage(context,
-                          chatList: viewModel.chatList,
-                          color: viewModel.colorPrimary,
-                          taglineText: viewModel.tagline,
-                          idleTimeout: viewModel.idleTimeout);
-                    },
-                    onDeleteConversationPressed: () {
-                      viewModel.onDeleteConversationPressed();
-                    },
-                    showViewAllConversation: showPreviousChatList),
+              ],
               if (viewModel.outputState != OutBondUiState.outBondStateIdle &&
                   viewModel.isInboundEnabled)
                 if (inBusinessHours)
@@ -85,7 +72,21 @@ class ChatBotUI extends UI<ChatBotViewModel> {
                     },
                   )
                 else
-                  const ChatClosedWidget()
+                  const ChatClosedWidget(),
+              if (viewModel.chatList.isNotEmpty)
+                ConversationWidget(
+                    chatList: viewModel.chatList.take(3).toList(),
+                    onSeeConversationListPressed: () {
+                      showConversationListPage(context,
+                          chatList: viewModel.chatList,
+                          color: viewModel.colorPrimary,
+                          taglineText: viewModel.tagline,
+                          idleTimeout: viewModel.idleTimeout);
+                    },
+                    onDeleteConversationPressed: () {
+                      viewModel.onDeleteConversationPressed();
+                    },
+                    showViewAllConversation: showPreviousChatList),
             ],
           ),
         ),

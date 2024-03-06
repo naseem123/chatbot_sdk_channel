@@ -47,50 +47,6 @@ class _ChatUserSelectItemWidgetState extends State<ChatUserSelectItemWidget> {
           width: MediaQuery.of(context).size.width - 30,
           child: Row(
             children: [
-              // Expanded(
-              //   child: Container(
-              //     padding: const EdgeInsets.symmetric(horizontal: 15),
-              //     decoration: BoxDecoration(
-              //       border: Border.all(color: Colors.black),
-              //       borderRadius: BorderRadius.circular(8),
-              //       color: Colors.white,
-              //     ),
-              //     child: DropdownButtonFormField<String>(
-              //       itemHeight: 50,
-              //       padding: EdgeInsets.zero,
-              //       decoration: InputDecoration(
-              //         hintText: _value == null ? 'Select an option' : "",
-              //         hintStyle: GoogleFonts.arimo(
-              //           color: const Color(0xFF858585),
-              //           fontSize: 16,
-              //         ),
-              //         isDense: true,
-              //       ),
-              //       value: _value,
-              //       alignment: Alignment.topLeft,
-              //       isDense: true,
-              //       items: widget.buttons
-              //           .map((element) => element.label)
-              //           .toList()
-              //           .map((label) => DropdownMenuItem(
-              //                 value: label,
-              //                 child: Text(
-              //                   label,
-              //                   style: GoogleFonts.arimo(
-              //                       color: Colors.black,
-              //                       fontSize: 16,
-              //                       height: 0.1),
-              //                 ),
-              //               ))
-              //           .toList(),
-              //       onChanged: (String? value) {
-              //         setState(() {
-              //           _value = value ?? "";
-              //         });
-              //       },
-              //     ),
-              //   ),
-              // ),
               Expanded(
                   child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -147,36 +103,38 @@ class _ChatUserSelectItemWidgetState extends State<ChatUserSelectItemWidget> {
                     ],
                   ),
                 ),
-              )),
-              const SizedBox(
-                width: 8,
               ),
-              Button.iconButton(
-                child: Container(
-                  height: 45,
-                  width: 45,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: _value.isNullOrEmpty
-                        ? const Color(0xFFE4E4E7)
-                        : widget.colorSecondary,
-                  ),
-                  child: const Icon(
-                    Icons.send,
-                    color: Colors.white,
-                    size: 20,
-                  ),
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Button.iconButton(
+              child: Container(
+                height: 45,
+                width: 45,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: _value.isNullOrEmpty
+                      ? const Color(0xFFE4E4E7)
+                      : widget.colorSecondary,
                 ),
-                onPressed: () {
-                  if (_value == null) {
-                    return;
-                  }
-                  widget.onUserInputTriggered(widget.buttons
-                      .firstWhere((element) => element.label == _value));
-                },
-              )
-            ],
-          )),
+                child: const Icon(
+                  Icons.send,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ),
+              onPressed: () {
+                if (_value == null) {
+                  return;
+                }
+                widget.onUserInputTriggered(widget.buttons
+                    .firstWhere((element) => element.label == _value));
+              },
+            )
+          ],
+        ),
+      ),
     );
   }
 

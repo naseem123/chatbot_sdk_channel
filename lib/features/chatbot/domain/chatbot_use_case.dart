@@ -650,6 +650,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     Map<String, dynamic> messageData = data["message"];
     var message = "";
 
+    print(data);
     if (messageData.containsKey("blocks") && messageData["blocks"] != null) {
       MessageUiModel messageBlockLabel;
       final bool hasReplied =
@@ -659,7 +660,9 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         messageBlockLabel = MessageUiModel(
           message: blockData.label!,
           messageId: messageData["id"].toString(),
-          messageSenderType: MessageSenderType.bot,
+          messageSenderType: data["appUser"]['kind'] == 'agent'
+              ? MessageSenderType.bot
+              : MessageSenderType.user,
           imageUrl: data["appUser"]["avatarUrl"],
           createdAt: data["createdAt"],
         );
@@ -819,7 +822,9 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       final messageuiData = MessageUiModel(
         message: message,
         messageId: messageKey,
-        messageSenderType: MessageSenderType.bot,
+        messageSenderType: data["appUser"]['kind'] == 'agent'
+            ? MessageSenderType.bot
+            : MessageSenderType.user,
         imageUrl: data["appUser"]["avatarUrl"],
         createdAt: data["createdAt"],
       );
