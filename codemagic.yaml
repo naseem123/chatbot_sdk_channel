@@ -66,7 +66,7 @@ workflows:
               jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
               jf project init
               echo $CM_BUILD_DIR
-              cd build/host/outputs/repo/com/thinkresearch/chatbot/flutter_release  
+              cd build/host/outputs/repo/com/thinkresearch/chatbot_native/flutter_release  
               jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/com/thinkresearch/chatbot_native/flutter_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
               jf rt upload "./$VERSION/*.pom" trc1-gradle-dev-local/com/thinkresearch/chatbot_native/flutter_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
               jf rt upload "./$VERSION/*.module" trc1-gradle-dev-local/com/thinkresearch/chatbot_native/flutter_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL              
