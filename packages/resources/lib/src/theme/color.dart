@@ -41,6 +41,10 @@ class _Color {
           gray52: Color(0xFF858585),
           gray87: Color(0xFFDEDEDE),
           matterhorn: Color(0xFF4D4C4C),
+          whiteSmoke: Color(0xFFF9F9F9),
+          gray18: Color(0xFF2E2E2E),
+          graniteGray: Color(0xFF606060),
+          ligthRed: Color(0xFFF6F6F6),
         ),
       );
 
@@ -95,6 +99,10 @@ class _SecondaryColor {
     required this.gray52,
     required this.gray87,
     required this.matterhorn,
+    required this.whiteSmoke,
+    required this.gray18,
+    required this.graniteGray,
+    required this.ligthRed,
   });
 
   final _Yellow yellow;
@@ -124,8 +132,12 @@ class _SecondaryColor {
   final Color boulder;
   final Color whiteRock;
   final Color gray52;
+  final Color gray18;
   final Color gray87;
   final Color matterhorn;
+  final Color whiteSmoke;
+  final Color graniteGray;
+  final Color ligthRed;
 }
 
 class _Yellow {

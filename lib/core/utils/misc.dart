@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 String getRandomString({int length = 10}) {
@@ -25,3 +26,5 @@ String getRandomKey({int length = 10}) {
 
   return buffer.toString();
 }
+
+bool get isAndroid => Platform.isAndroid;

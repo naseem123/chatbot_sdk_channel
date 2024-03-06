@@ -113,7 +113,7 @@ class DraftTextView extends StatelessWidget {
     }
     textStyle = textStyle.copyWith(
         height: 1.4,
-        fontFamily: GoogleFonts.arimo().fontFamily,
+        fontFamily: GoogleFonts.inter().fontFamily,
         color: Colors.black);
     if (block.inlineStyle.isNotEmpty) {
       var styleMap = block.textStyleMap(textStyle);
