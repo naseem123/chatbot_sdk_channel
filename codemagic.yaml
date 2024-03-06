@@ -47,16 +47,18 @@ workflows:
             script: |
               flutter build aar --no-debug --no-profile --build-number $VERSION
 
-          - name: 'Publish to Jfrog'
+          - name: 'Publish sqflite_release to Jfrog'
             script: |
               curl -fL "https://install-cli.jfrog.io" | sh;
-              jf config add --password=cmVmdGtuOjAxOjE3NDEyMDcxNzY6cHYzSkljUFNnMHZ1YkpHTTBxOFByY25SaEFG --url=https://archisys.jfrog.io/ --interactive=false trc1-gradle-dev3 --user=babiraman@architech.ca
+              jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
               jf project init
               echo $CM_BUILD_DIR
               cd build/host/outputs/repo/com/tekartik/sqflite/sqflite_release  
-              jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/com/tekartik/sqflite/sqflite_release/ --user babiraman@architech.ca --password cmVmdGtuOjAxOjE3NDEyMDcxNzY6cHYzSkljUFNnMHZ1YkpHTTBxOFByY25SaEFG --url https://archisys.jfrog.io/artifactory/
-              jf rt upload "./$VERSION/*.pom" trc1-gradle-dev-local/com/tekartik/sqflite/sqflite_release/ --user babiraman@architech.ca --password cmVmdGtuOjAxOjE3NDEyMDcxNzY6cHYzSkljUFNnMHZ1YkpHTTBxOFByY25SaEFG --url https://archisys.jfrog.io/artifactory/
-              jf rt upload "./$VERSION/*.module" trc1-gradle-dev-local/com/tekartik/sqflite/sqflite_release/ --user babiraman@architech.ca --password cmVmdGtuOjAxOjE3NDEyMDcxNzY6cHYzSkljUFNnMHZ1YkpHTTBxOFByY25SaEFG --url https://archisys.jfrog.io/artifactory/
+              jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/com/tekartik/sqflite/sqflite_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+              jf rt upload "./$VERSION/*.pom" trc1-gradle-dev-local/com/tekartik/sqflite/sqflite_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+              jf rt upload "./$VERSION/*.module" trc1-gradle-dev-local/com/tekartik/sqflite/sqflite_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+              
+              
 
 
             # You can add more scripts or steps as needed
