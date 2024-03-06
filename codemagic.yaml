@@ -89,9 +89,9 @@ workflows:
               jf project init
               echo $CM_BUILD_DIR
               cd build/host/outputs/repo/io/flutter/plugins/sharedpreferences/sharedpreferences_android_release
-              jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/io/flutter/plugins/sharedpreferences/sharedpreferences_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-              jf rt upload "./$VERSION/*.pom" trc1-gradle-dev-local/io/flutter/plugins/sharedpreferences/sharedpreferences_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-              jf rt upload "./$VERSION/*.module" trc1-gradle-dev-local/io/flutter/plugins/sharedpreferences/sharedpreferences_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL              
+              jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/io/flutter/plugins/sharedpreferences/shared_preferences_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+              jf rt upload "./$VERSION/*.pom" trc1-gradle-dev-local/io/flutter/plugins/sharedpreferences/shared_preferences_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+              jf rt upload "./$VERSION/*.module" trc1-gradle-dev-local/io/flutter/plugins/sharedpreferences/shared_preferences_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL              
 
           - name: 'Publish urllauncher aar to Jfrog'
             script: |
