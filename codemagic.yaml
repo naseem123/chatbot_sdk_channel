@@ -82,6 +82,38 @@ workflows:
               jf rt upload "./$VERSION/*.pom" trc1-gradle-dev-local/io/flutter/plugins/pathprovider/path_provider_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
               jf rt upload "./$VERSION/*.module" trc1-gradle-dev-local/io/flutter/plugins/pathprovider/path_provider_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL              
 
+          - name: 'Publish sharedpreferences aar to Jfrog'
+            script: |
+              curl -fL "https://install-cli.jfrog.io" | sh;
+              jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
+              jf project init
+              echo $CM_BUILD_DIR
+              cd $CM_BUILD_DIR/build/host/outputs/repo/io/flutter/plugins/sharedpreferences/sharedpreferences_android_release
+              jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/io/flutter/plugins/sharedpreferences/sharedpreferences_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+              jf rt upload "./$VERSION/*.pom" trc1-gradle-dev-local/io/flutter/plugins/sharedpreferences/sharedpreferences_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+              jf rt upload "./$VERSION/*.module" trc1-gradle-dev-local/io/flutter/plugins/sharedpreferences/sharedpreferences_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL              
+
+          - name: 'Publish urllauncher aar to Jfrog'
+            script: |
+              curl -fL "https://install-cli.jfrog.io" | sh;
+              jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
+              jf project init
+              echo $CM_BUILD_DIR
+              cd $CM_BUILD_DIR/build/host/outputs/repo/io/flutter/plugins/urllauncher/url_launcher_android_release
+              jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/io/flutter/plugins/urllauncher/url_launcher_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+              jf rt upload "./$VERSION/*.pom" trc1-gradle-dev-local/io/flutter/plugins/urllauncher/url_launcher_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+              jf rt upload "./$VERSION/*.module" trc1-gradle-dev-local/io/flutter/plugins/urllauncher/url_launcher_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL              
+
+          - name: 'Publish webviewflutter aar to Jfrog'
+            script: |
+              curl -fL "https://install-cli.jfrog.io" | sh;
+              jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
+              jf project init
+              echo $CM_BUILD_DIR
+              cd $CM_BUILD_DIR/build/host/outputs/repo/io/flutter/plugins/webviewflutter/webview_flutter_android_release
+              jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/io/flutter/plugins/webviewflutter/webview_flutter_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+              jf rt upload "./$VERSION/*.pom" trc1-gradle-dev-local/io/flutter/plugins/webviewflutter/webview_flutter_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+              jf rt upload "./$VERSION/*.module" trc1-gradle-dev-local/io/flutter/plugins/webviewflutter/webview_flutter_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL              
 
             # You can add more scripts or steps as needed
          # - name: Publish to Google Cloud
