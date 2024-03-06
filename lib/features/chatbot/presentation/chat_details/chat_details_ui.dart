@@ -114,7 +114,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                   alignment: Alignment.center,
                   child: Text(
                     'This conversation has ended',
-                    style: GoogleFonts.arimo(
+                    style: GoogleFonts.inter(
                         color: context.secondaryColor.mostlyBlack,
                         fontSize: 14,
                         height: 1.5,
@@ -128,6 +128,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                       ChatMessageType.enterMessageAndTrigger)
                 ChatUserInputEditorWidget(
                   textEditingController: messageController,
+                  colorSecondary: viewModel.colorSecondary,
                   onMessageEntered: (message) {
                     viewModel.onMessageEntered(
                         messageController.text, viewModel.chatMessageType);
@@ -143,7 +144,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                   alignment: Alignment.center,
                   child: Text(
                     'Reply above',
-                    style: GoogleFonts.arimo(
+                    style: GoogleFonts.inter(
                         color: context.secondaryColor.mostlyBlack,
                         fontSize: 14,
                         height: 1.5,

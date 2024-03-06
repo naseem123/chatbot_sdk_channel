@@ -42,17 +42,18 @@ class _ChatUserSelectItemWidgetState extends State<ChatUserSelectItemWidget> {
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.only(
           left: 15, right: 15, bottom: viewInsets.bottom, top: 8),
-      color: widget.color,
+      color: context.secondaryColor.ligthRed,
       child: SizedBox(
-          width: MediaQuery.of(context).size.width - 30,
-          child: Row(
-            children: [
-              Expanded(
-                  child: Container(
+        width: MediaQuery.of(context).size.width - 30,
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                      color: context.secondaryColor.graniteGray, width: 0.5),
+                  borderRadius: BorderRadius.circular(25),
                   color: Colors.white,
                 ),
                 child: CupertinoButton(
@@ -92,7 +93,7 @@ class _ChatUserSelectItemWidgetState extends State<ChatUserSelectItemWidget> {
                             ? selectedItem(_value!, context)
                             : Text(
                                 'Select an option',
-                                style: GoogleFonts.arimo(
+                          style: GoogleFonts.inter(
                                   color: context.secondaryColor.gray52,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
@@ -121,7 +122,7 @@ class _ChatUserSelectItemWidgetState extends State<ChatUserSelectItemWidget> {
                 child: const Icon(
                   Icons.send,
                   color: Colors.white,
-                  size: 20,
+                  size: 22,
                 ),
               ),
               onPressed: () {
@@ -142,7 +143,7 @@ class _ChatUserSelectItemWidgetState extends State<ChatUserSelectItemWidget> {
     return Text(
       label,
       textAlign: TextAlign.left,
-      style: GoogleFonts.arimo(
+      style: GoogleFonts.inter(
         color: context.secondaryColor.mostlyBlack,
         fontSize: 16,
         fontWeight: FontWeight.bold,

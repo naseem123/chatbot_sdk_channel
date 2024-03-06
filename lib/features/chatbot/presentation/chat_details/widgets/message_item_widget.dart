@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatbot/core/extensions/date_extensions.dart';
 import 'package:chatbot/core/extensions/string_extensions.dart';
 import 'package:chatbot/core/widgets/draft_view/view/draft_text_view.dart';
-import 'package:chatbot/features/chatbot/domain/chatbot_use_case.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
 import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +29,6 @@ class MessageItemWidget extends StatelessWidget {
     Widget messageWidget;
     final isBot = message.messageSenderType == MessageSenderType.bot;
 
-    print('isBot ${isBot} ${message.message} ${message.messageSenderType}');
 
     if (message.message.contains("blocks")) {
       messageWidget = SizedBox(
@@ -56,7 +54,7 @@ class MessageItemWidget extends StatelessWidget {
           padding: const EdgeInsets.all(12.0),
           child: Text(
             message.message,
-            style: GoogleFonts.arimo(
+            style: GoogleFonts.inter(
               color: isBot
                   ? context.secondaryColor.mostlyBlack
                   : context.secondaryColor.lightWhite,
@@ -69,7 +67,6 @@ class MessageItemWidget extends StatelessWidget {
         messageWidget = SelfReplyMessageWidget(message: message);
       }
     }
-    bool isSelfRepliedMessage = message.message.startsWith(sentMessageHead);
 
     return Container(
       padding: const EdgeInsets.all(8),
@@ -110,19 +107,14 @@ class MessageItemWidget extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (messageWidget is SelfReplyMessageWidget &&
-                          isSelfRepliedMessage)
-                        messageWidget
-                      else
-                        CustomPaint(
-                          painter: ChatBubble(
-                            isOwn: !isBot,
-                            color: isBot
-                                ? const Color(0xFFE9E9E9)
-                                : secondaryColor,
-                          ),
-                          child: messageWidget,
+                      CustomPaint(
+                        painter: ChatBubble(
+                          isOwn: !isBot,
+                          color:
+                              isBot ? const Color(0xFFE9E9E9) : secondaryColor,
                         ),
+                        child: messageWidget,
+                      ),
                     ],
                   ),
                 ),

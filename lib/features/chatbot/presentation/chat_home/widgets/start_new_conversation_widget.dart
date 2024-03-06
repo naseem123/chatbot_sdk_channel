@@ -72,7 +72,7 @@ class StartNewConversationWidget extends StatelessWidget {
                   onTap: onSeePreviousPressed,
                   child: Text(
                     'See previous',
-                    style: GoogleFonts.arimo(
+                    style: GoogleFonts.inter(
                       color: context.colorScheme.primary,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,

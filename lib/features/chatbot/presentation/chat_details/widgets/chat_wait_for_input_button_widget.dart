@@ -1,6 +1,8 @@
+import 'package:chatbot/core/utils/misc.dart';
 import 'package:chatbot/features/chatbot/model/block_model.dart';
 import 'package:components/components.dart';
 import 'package:flutter/material.dart';
+
 class ChatWaitForInputButtonWidget extends StatelessWidget {
   const ChatWaitForInputButtonWidget({
     Key? key,
@@ -17,7 +19,8 @@ class ChatWaitForInputButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 24),
+        margin: EdgeInsets.symmetric(
+            horizontal: 24, vertical: isAndroid ? 16 : 0.0),
         decoration: BoxDecoration(
           color: const Color(0xFFf6f6f6),
           borderRadius: BorderRadius.circular(12),
@@ -38,7 +41,7 @@ class ChatWaitForInputButtonWidget extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(button.label,
                     style:
-                        context.textTheme.body1Medium.copyWith(color: color)),
+                    context.textTheme.body1Medium.copyWith(color: color)),
               ),
             );
           },

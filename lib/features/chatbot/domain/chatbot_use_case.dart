@@ -885,4 +885,4 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
   }
 }
 
-const sentMessageHead = 'You replied : ';
+const sentMessageHead = '';

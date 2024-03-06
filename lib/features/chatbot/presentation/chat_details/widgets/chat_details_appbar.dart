@@ -25,7 +25,15 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.black.withOpacity(.1),
+            width: 1.0,
+          ),
+        ),
+      ),
       child: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -35,7 +43,7 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
               Button.iconButton(
                 child: const Icon(
                   Icons.arrow_back_ios,
-                  size: 28,
+                  size: 22,
                 ),
                 onPressed: () {
                   backButtonPressed();
