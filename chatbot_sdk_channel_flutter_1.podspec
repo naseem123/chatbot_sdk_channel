@@ -1,15 +1,15 @@
 Pod::Spec.new do |s|
-  s.name             = 'chatbot_sdk_channel_test'
-  s.module_name      = 'chatbot_sdk_channel_test'
+  s.name             = 'chatbot_sdk_channel_flutter_1'
+  s.module_name      = 'chatbot_sdk_channel_flutter_1'
 
 
-  s.version = '1.0.6+11'
+  s.version = '1.0.16'
 
-  s.summary          = 'Your Pod Summary'
-  s.description      = 'Your Pod Description'
+  s.summary          = 'ChatBots SDK CHannel'
+  s.description      = 'ChatBots SDK CHannel is very good application'
   s.homepage         = 'https://github.com/naseem123/chatbot_sdk_channel'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Your Name' => 'your@email.com' }
+  s.author           = { 'Suhail T S' => 'suhail.ts-e@thinkresearch.com' }
   s.platforms        = { :ios => '13.0' }
   s.source           = { :git => 'https://github.com/naseem123/chatbot_sdk_channel.git', :tag => s.version.to_s }
   s.swift_version    = '5.0'
