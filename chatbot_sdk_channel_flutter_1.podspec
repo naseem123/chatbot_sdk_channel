@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   s.module_name      = 'chatbot_sdk_channel_flutter_1'
 
 
-  s.version = '1.0.17'
+  s.version = '1.0.18'
 
   s.summary          = 'ChatBots SDK CHannel'
   s.description      = 'ChatBots SDK CHannel is very good application'
