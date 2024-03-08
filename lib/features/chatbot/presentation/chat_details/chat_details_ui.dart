@@ -1,4 +1,3 @@
-import 'package:chatbot/core/extensions/context_extension.dart';
 import 'package:chatbot/core/widgets/idle_detector.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
@@ -139,8 +138,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
               if (chatBotUserState == ChatBotUserState.survey &&
                   viewModel.chatMessageType == ChatMessageType.survey)
                 Container(
-                  padding: EdgeInsets.symmetric(
-                      vertical: context.bottomPadding.bottom),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                   color: Colors.white,
                   width: double.infinity,
                   alignment: Alignment.center,
