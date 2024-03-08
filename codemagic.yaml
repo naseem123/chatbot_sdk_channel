@@ -155,8 +155,9 @@ workflows:
           ls
           echo "Listing ChatBotSDK"
           
-          cd ChatBotSDK/
+          cd thinkresearch-ios-sdk/
           echo "Listing ChatBotSDK1"
+          ls
           
           # Define the new version
           new_version="1.0.23"
