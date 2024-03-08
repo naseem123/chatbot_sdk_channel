@@ -152,6 +152,7 @@ workflows:
 
       - name : "Updating the version details"
         script: |
+          ls
           
           cd ChatBotSDK/
           
