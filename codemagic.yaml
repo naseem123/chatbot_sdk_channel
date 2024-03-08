@@ -148,7 +148,7 @@ workflows:
 
       - name : "Copy fromework to SDK Folder"
         script: |
-          cp -r $CM_BUILD_DIR/Frameworks  ChatBotSDK/
+          cp -r $CM_BUILD_DIR/Frameworks  thinkresearch-ios-sdk/
 
       - name : "Updating the version details"
         script: |
@@ -176,7 +176,7 @@ workflows:
         script: |
           cd thinkresearch-ios-sdk/
           git status
-          git add $CM_BUILD_DIR/Frameworks
+          git add Frameworks/
           git add Think_research_messenger_SDK.podspec
           git add Think_research_messenger_SDK_Debug.podspec
           git commit -m "version changes"
