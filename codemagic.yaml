@@ -128,8 +128,8 @@ workflows:
           echo "VERSION=$TAG_VERSION" >> $CM_ENV
           
 
-      - name: 'Flutter Pub Get'
-        script: flutter pub get
+#      - name: 'Flutter Pub Get'
+#        script: flutter pub get
 
       - name: 'Add embed script in Xcode Project Build phases'
         script: |
@@ -153,7 +153,7 @@ workflows:
       - name : "Updating the version details"
         script: |
           
-          cd $CM_BUILD_DIR/
+          cd ChatBotSDK/
           
           # Define the new version
           new_version="1.0.23"
