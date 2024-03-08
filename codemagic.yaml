@@ -138,7 +138,7 @@ workflows:
 
       - name: "Build Frameworks"
         script: |
-          flutter build ios-framework --output=Frameworks --no-profile
+#          flutter build ios-framework --output=Frameworks --no-profile
 
 
       - name : "Clone the iOS SDK"
@@ -148,12 +148,39 @@ workflows:
       - name : "Copy fromework to SDK Folder"
         script: |
           cp -r $CM_BUILD_DIR/Frameworks  ChatBotSDK/
-            
-        
-    
-    
-    
 
-    artifacts:
+      - name : "Updating the version details"
+        script: |
+          # Define the new version
+          new_version="1.0.23"
+          
+          # Define the path to your podspec file
+          podspec_file_R="ChatBotSDK_v2.podspec"
+          podspec_file_D="ChatBotSDK_v2Debug.podspec"
+          
+          # Use sed to replace the version field in the podspec file
+          sed -i '' -E "s/(\s*s\.version\s*=\s*\")[^\"]+(\")/\1$new_version\2/g" "podspec_file_R"
+          sed -i '' -E "s/(\s*s\.version\s*=\s*\")[^\"]+(\")/\1$new_version\2/g" "podspec_file_D"
+          
+          echo "Version updated to $new_version"
+
+      - name : "Commiting the changes"
+        script: |
+          git status
+          git add $CM_BUILD_DIR/Frameworks
+          git add ChatBotSDK_v2.podspec
+          git add ChatBotSDK_v2Debug.podspec
+          git commit -m "version changes"
+          git tag new_version
+          git push
+
+
+
+
+
+
+
+
+artifacts:
       - $CM_BUILD_DIR/Frameworks/**/*.zip
       - $CM_BUILD_DIR/Frameworks/**/*.txt
