@@ -139,6 +139,7 @@ workflows:
       - name: "Build Frameworks"
         script: |
 #          flutter build ios-framework --output=Frameworks --no-profile
+          echo "Skipping building"
 
 
       - name : "Clone the iOS SDK"
