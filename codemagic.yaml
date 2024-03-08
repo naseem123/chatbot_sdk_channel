@@ -152,6 +152,9 @@ workflows:
 
       - name : "Updating the version details"
         script: |
+          
+          cd $CM_BUILD_DIR/
+          
           # Define the new version
           new_version="1.0.23"
           
