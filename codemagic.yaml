@@ -144,7 +144,7 @@ workflows:
 
       - name : "Clone the iOS SDK"
         script: |
-          git clone https://sts_archtech@bitbucket.org/architech/thinkresearch-ios-sdk.git
+          git clone https://x-token-auth:ATCTT3xFfGN0CqY_62SAgI6ndlX5FQoUJbzrr-kuzjE8vfSneSzmTgL0wO5exP8S3HJ5W3CGcl1d1fIa6XDHFeSoeGoWIRujlz6c-v6drkRIbdtRUJC6JD3WM0SZbEXs6Ul9cSWz3G269jlmTrZVbYmM9f-VCcqI7AE6pK7U7XVZm4Ll0EI-LTo=A43A8654@bitbucket.org/architech/thinkresearch-ios-sdk.git
 
       - name : "Copy fromework to SDK Folder"
         script: |
