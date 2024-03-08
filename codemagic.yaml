@@ -167,8 +167,8 @@ workflows:
           podspec_file_D="Think_research_messenger_SDK_Debug.podspec"
           
           # Use sed to replace the version field in the podspec file
-          sed -i '' -E "s/(\s*s\.version\s*=\s*\")[^\"]+(\")/\1$new_version\2/g" "podspec_file_R"
-          sed -i '' -E "s/(\s*s\.version\s*=\s*\")[^\"]+(\")/\1$new_version\2/g" "podspec_file_D"
+          sed -i '' -E "s/(\s*s\.version\s*=\s*\")[^\"]+(\")/\1$new_version\2/g" "$podspec_file_R"
+          sed -i '' -E "s/(\s*s\.version\s*=\s*\")[^\"]+(\")/\1$new_version\2/g" "$podspec_file_D"
           
           echo "Version updated to $new_version"
 
@@ -176,8 +176,8 @@ workflows:
         script: |
           git status
           git add $CM_BUILD_DIR/Frameworks
-          git add ChatBotSDK_v2.podspec
-          git add ChatBotSDK_v2Debug.podspec
+          git add Think_research_messenger_SDK.podspec
+          git add Think_research_messenger_SDK_Debug.podspec
           git commit -m "version changes"
           git tag new_version
           git push
