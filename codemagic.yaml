@@ -140,48 +140,20 @@ workflows:
         script: |
           flutter build ios-framework --output=Frameworks --no-profile
 
-      - name: "Zip release frameworks"
-        script: |
-          cd Frameworks/Release
-          zip -r App.xcframework.zip App.xcframework
-          chasum -a 256 App.xcframework.zip | cut -f1 -d' '>> App.xcframework.txt
-          zip -r Flutter.xcframework.zip Flutter.xcframework
-          chasum -a 256 Flutter.xcframework.zip | cut -f1 -d' '>> Flutter.xcframework.txt
-          zip -r FlutterPluginRegistrant.xcframework.zip FlutterPluginRegistrant.xcframework
-          chasum -a 256 FlutterPluginRegistrant.xcframework.zip | cut -f1 -d' '>> FlutterPluginRegistrant.xcframework.txt
-          zip -r path_provider_foundation.xcframework.zip path_provider_foundation.xcframework
-          chasum -a 256 path_provider_foundation.xcframework.zip | cut -f1 -d' '>> path_provider_foundation.xcframework.txt
-          zip -r shared_preferences_foundation.xcframework.zip shared_preferences_foundation.xcframework
-          chasum -a 256 shared_preferences_foundation.xcframework.zip | cut -f1 -d' '>> shared_preferences_foundation.xcframework.txt
-          zip -r sqflite.xcframework.zip sqflite.xcframework
-          chasum -a 256 sqflite.xcframework.zip | cut -f1 -d' '>> sqflite.xcframework.txt
-          zip -r url_launcher_ios.xcframework.zip url_launcher_ios.xcframework
-          chasum -a 256 url_launcher_ios.xcframework.zip | cut -f1 -d' '>> url_launcher_ios.xcframework.txt
-          zip -r webview_flutter_wkwebview.xcframework.zip webview_flutter_wkwebview.xcframework
-          chasum -a 256 webview_flutter_wkwebview.xcframework.zip | cut -f1 -d' '>> webview_flutter_wkwebview.xcframework.txt
 
-      - name: "Zip Debug frameworks"
+      - name : "Clone the iOS SDK"
         script: |
-          cd Frameworks/Debug
-          zip -r App.xcframework.zip App.xcframework
-          chasum -a 256 App.xcframework.zip | cut -f1 -d' '>> App.xcframework.txt
-          zip -r Flutter.xcframework.zip Flutter.xcframework
-          chasum -a 256 Flutter.xcframework.zip | cut -f1 -d' '>> Flutter.xcframework.txt
-          zip -r FlutterPluginRegistrant.xcframework.zip FlutterPluginRegistrant.xcframework
-          chasum -a 256 FlutterPluginRegistrant.xcframework.zip | cut -f1 -d' '>> FlutterPluginRegistrant.xcframework.txt
-          zip -r path_provider_foundation.xcframework.zip path_provider_foundation.xcframework
-          chasum -a 256 path_provider_foundation.xcframework.zip | cut -f1 -d' '>> path_provider_foundation.xcframework.txt
-          zip -r shared_preferences_foundation.xcframework.zip shared_preferences_foundation.xcframework
-          chasum -a 256 shared_preferences_foundation.xcframework.zip | cut -f1 -d' '>> shared_preferences_foundation.xcframework.txt
-          zip -r sqflite.xcframework.zip sqflite.xcframework
-          chasum -a 256 sqflite.xcframework.zip | cut -f1 -d' '>> sqflite.xcframework.txt
-          zip -r url_launcher_ios.xcframework.zip url_launcher_ios.xcframework
-          chasum -a 256 url_launcher_ios.xcframework.zip | cut -f1 -d' '>> url_launcher_ios.xcframework.txt
-          zip -r webview_flutter_wkwebview.xcframework.zip webview_flutter_wkwebview.xcframework
-          chasum -a 256 webview_flutter_wkwebview.xcframework.zip | cut -f1 -d' '>> webview_flutter_wkwebview.xcframework.txt
-          
-          ls
-          
+          git clone https://sts_archtech@bitbucket.org/architech/thinkresearch-ios-sdk.git
+
+      - name : "Copy fromework to SDK Folder"
+        script: |
+          cp -r $CM_BUILD_DIR/Frameworks  ChatBotSDK/
+            
+        
+    
+    
+    
+
     artifacts:
       - $CM_BUILD_DIR/Frameworks/**/*.zip
       - $CM_BUILD_DIR/Frameworks/**/*.txt
