@@ -153,8 +153,10 @@ workflows:
       - name : "Updating the version details"
         script: |
           ls
+          echo "Listing ChatBotSDK"
           
           cd ChatBotSDK/
+          echo "Listing ChatBotSDK1"
           
           # Define the new version
           new_version="1.0.23"
