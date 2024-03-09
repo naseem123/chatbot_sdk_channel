@@ -145,7 +145,7 @@ workflows:
       - name: "Build Frameworks"
         script: |
           echo $TAG_VERSION
-          # flutter build ios-framework --output=Frameworks --no-profile
+          flutter build ios-framework --output=Frameworks --no-profile
           echo "ssss"
 
       - name : "Clone the iOS SDK"
