@@ -38,7 +38,6 @@ class _ChatListWidgetState extends State<ChatListWidget>
   void initState() {
     super.initState();
     _listScrollController.addListener(_scrollListener);
-    print("initState");
     scrollToLast();
   }
 
@@ -57,7 +56,6 @@ class _ChatListWidgetState extends State<ChatListWidget>
 
   @override
   Widget build(BuildContext context) {
-    print("build");
 
     return ListView.builder(
       shrinkWrap: true,

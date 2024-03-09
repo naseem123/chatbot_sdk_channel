@@ -64,7 +64,7 @@ class SurveyWidget extends StatelessWidget {
                   onPressed: () => onSurveyStartClicked(e.surveyData),
                   child: Text(
                     e.label,
-                    style: GoogleFonts.arimo(
+                    style: GoogleFonts.inter(
                       color: context.secondaryColor.mostlyWhite,
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
@@ -95,7 +95,7 @@ class SurveyWidget extends StatelessWidget {
   }
 
   TextStyle getStyle(BuildContext context, String style) {
-    TextStyle tStyle = GoogleFonts.arimo(
+    TextStyle tStyle = GoogleFonts.inter(
       height: 1.3,
     );
     if (style == 'muted') {

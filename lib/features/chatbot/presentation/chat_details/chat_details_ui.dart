@@ -1,4 +1,3 @@
-import 'package:chatbot/core/extensions/context_extension.dart';
 import 'package:chatbot/core/widgets/idle_detector.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
@@ -53,7 +52,6 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
     return IdleDetector(
       idleTime: viewModel.idleTimeout,
       child: Scaffold(
-        backgroundColor: const Color(0xfff1f1f1),
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(70),
           child: ChatBotAppbar(
@@ -111,12 +109,12 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
               if (chatBotUserState == ChatBotUserState.conversationClosed)
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 15),
-                  color: Colors.white,
+                  color: context.secondaryColor.ligthRed,
                   width: double.infinity,
                   alignment: Alignment.center,
                   child: Text(
                     'This conversation has ended',
-                    style: GoogleFonts.arimo(
+                    style: GoogleFonts.inter(
                         color: context.secondaryColor.mostlyBlack,
                         fontSize: 14,
                         height: 1.5,
@@ -130,6 +128,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                       ChatMessageType.enterMessageAndTrigger)
                 ChatUserInputEditorWidget(
                   textEditingController: messageController,
+                  colorSecondary: viewModel.colorSecondary,
                   onMessageEntered: (message) {
                     viewModel.onMessageEntered(
                         messageController.text, viewModel.chatMessageType);
@@ -139,14 +138,13 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
               if (chatBotUserState == ChatBotUserState.survey &&
                   viewModel.chatMessageType == ChatMessageType.survey)
                 Container(
-                  padding: EdgeInsets.symmetric(
-                      vertical: context.bottomPadding.bottom),
-                  color: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  color: context.secondaryColor.ligthRed,
                   width: double.infinity,
                   alignment: Alignment.center,
                   child: Text(
                     'Reply above',
-                    style: GoogleFonts.arimo(
+                    style: GoogleFonts.inter(
                         color: context.secondaryColor.mostlyBlack,
                         fontSize: 14,
                         height: 1.5,
