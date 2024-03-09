@@ -118,13 +118,19 @@ workflows:
       #     gsutil cp $CM_BUILD_DIR/app/build/outputs/**/*.aar gs://think-research-maven-repo-bucket
   ios:
     name: Publish WOrkflow iOS
+
     environment:
       flutter: stable
+      groups:
+        - jf
+      vars:
+        COCOAPODS_TRUNK_TOKEN:  "ed2707a69720522a8be2c2faf79e64af"
     scripts:
       - name: Check a new tag
         script: |
           export TAG_VERSION=$(grep version pubspec.yaml |  awk -F  ': ' '{print $2}'| awk '{print substr($0, 1, 4)}'| awk -v build="$PROJECT_BUILD_NUMBER" '{printf "%s%s\n", $0, build}')
-          echo "TAG_VERSION: $TAG_VERSION" 
+          echo $TAG_VERSION
+          echo "VERSION=$TAG_VERSION" >> $CM_ENV
       
 
       # - name: 'Flutter Pub Get'
@@ -138,7 +144,7 @@ workflows:
 
       - name: "Build Frameworks"
         script: |
-          echo "TAG_VERSION: $TAG_VERSION" 
+          echo $TAG_VERSION
           # flutter build ios-framework --output=Frameworks --no-profile
           echo "ssss"
 
@@ -155,8 +161,6 @@ workflows:
           
           cd thinkresearch-ios-sdk/
           echo "Listing ChatBotSDK1" 
-         
-          export TAG_VERSION=$(grep version $CM_BUILD_DIR/pubspec.yaml |  awk -F  ': ' '{print $2}'| awk '{print substr($0, 1, 4)}'| awk -v build="$PROJECT_BUILD_NUMBER" '{printf "%s%s\n", $0, build}')
           
           
           # Use sed to replace the version field in the podspec file
@@ -168,10 +172,6 @@ workflows:
 
       - name : "Commiting the changes"
         script: |
-          
-          export TAG_VERSION=$(grep version $CM_BUILD_DIR/pubspec.yaml |  awk -F  ': ' '{print $2}'| awk '{print substr($0, 1, 4)}'| awk -v build="$PROJECT_BUILD_NUMBER" '{printf "%s%s\n", $0, build}')
-          
-          
           cd thinkresearch-ios-sdk/
           git status
           git add Frameworks/
@@ -185,7 +185,7 @@ workflows:
       - name : "Pushing to CocoaPods registry"
         script: |
           
-          pod trunk register balaji.abiraman-e@thinkresearch.com 'Think-research'
+           
           pod trunk push Think_research_messenger_SDK.podspec --allow-warnings 
           pod trunk push Think_research_messenger_SDK_Debug.podspec --allow-warnings 
 
