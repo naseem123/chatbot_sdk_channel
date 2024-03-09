@@ -63,6 +63,7 @@ class Button extends StatelessWidget {
   ButtonStyle get _style {
     return ElevatedButton.styleFrom(
       elevation: 0,
+      padding: EdgeInsets.zero,
       shape: const BeveledRectangleBorder(),
       minimumSize: const Size.fromHeight(56),
     );
@@ -161,6 +162,7 @@ class _AccentButton extends Button {
         foregroundColor: context.theme.brightness == Brightness.dark
             ? context.colorScheme.primary
             : context.colorScheme.surface,
+        padding: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(buttonRadius),
         ),

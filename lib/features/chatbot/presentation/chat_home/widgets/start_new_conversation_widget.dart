@@ -53,16 +53,18 @@ class StartNewConversationWidget extends StatelessWidget {
           ),
           Row(
             children: [
-              SizedBox(
-                height: 45,
-                width: 190,
-                child: Button.accent(
-                  onPressed: onStartConversationPressed,
-                  primaryColor: buttonColor,
-                  buttonRadius: Platform.isAndroid ? 24 : 12,
-                  child: Text(
-                    'Start a conversation',
-                    style: tn.s16.c(context.secondaryColor.lightWhite),
+              Expanded(
+                flex: 3,
+                child: SizedBox(
+                  height: 45,
+                  child: Button.accent(
+                    onPressed: onStartConversationPressed,
+                    primaryColor: buttonColor,
+                    buttonRadius: Platform.isAndroid ? 24 : 12,
+                    child: Text(
+                      'Start a conversation',
+                      style: tn.s16.c(context.secondaryColor.lightWhite),
+                    ),
                   ),
                 ),
               ),
