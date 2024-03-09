@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chatbot/core/utils/platform_channel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -39,7 +42,11 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
               ),
               trailing: IconButton(
                 onPressed: () {
-                  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                  if (Platform.isAndroid) {
+                    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                  } else {
+                    Channel.invokeMethod();
+                  }
                 },
                 icon: const Icon(
                   Icons.close,
