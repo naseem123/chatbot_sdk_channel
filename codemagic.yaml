@@ -185,17 +185,14 @@ workflows:
           git push
           git push --tag
 
-      - name : "Pushing to CocoaPods registry"
+      - name : "Pushing to CocoaPods registry Release Podspec"
         script: |
           cd thinkresearch-ios-sdk/
           
           pod trunk push Think_research_messenger_SDK_Suhail.podspec --allow-warnings 
-          pod trunk push Think_research_messenger_SDK_Debug_Suhail.podspec --allow-warnings 
 
-
-
-
-
-artifacts:
-  - $CM_BUILD_DIR/Frameworks/**/*.zip
-  - $CM_BUILD_DIR/Frameworks/**/*.txt
+      - name : "Pushing to CocoaPods registry Debug Podspec"
+        script: |
+          cd thinkresearch-ios-sdk/
+          
+          pod trunk push Think_research_messenger_SDK_Debug_Suhail.podspec --allow-warnings
