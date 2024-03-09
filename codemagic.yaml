@@ -187,6 +187,7 @@ workflows:
 
       - name : "Pushing to CocoaPods registry"
         script: |
+          cd thinkresearch-ios-sdk/
           
           pod trunk push Think_research_messenger_SDK_Suhail.podspec --allow-warnings 
           pod trunk push Think_research_messenger_SDK_Debug_Suhail.podspec --allow-warnings 
