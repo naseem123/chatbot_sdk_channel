@@ -28,7 +28,7 @@ class ChatClosedWidget extends StatelessWidget {
         children: [
           Text(
             'We are currently closed',
-            style: GoogleFonts.arimo(
+            style: GoogleFonts.inter(
               color: context.colorScheme.primary,
               fontSize: 19,
               fontWeight: FontWeight.bold,
@@ -37,7 +37,7 @@ class ChatClosedWidget extends StatelessWidget {
           ),
           Text(
             'We’ll be back at 12:00 AM (AST)',
-            style: GoogleFonts.arimo(
+            style: GoogleFonts.inter(
               color: context.colorScheme.primary,
               fontSize: 13,
               fontWeight: FontWeight.normal,

@@ -42,61 +42,18 @@ class _ChatUserSelectItemWidgetState extends State<ChatUserSelectItemWidget> {
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.only(
           left: 15, right: 15, bottom: viewInsets.bottom, top: 8),
-      color: widget.color,
+      color: context.secondaryColor.ligthRed,
       child: SizedBox(
-          width: MediaQuery.of(context).size.width - 30,
-          child: Row(
-            children: [
-              // Expanded(
-              //   child: Container(
-              //     padding: const EdgeInsets.symmetric(horizontal: 15),
-              //     decoration: BoxDecoration(
-              //       border: Border.all(color: Colors.black),
-              //       borderRadius: BorderRadius.circular(8),
-              //       color: Colors.white,
-              //     ),
-              //     child: DropdownButtonFormField<String>(
-              //       itemHeight: 50,
-              //       padding: EdgeInsets.zero,
-              //       decoration: InputDecoration(
-              //         hintText: _value == null ? 'Select an option' : "",
-              //         hintStyle: GoogleFonts.arimo(
-              //           color: const Color(0xFF858585),
-              //           fontSize: 16,
-              //         ),
-              //         isDense: true,
-              //       ),
-              //       value: _value,
-              //       alignment: Alignment.topLeft,
-              //       isDense: true,
-              //       items: widget.buttons
-              //           .map((element) => element.label)
-              //           .toList()
-              //           .map((label) => DropdownMenuItem(
-              //                 value: label,
-              //                 child: Text(
-              //                   label,
-              //                   style: GoogleFonts.arimo(
-              //                       color: Colors.black,
-              //                       fontSize: 16,
-              //                       height: 0.1),
-              //                 ),
-              //               ))
-              //           .toList(),
-              //       onChanged: (String? value) {
-              //         setState(() {
-              //           _value = value ?? "";
-              //         });
-              //       },
-              //     ),
-              //   ),
-              // ),
-              Expanded(
-                  child: Container(
+        width: MediaQuery.of(context).size.width - 30,
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                      color: context.secondaryColor.graniteGray, width: 0.5),
+                  borderRadius: BorderRadius.circular(25),
                   color: Colors.white,
                 ),
                 child: CupertinoButton(
@@ -136,7 +93,7 @@ class _ChatUserSelectItemWidgetState extends State<ChatUserSelectItemWidget> {
                             ? selectedItem(_value!, context)
                             : Text(
                                 'Select an option',
-                                style: GoogleFonts.arimo(
+                          style: GoogleFonts.inter(
                                   color: context.secondaryColor.gray52,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
@@ -147,36 +104,38 @@ class _ChatUserSelectItemWidgetState extends State<ChatUserSelectItemWidget> {
                     ],
                   ),
                 ),
-              )),
-              const SizedBox(
-                width: 8,
               ),
-              Button.iconButton(
-                child: Container(
-                  height: 45,
-                  width: 45,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: _value.isNullOrEmpty
-                        ? const Color(0xFFE4E4E7)
-                        : widget.colorSecondary,
-                  ),
-                  child: const Icon(
-                    Icons.send,
-                    color: Colors.white,
-                    size: 20,
-                  ),
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Button.iconButton(
+              child: Container(
+                height: 45,
+                width: 45,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: _value.isNullOrEmpty
+                      ? const Color(0xFFE4E4E7)
+                      : widget.colorSecondary,
                 ),
-                onPressed: () {
-                  if (_value == null) {
-                    return;
-                  }
-                  widget.onUserInputTriggered(widget.buttons
-                      .firstWhere((element) => element.label == _value));
-                },
-              )
-            ],
-          )),
+                child: const Icon(
+                  Icons.send,
+                  color: Colors.white,
+                  size: 22,
+                ),
+              ),
+              onPressed: () {
+                if (_value == null) {
+                  return;
+                }
+                widget.onUserInputTriggered(widget.buttons
+                    .firstWhere((element) => element.label == _value));
+              },
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -184,7 +143,7 @@ class _ChatUserSelectItemWidgetState extends State<ChatUserSelectItemWidget> {
     return Text(
       label,
       textAlign: TextAlign.left,
-      style: GoogleFonts.arimo(
+      style: GoogleFonts.inter(
         color: context.secondaryColor.mostlyBlack,
         fontSize: 16,
         fontWeight: FontWeight.bold,

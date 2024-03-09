@@ -42,31 +42,6 @@ class ChatBotUI extends UI<ChatBotViewModel> {
           color: const Color(0xFFfbf9f9),
           child: Column(
             children: [
-              if (viewModel.conversationsListUiState ==
-                  ConversationsListUiState.loading) ...[
-                const SizedBox(
-                  height: 80,
-                  child: Center(
-                    child: SizedBox(
-                        height: 30,
-                        width: 30,
-                        child: CircularProgressIndicator()),
-                  ),
-                ),
-              ] else if (viewModel.chatList.isNotEmpty)
-                ConversationWidget(
-                    chatList: viewModel.chatList.take(3).toList(),
-                    onSeeConversationListPressed: () {
-                      showConversationListPage(context,
-                          chatList: viewModel.chatList,
-                          color: viewModel.colorPrimary,
-                          taglineText: viewModel.tagline,
-                          idleTimeout: viewModel.idleTimeout);
-                    },
-                    onDeleteConversationPressed: () {
-                      viewModel.onDeleteConversationPressed();
-                    },
-                    showViewAllConversation: showPreviousChatList),
               if (viewModel.outputState != OutBondUiState.outBondStateIdle &&
                   viewModel.isInboundEnabled)
                 if (inBusinessHours)
@@ -85,7 +60,32 @@ class ChatBotUI extends UI<ChatBotViewModel> {
                     },
                   )
                 else
-                  const ChatClosedWidget()
+                  const ChatClosedWidget(),
+              if (viewModel.conversationsListUiState ==
+                  ConversationsListUiState.loading)
+                const SizedBox(
+                  height: 80,
+                  child: Center(
+                    child: SizedBox(
+                        height: 30,
+                        width: 30,
+                        child: CircularProgressIndicator()),
+                  ),
+                ),
+              if (viewModel.chatList.isNotEmpty)
+                ConversationWidget(
+                    chatList: viewModel.chatList.take(3).toList(),
+                    onSeeConversationListPressed: () {
+                      showConversationListPage(context,
+                          chatList: viewModel.chatList,
+                          color: viewModel.colorPrimary,
+                          taglineText: viewModel.tagline,
+                          idleTimeout: viewModel.idleTimeout);
+                    },
+                    onDeleteConversationPressed: () {
+                      viewModel.onDeleteConversationPressed();
+                    },
+                    showViewAllConversation: showPreviousChatList),
             ],
           ),
         ),

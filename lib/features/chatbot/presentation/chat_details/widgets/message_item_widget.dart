@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatbot/core/extensions/date_extensions.dart';
 import 'package:chatbot/core/extensions/string_extensions.dart';
@@ -10,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:resources/resources.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'clipper/chat_right_clipper.dart';
 import 'self_reply_message_widget.dart';
 
 class MessageItemWidget extends StatelessWidget {
@@ -27,6 +29,7 @@ class MessageItemWidget extends StatelessWidget {
     Widget messageWidget;
     final isBot = message.messageSenderType == MessageSenderType.bot;
 
+
     if (message.message.contains("blocks")) {
       messageWidget = SizedBox(
         width: MediaQuery.of(context).size.width - 30,
@@ -41,25 +44,22 @@ class MessageItemWidget extends StatelessWidget {
                   fontSize: 18,
                   height: 1.5,
                 ),
-            onLinkTab: (link) {
-              _launchUrl(link);
-            },
+            onLinkTab: _launchUrl,
           ),
         ),
       ); //
     } else {
       if (isBot) {
-        messageWidget = SizedBox(
-          width: MediaQuery.of(context).size.width - 30,
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Text(
-              message.message,
-              style: GoogleFonts.arimo(
-                color: context.secondaryColor.mostlyBlack,
-                fontSize: 16,
-                height: 1.5,
-              ),
+        messageWidget = Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Text(
+            message.message,
+            style: GoogleFonts.inter(
+              color: isBot
+                  ? context.secondaryColor.mostlyBlack
+                  : context.secondaryColor.lightWhite,
+              fontSize: 16,
+              height: 1.5,
             ),
           ),
         );
@@ -68,64 +68,72 @@ class MessageItemWidget extends StatelessWidget {
       }
     }
 
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-        if (isBot && message.imageUrl.isNotEmpty) ...[
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Container(
-              width: 35.0,
-              height: 35.0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  image: CachedNetworkImageProvider(
-                    message.imageUrl,
+    return Container(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (isBot && message.imageUrl.isNotEmpty) ...[
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Container(
+                    width: 35.0,
+                    height: 35.0,
+                    margin: const EdgeInsets.only(bottom: 0),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: CachedNetworkImageProvider(
+                          message.imageUrl,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+              ],
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.only(left: 8, right: 8, top: 10),
+                  margin: const EdgeInsets.only(
+                      left: 5, right: 8, top: 10, bottom: 8),
+                  alignment:
+                      !isBot ? Alignment.centerRight : Alignment.centerLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomPaint(
+                        painter: ChatBubble(
+                          isOwn: !isBot,
+                          color:
+                              isBot ? const Color(0xFFE9E9E9) : secondaryColor,
+                        ),
+                        child: messageWidget,
+                      ),
+                    ],
                   ),
                 ),
               ),
+            ],
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              message.createdAt.toDate.timeAgo,
+              textAlign: isBot ? TextAlign.start : TextAlign.end,
+              style: GoogleFonts.inter(
+                color: context.secondaryColor.gray52,
+                fontSize: 10,
+              ),
             ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
+          )
         ],
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-            margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  spreadRadius: 2,
-                  blurRadius: 3,
-                  offset: const Offset(0, 2), // changes position of shadow
-                ),
-              ],
-              borderRadius: getBorderRadius(isBot),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                messageWidget,
-                if (isBot)
-                  SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      message.createdAt.toDate.timeAgo,
-                      textAlign: TextAlign.end,
-                      style: GoogleFonts.arima(
-                          color: context.secondaryColor.gray52, fontSize: 10),
-                    ),
-                  )
-              ],
-            ),
-          ),
-        ),
-      ]),
+      ),
     );
   }
 

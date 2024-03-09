@@ -25,7 +25,15 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: colorPrimary,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.black.withOpacity(.1),
+            width: 1.0,
+          ),
+        ),
+      ),
       child: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -35,8 +43,7 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
               Button.iconButton(
                 child: const Icon(
                   Icons.arrow_back_ios,
-                  size: 28,
-                  color: Colors.white,
+                  size: 22,
                 ),
                 onPressed: () {
                   backButtonPressed();
@@ -59,22 +66,21 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
                           children: [
                             Text(
                               title,
-                              style: GoogleFonts.arimo(
-                                color: Colors.white,
+                              style: GoogleFonts.inter(
+                                color: context.secondaryColor.mostlyBlack,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            if (subTitle.isNotEmpty) ...[
+                            if (subTitle.isNotEmpty)
                               Text(
                                 subTitle,
-                                style: GoogleFonts.arimo(
-                                  color: Colors.white,
+                                style: GoogleFonts.inter(
+                                  color: context.secondaryColor.mostlyBlack,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
-                            ],
                           ],
                         ),
                       ),
