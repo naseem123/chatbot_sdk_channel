@@ -136,6 +136,10 @@ workflows:
       - name: 'Flutter Pub Get'
         script: |
           flutter pub get
+      - name: 'Updating minimum deployment Target'
+        script: |
+          
+          cd .ios && perl -i -pe 's/IPHONEOS_DEPLOYMENT_TARGET = 11.0;/IPHONEOS_DEPLOYMENT_TARGET = 13.0;/g' Runner.xcodeproj/project.pbxproj && sed -i '' 's/platform :ios, '\''11.0'\''/platform :ios, '\''13.0'\''/g' Podfile
 
       - name: 'Add embed script in Xcode Project Build phases'
         script: |
