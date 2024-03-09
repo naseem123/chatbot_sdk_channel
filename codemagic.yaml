@@ -124,8 +124,7 @@ workflows:
       - name: Check a new tag
         script: |
           export TAG_VERSION=$(grep version pubspec.yaml |  awk -F  ': ' '{print $2}'| awk '{print substr($0, 1, 4)}'| awk -v build="$PROJECT_BUILD_NUMBER" '{printf "%s%s\n", $0, build}')
-          echo $TAG_VERSION
-          echo "VERSION=$TAG_VERSION" >> $CM_ENV
+          echo "TAG_VERSION: $TAG_VERSION" 
       
 
       # - name: 'Flutter Pub Get'
@@ -139,7 +138,7 @@ workflows:
 
       - name: "Build Frameworks"
         script: |
-          echo $TAG_VERSION
+          echo "TAG_VERSION: $TAG_VERSION" 
           # flutter build ios-framework --output=Frameworks --no-profile
           echo "ssss"
 
