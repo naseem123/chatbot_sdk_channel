@@ -160,9 +160,8 @@ workflows:
         script: |
           
           cd thinkresearch-ios-sdk/
-          echo "Listing ChatBotSDK1" 
           
-          export TAG_VERSION=$(grep version $CM_BUILD_DIR/pubspec.yaml |  awk -F  ': ' '{print $2}'| awk '{print substr($0, 1, 4)}'| awk -v build="$PROJECT_BUILD_NUMBER" '{printf "%s%s\n", $0, build}')
+          export TAG_VERSION=$( grep version pubspec.yaml |  awk -F  ': ' '{print $2}' |awk '{print substr($0, 1, 5)}')
           
           # Use sed to replace the version field in the podspec file
           sed -i '' -E "s/[0-9]+\.[0-9]+\.[0-9]+/${TAG_VERSION}/g" Think_research_messenger_SDK_Suhail.podspec
@@ -173,7 +172,7 @@ workflows:
 
       - name : "Commiting the changes"
         script: |
-          export TAG_VERSION=$(grep version $CM_BUILD_DIR/pubspec.yaml |  awk -F  ': ' '{print $2}'| awk '{print substr($0, 1, 4)}'| awk -v build="$PROJECT_BUILD_NUMBER" '{printf "%s%s\n", $0, build}')
+          export TAG_VERSION=$( grep version pubspec.yaml |  awk -F  ': ' '{print $2}' |awk '{print substr($0, 1, 5)}')
           
           cd thinkresearch-ios-sdk/
           git status
