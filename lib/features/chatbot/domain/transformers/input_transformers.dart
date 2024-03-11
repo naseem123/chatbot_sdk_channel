@@ -31,7 +31,16 @@ class ChatDetailsGetMessageInputTransformer
   @override
   ChatBotEntity transform(
       ChatBotEntity entity, WebsocketMessageSuccessInput input) {
-    if (input.data["type"] == "confirm_subscription") {
+
+    if (input.data["type"] == "conversations:unreads" || input.data["type"] == "conversations:typing"){
+      Future.delayed(const Duration(milliseconds: 50), () {
+        chatBotUseCaseProvider
+            .getUseCaseFromContext(providersContext)
+            .toggleAgentTypingStatus();
+      });
+      return entity;
+    }
+    else if (input.data["type"] == "confirm_subscription") {
       Future.delayed(const Duration(milliseconds: 50), () {
         chatBotUseCaseProvider
             .getUseCaseFromContext(providersContext)
@@ -62,6 +71,7 @@ class ChatDetailsGetMessageInputTransformer
           assigneeImage: assigneeMap["avatar_url"]);
       return entity = entity.merge(chatAssignee: assignee);
     } else if (input.data["type"] == "conversations:conversation_part") {
+
       final conversationKey = input.data["data"]["conversation_key"];
       final messageKey = input.data["data"]["key"];
       Map<String, dynamic> messageData = input.data["data"]["message"];
@@ -98,9 +108,6 @@ class ChatDetailsGetMessageInputTransformer
         // remove previous survey start text
         final currentChatList = List.of(entity.chatDetailList);
 
-        print(
-            '========  $conversationKey <-> $messageKey ${currentChatList.contains(surveyMessage)} ${surveyMessage.isSurveyStartMsg}');
-
         if (messageKey == entity.messageKey) {
           final itemIdx = currentChatList.indexWhere(
             (element) => element.messageId == messageKey,
@@ -108,16 +115,9 @@ class ChatDetailsGetMessageInputTransformer
 
           if (itemIdx != -1) {
             currentChatList[itemIdx] = surveyMessage;
-
             return entity.merge(chatDetailList: currentChatList);
           }
         }
-        //
-        // final hasSurveyInputChatItem = currentChatList.where(
-        //     (element) => element is SurveyMessage && element.isSurveyStartMsg);
-        // if (hasSurveyInputChatItem.isNotEmpty) {
-        //   currentChatList.removeAt(0);
-        // }
 
         return entity.merge(
           conversationKey: conversationKey,

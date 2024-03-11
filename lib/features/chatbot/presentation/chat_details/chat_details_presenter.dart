@@ -56,6 +56,7 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
       currentPage: output.currentPage,
       totalPages: output.totalPages,
       onSurveySubmitted: useCase.onSurveySubmitted,
+        isAgentTyping: output.isAgentTyping,
     );
   }
 

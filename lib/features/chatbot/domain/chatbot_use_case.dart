@@ -865,6 +865,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       chatStepId: "",
       chatPathId: "",
       chatNextStepUUID: "",
+      isAgentTyping : false,
     );
     loadRecentConversationList();
   }
@@ -882,6 +883,13 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     }, onFailure: (_) {
       return entity;
     });
+  }
+
+  void toggleAgentTypingStatus() {
+    entity= entity.merge(isAgentTyping: true);
+      Future.delayed(const Duration(milliseconds: 1500), (){
+        entity= entity.merge(isAgentTyping: false);
+      });
   }
 }
 
