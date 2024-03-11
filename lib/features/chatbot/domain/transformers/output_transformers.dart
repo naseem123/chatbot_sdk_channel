@@ -37,6 +37,7 @@ class ChatDetailsUIOutputTransformer
       chatSessionState: entity.chatSessionState,
       totalPages: entity.totalPages,
       currentPage: entity.currentPage,
+      isAgentTyping: entity.isAgentTyping,
     );
   }
 }
