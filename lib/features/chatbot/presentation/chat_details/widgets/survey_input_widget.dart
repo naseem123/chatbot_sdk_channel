@@ -13,7 +13,7 @@ class SurveyWidget extends StatelessWidget {
 
   final SurveyMessage surveyModel;
 
-  final void Function(Map) onSurveyStartClicked;
+  final void Function(String) onSurveyStartClicked;
   final Color primaryColor;
 
   @override
@@ -61,7 +61,7 @@ class SurveyWidget extends StatelessWidget {
                 child: Button.accent(
                   primaryColor: primaryColor,
                   buttonRadius: 4,
-                  onPressed: () => onSurveyStartClicked(e.surveyData),
+                  onPressed: () => onSurveyStartClicked(e.surveyEncodes),
                   child: Text(
                     e.label,
                     style: GoogleFonts.inter(

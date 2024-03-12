@@ -56,16 +56,24 @@ class StartNewConversationWidget extends StatelessWidget {
           ),
           Row(
             children: [
-              SizedBox(
-                height: providersContext().read(envReaderProvider).getLang()=='fr'?50: 45,
-                width: 190,
-                child: Button.accent(
-                  onPressed: onStartConversationPressed,
-                  primaryColor: buttonColor,
-                  buttonRadius: Platform.isAndroid ? 24 : 12,
-                  child: Text(
-                    AppLocalizations.of(context).translate('start_conversation'),
-                    style: tn.s16.c(context.secondaryColor.lightWhite),
+              Expanded(
+                flex: 3,
+                child: SizedBox(
+                  height:
+                      providersContext().read(envReaderProvider).getLang() ==
+                              'fr'
+                          ? 50
+                          : 45,
+                  child: Button.accent(
+                    onPressed: onStartConversationPressed,
+                    primaryColor: buttonColor,
+                    buttonRadius: Platform.isAndroid ? 24 : 12,
+                    child: Text(
+                      AppLocalizations.of(context)
+                          .translate('start_conversation'),
+                      textAlign: TextAlign.center,
+                      style: tn.s16.c(context.secondaryColor.lightWhite),
+                    ),
                   ),
                 ),
               ),

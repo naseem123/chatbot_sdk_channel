@@ -53,6 +53,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
 
     return IdleDetector(
       idleTime: viewModel.idleTimeout,
+      onTick: viewModel.onTick,
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(70),

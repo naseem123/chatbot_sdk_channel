@@ -25,18 +25,18 @@ class ChatConversationModel extends Equatable {
 }
 
 class Conversation extends Equatable {
-  String id;
-  String key;
-  String state;
-  String participantName;
-  String? participantAvatar;
-  String? closedAt;
-  String? assigneeAvatar;
-  String assigneeName;
-  LastMessage lastMessage;
-  DateTime? lastUpdatedTime;
+  final String id;
+  final String key;
+  final String state;
+  final String participantName;
+  final String? participantAvatar;
+  final String? closedAt;
+  final String? assigneeAvatar;
+  final String assigneeName;
+  final LastMessage lastMessage;
+  final DateTime? lastUpdatedTime;
 
-  Conversation({
+  const Conversation({
     required this.id,
     required this.key,
     required this.state,

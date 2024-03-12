@@ -19,7 +19,7 @@ class ChatBotViewModel extends ViewModel {
     required this.inBusinessHours,
     required this.tagline,
     required this.onDeleteConversationPressed,
-    required this.onIdleSessionTimeout,
+    required this.onTick,
     required this.idleTimeout,
     required this.replyTime,
     required this.isInboundEnabled,
@@ -39,7 +39,7 @@ class ChatBotViewModel extends ViewModel {
   final VoidCallback onRetry;
   final AsyncCallback onRefresh;
   final VoidCallback onDeleteConversationPressed;
-  final VoidCallback onIdleSessionTimeout;
+  final void Function(int remaining) onTick;
   final int idleTimeout;
   final String replyTime;
   final bool isInboundEnabled;
