@@ -9,7 +9,7 @@ class Channel {
       _channel.invokeMethod(
         'callNativeMethod',
       );
-    } catch (e, stacktrace) {
+    } catch (e) {
       if (kDebugMode) {
         print("errro$e");
       }

@@ -31,7 +31,16 @@ class ChatDetailsGetMessageInputTransformer
   @override
   ChatBotEntity transform(
       ChatBotEntity entity, WebsocketMessageSuccessInput input) {
-    if (input.data["type"] == "confirm_subscription") {
+
+    if (input.data["type"] == "conversations:unreads" || input.data["type"] == "conversations:typing"){
+      Future.delayed(const Duration(milliseconds: 50), () {
+        chatBotUseCaseProvider
+            .getUseCaseFromContext(providersContext)
+            .toggleAgentTypingStatus();
+      });
+      return entity;
+    }
+    else if (input.data["type"] == "confirm_subscription") {
       Future.delayed(const Duration(milliseconds: 50), () {
         chatBotUseCaseProvider
             .getUseCaseFromContext(providersContext)
@@ -62,6 +71,7 @@ class ChatDetailsGetMessageInputTransformer
           assigneeImage: assigneeMap["avatar_url"]);
       return entity = entity.merge(chatAssignee: assignee);
     } else if (input.data["type"] == "conversations:conversation_part") {
+
       final conversationKey = input.data["data"]["conversation_key"];
       final messageKey = input.data["data"]["key"];
       Map<String, dynamic> messageData = input.data["data"]["message"];
@@ -86,6 +96,7 @@ class ChatDetailsGetMessageInputTransformer
           messageData["blocks"]["app_package"] == "Surveys") {
         String? sessionId = preference.get<String>(PreferenceKey.sessionId, "");
         final appId = providersContext().read(envReaderProvider).getAppID();
+        final baseUrl = providersContext().read(envReaderProvider).getBaseUrl();
 
         final surveyMessage = SurveyMessage.fromJson(
           messageData["blocks"]["schema"],
@@ -93,13 +104,11 @@ class ChatDetailsGetMessageInputTransformer
           conversationKey: conversationKey,
           appId: appId,
           sessionId: sessionId,
+          baseUrl: baseUrl,
         );
 
         // remove previous survey start text
         final currentChatList = List.of(entity.chatDetailList);
-
-        print(
-            '========  $conversationKey <-> $messageKey ${currentChatList.contains(surveyMessage)} ${surveyMessage.isSurveyStartMsg}');
 
         if (messageKey == entity.messageKey) {
           final itemIdx = currentChatList.indexWhere(
@@ -108,16 +117,9 @@ class ChatDetailsGetMessageInputTransformer
 
           if (itemIdx != -1) {
             currentChatList[itemIdx] = surveyMessage;
-
             return entity.merge(chatDetailList: currentChatList);
           }
         }
-        //
-        // final hasSurveyInputChatItem = currentChatList.where(
-        //     (element) => element is SurveyMessage && element.isSurveyStartMsg);
-        // if (hasSurveyInputChatItem.isNotEmpty) {
-        //   currentChatList.removeAt(0);
-        // }
 
         return entity.merge(
           conversationKey: conversationKey,

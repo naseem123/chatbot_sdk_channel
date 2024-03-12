@@ -1,6 +1,5 @@
 import 'package:clean_framework/clean_framework_legacy.dart';
-import 'package:clean_framework_graphql/src/graphql_error_policy.dart';
-import 'package:clean_framework_graphql/src/graphql_fetch_policy.dart';
+import 'package:clean_framework_graphql/clean_framework_graphql.dart';
 
 abstract class ChatBotGraphQLRequest extends Request {
   String get document;

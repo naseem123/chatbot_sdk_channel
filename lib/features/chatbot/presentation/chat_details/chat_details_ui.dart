@@ -1,3 +1,4 @@
+import 'package:chatbot/core/widgets/anim/anim_three_in_out.dart';
 import 'package:chatbot/core/widgets/idle_detector.dart';
 import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_presenter.dart';
@@ -51,6 +52,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
 
     return IdleDetector(
       idleTime: viewModel.idleTimeout,
+      onTick: viewModel.onTick,
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(70),
@@ -85,6 +87,26 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                   ),
                 ),
               ),
+              if(viewModel.isAgentTyping)...[
+              Row(
+                children: [
+                  const SizedBox(width: 10,),
+                  SpinKitThreeInOut(
+                    size: 20,
+                    color: viewModel.colorSecondary,
+                  ),
+                  Text(
+                    "agent is typing",
+                    style: GoogleFonts.inter(
+                      color:  context.secondaryColor.mostlyBlack,
+                      fontSize: 13,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15,),
+              ],
               if (chatBotUserState == ChatBotUserState.waitForInput &&
                   chatMessageType == ChatMessageType.askForInputButton &&
                   userInputOptions.length > 3) ...[
@@ -151,6 +173,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                         fontWeight: FontWeight.w800),
                   ),
                 ),
+
             ],
           ),
         ),

@@ -41,6 +41,8 @@ class ChatBotEntity extends Entity {
   final String chatPathId;
   final String chatNextStepUUID;
 
+  final bool isAgentTyping;
+
   const ChatBotEntity({
     this.chatBotUiState = ChatBotUiState.conversationLoading,
     this.outBondUiState = OutBondUiState.outBondStateIdle,
@@ -65,6 +67,7 @@ class ChatBotEntity extends Entity {
     this.chatStepId = "",
     this.chatPathId = "",
     this.chatNextStepUUID = "",
+    this.isAgentTyping = false,
   });
 
   ChatBotEntity merge({
@@ -91,6 +94,7 @@ class ChatBotEntity extends Entity {
     String? chatStepId,
     String? chatPathId,
     String? chatNextStepUUID,
+    bool? isAgentTyping,
   }) {
     return ChatBotEntity(
       chatBotUiState: chatBotUiState ?? this.chatBotUiState,
@@ -117,6 +121,7 @@ class ChatBotEntity extends Entity {
       chatStepId: chatStepId ?? this.chatStepId,
       chatPathId: chatPathId ?? this.chatPathId,
       chatNextStepUUID: chatNextStepUUID ?? this.chatNextStepUUID,
+        isAgentTyping : isAgentTyping ?? this.isAgentTyping,
     );
   }
 
@@ -143,5 +148,6 @@ class ChatBotEntity extends Entity {
         chatStepId,
         chatPathId,
         chatNextStepUUID,
+    isAgentTyping,
       ];
 }
