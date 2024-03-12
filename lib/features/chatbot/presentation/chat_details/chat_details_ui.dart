@@ -8,6 +8,7 @@ import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_user_input_editor_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_user_select_item_widget.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/widgets/chat_wait_for_input_button_widget.dart';
+import 'package:chatbot/i18n/app_localization.dart';
 import 'package:clean_framework/clean_framework_legacy.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -96,7 +97,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                     color: viewModel.colorSecondary,
                   ),
                   Text(
-                    "agent is typing",
+                    AppLocalizations.of(context).translate('agent_typing'),
                     style: GoogleFonts.inter(
                       color:  context.secondaryColor.mostlyBlack,
                       fontSize: 13,
@@ -135,7 +136,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                   width: double.infinity,
                   alignment: Alignment.center,
                   child: Text(
-                    'This conversation has ended',
+                    AppLocalizations.of(context).translate('conversation_end'),
                     style: GoogleFonts.inter(
                         color: context.secondaryColor.mostlyBlack,
                         fontSize: 14,
@@ -165,7 +166,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                   width: double.infinity,
                   alignment: Alignment.center,
                   child: Text(
-                    'Reply above',
+                    AppLocalizations.of(context).translate('reply_above'),
                     style: GoogleFonts.inter(
                         color: context.secondaryColor.mostlyBlack,
                         fontSize: 14,

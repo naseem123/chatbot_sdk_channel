@@ -1,0 +1,22 @@
+{
+  "continue_conversation": "Continuer la discussion",
+  "start_conversation": "Commencer une discussion",
+  "view_all_conversations": "voir toutes les discussions",
+  "see_previous": "Voir les précedentes",
+  "reply_time_auto": "L'équipe va vous répondre dès que possible",
+  "reply_time_minutes": "L'équipe répond habituellement en quelques minutes",
+  "reply_time_hours": "L'équipe répond habituellement en quelques heures",
+  "reply_time_day": "L'équipe répond habituellement en quelques jours",
+  "select_an_option": "Choisir une option",
+  "reply_above": "Répondre en dessous",
+  "type_your_message": "Envoyer un message...",
+  "clear_conversations": "Effacer les conversations",
+  "clear_conversations_description": "Cela effacera vos conversations, êtes-vous sûr de vouloir continuer?",
+  "cancel": "Annuler",
+  "agent_typing": "agent est en train d'écrire",
+  "waiting_for_reply": "attend votre réponse",
+  "conversation_end": "Cette conversation est terminée",
+  "thanks_for_stopping_by": "Merci d'être passé !"
+}
+
+
