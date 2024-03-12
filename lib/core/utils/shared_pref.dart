@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum PreferenceKey { sessionId, sessionIdleTimout }
+enum PreferenceKey { sessionId, sessionIdleTimout, lastSessionUpdate }
 
 class Preference {
   Preference();
@@ -18,6 +18,10 @@ class Preference {
 
   Future<void> put(PreferenceKey key, String value) async {
     _prefs.setString(key.name, value);
+  }
+
+  Future<void> putInt(PreferenceKey key, int value) async {
+    _prefs.setInt(key.name, value);
   }
 
   Future<void> remove(PreferenceKey key) async {
