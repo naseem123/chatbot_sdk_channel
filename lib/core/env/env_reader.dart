@@ -22,6 +22,8 @@ class EnvReader {
   late String _appId;
   late String _origin;
   late String _apiUrl;
+  late String _lang;
+
 
   String getAppID() {
     return _appId;
@@ -47,6 +49,15 @@ class EnvReader {
     _apiUrl = baseUrl;
   }
 
+  String getLang() {
+    return _lang;
+  }
+
+  void setLang(String lang) {
+    _lang = lang;
+  }
+
+
   String getWebsocketBaseUrl() {
     return 'wss://$_apiUrl/cable';
   }
@@ -54,9 +65,12 @@ class EnvReader {
   Future<void> init(
       {required String appID,
       required String origin,
-      required String apiUrl}) async {
+      required String apiUrl,
+      required String lang,
+      }) async {
     _appId = appID;
     _origin = origin;
     _apiUrl = apiUrl;
+    _lang = lang;
   }
 }

@@ -1,6 +1,9 @@
+import 'package:chatbot/core/env/env_reader.dart';
 import 'package:chatbot/core/router/app_router.dart';
+import 'package:chatbot/i18n/AppLocalizationsDelegate.dart';
 import 'package:clean_framework/clean_framework.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:resources/resources.dart';
 
 ProvidersContext get providersContext => _providersContext;
@@ -38,6 +41,26 @@ class ChatBotAppState extends State<ChatBotApp> {
                 data: data.copyWith(textScaleFactor: 1, boldText: false),
                 child: child!,
               );
+            },
+            locale: Locale(providersContext().read(envReaderProvider).getLang(), 'CA'),
+            localizationsDelegates: const [
+              AppLocalizationsDelegate(),
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('en', 'CA'),
+              Locale('fr', 'CA'),
+            ],
+            localeResolutionCallback: (locale, supportedLocales) {
+              for (var supportedLocale in supportedLocales) {
+                if (supportedLocale.languageCode == locale!.languageCode &&
+                    supportedLocale.countryCode == locale.countryCode) {
+                  return supportedLocale;
+                }
+              }
+              return supportedLocales.first;
             },
             title: 'ChatBot',
             theme: context.themeData,
