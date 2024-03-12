@@ -702,7 +702,8 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
           messageData["blocks"]['app_package'] == 'Surveys') {
         String? sessionId = preference.get<String>(PreferenceKey.sessionId, "");
         final appId = providersContext().read(envReaderProvider).getAppID();
-
+        final base_url =
+            providersContext().read(envReaderProvider).getBaseUrl();
         entity = entity.merge(
           chatDetailList: curPage == 1
               ? [
@@ -711,6 +712,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
                     messageKey: messageKey,
                     conversationKey: conversationKey,
                     appId: appId,
+                    baseUrl: base_url,
                     sessionId: sessionId,
                   ),
                   ...entity.chatDetailList,
@@ -722,6 +724,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
                     messageKey: messageKey,
                     conversationKey: conversationKey,
                     appId: appId,
+                    baseUrl: base_url,
                     sessionId: sessionId,
                   ),
                 ],

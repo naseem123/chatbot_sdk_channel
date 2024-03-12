@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:chatbot/chatbot_app.dart';
-import 'package:chatbot/core/env/env_reader.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -10,17 +8,17 @@ import 'package:webview_flutter/webview_flutter.dart';
 class SurveyUi extends StatefulWidget {
   const SurveyUi({super.key, required, required this.surveyData});
 
-final Map<String, dynamic> surveyData;
+  final String surveyData;
 
-@override
-State<SurveyUi> createState() => _SurveyUiState();
+  @override
+  State<SurveyUi> createState() => _SurveyUiState();
 }
 
 class _SurveyUiState extends State<SurveyUi> {
   final Completer<WebViewController> _controller =
-  Completer<WebViewController>();
+      Completer<WebViewController>();
   late WebViewController _mycontroller;
-  bool isLoading=true;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -31,27 +29,23 @@ class _SurveyUiState extends State<SurveyUi> {
 
   @override
   Widget build(BuildContext context) {
-    final surveyData = Uri.encodeComponent(jsonEncode(widget.surveyData));
-    final url =
-        '${providersContext().read(envReaderProvider).getBaseUrl()}/package_iframe/surveys?data=$surveyData';
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(),
       body: SafeArea(
-        child:
-        Stack(
-          children:[
+        child: Stack(
+          children: [
             WebView(
               backgroundColor: Colors.white,
               javascriptMode: JavascriptMode.unrestricted,
-              initialUrl: url,
+              initialUrl: widget.surveyData,
               onWebViewCreated: (webviewcontroller) {
                 _controller.complete(_mycontroller = webviewcontroller);
               },
               onPageFinished: (string) {
-       setState(() {
-         isLoading = false;
-      });
+                setState(() {
+                  isLoading = false;
+                });
                 _mycontroller.runJavascript('''
         window.addEventListener('message', function(event) {
           chatbotMessageChannel.postMessage(JSON.stringify(event.data));
@@ -63,7 +57,8 @@ class _SurveyUiState extends State<SurveyUi> {
                   name: 'chatbotMessageChannel',
                   onMessageReceived: (JavascriptMessage message) {
                     surveyMap = jsonDecode(message.message);
-                    Future.delayed(const Duration(milliseconds: 400)).then((value) {
+                    Future.delayed(const Duration(milliseconds: 400))
+                        .then((value) {
                       context.pop(surveyMap);
                     });
                   },
@@ -71,9 +66,8 @@ class _SurveyUiState extends State<SurveyUi> {
               },
             ),
             if (isLoading) const Center(child: CircularProgressIndicator())
-          ]
-        )
-
+          ],
+        ),
       ),
     );
   }

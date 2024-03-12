@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'mesasge_ui_model.dart';
 
 class SurveyMessage extends ChatMessage {
@@ -11,6 +13,7 @@ class SurveyMessage extends ChatMessage {
     required String messageKey,
     required String conversationKey,
     required String appId,
+    required String baseUrl,
     String? sessionId,
   }) {
     final messageArray = <SurveyMessage>[];
@@ -48,11 +51,14 @@ class SurveyMessage extends ChatMessage {
             }
           }
         };
+        final uncodedSurvey = Uri.encodeComponent(jsonEncode(surveyData));
+
+        final url = '$baseUrl/package_iframe/surveys?data=$uncodedSurvey';
 
         messageArray.add(SurveyInputButton(
           messageType: MessageType.surveyMessage,
           label: e['label'],
-          surveyData: surveyData,
+          surveyEncodes: url,
         ));
       }
     }
@@ -97,16 +103,16 @@ class SurveyInputSeparator extends SurveyMessage {
 
 class SurveyInputButton extends SurveyMessage {
   final String label;
-  final Map<String, dynamic> surveyData;
+  final String surveyEncodes;
 
   const SurveyInputButton({
     super.messageType,
     required this.label,
-    required this.surveyData,
+    required this.surveyEncodes,
   });
 
   @override
-  List<Object?> get props => [label, surveyData];
+  List<Object?> get props => [label, surveyEncodes];
 }
 
 enum InputType { text, button, divider }
