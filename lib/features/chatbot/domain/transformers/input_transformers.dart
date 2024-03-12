@@ -96,6 +96,7 @@ class ChatDetailsGetMessageInputTransformer
           messageData["blocks"]["app_package"] == "Surveys") {
         String? sessionId = preference.get<String>(PreferenceKey.sessionId, "");
         final appId = providersContext().read(envReaderProvider).getAppID();
+        final baseUrl = providersContext().read(envReaderProvider).getBaseUrl();
 
         final surveyMessage = SurveyMessage.fromJson(
           messageData["blocks"]["schema"],
@@ -103,6 +104,7 @@ class ChatDetailsGetMessageInputTransformer
           conversationKey: conversationKey,
           appId: appId,
           sessionId: sessionId,
+          baseUrl: baseUrl,
         );
 
         // remove previous survey start text

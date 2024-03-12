@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:clean_framework_graphql/src/graphql_error_policy.dart';
-import 'package:clean_framework_graphql/src/graphql_fetch_policy.dart';
-import 'package:clean_framework_graphql/src/graphql_logger.dart';
+import 'package:clean_framework_graphql/clean_framework_graphql.dart';
 import 'package:gql/ast.dart';
 import 'package:graphql/client.dart';
 

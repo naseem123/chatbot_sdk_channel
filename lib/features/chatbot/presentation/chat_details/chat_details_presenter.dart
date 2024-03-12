@@ -51,12 +51,12 @@ class ChatDetailsPresenter extends Presenter<ChatDetailsViewModel,
       },
       chatAssignee: output.chatAssignee,
       idleTimeout: output.idleTimeout,
-      onIdleSessionTimeout: useCase.clearSession,
+      onTick: useCase.onTick,
       loadMoreChats: useCase.loadMoreChats,
       currentPage: output.currentPage,
       totalPages: output.totalPages,
       onSurveySubmitted: useCase.onSurveySubmitted,
-        isAgentTyping: output.isAgentTyping,
+      isAgentTyping: output.isAgentTyping,
     );
   }
 

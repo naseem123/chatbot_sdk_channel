@@ -57,7 +57,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/survey',
         name: survey,
         pageBuilder: (context, state) {
-          var surveyData = <String, dynamic>{};
+          var surveyData = '';
           if (state.extra != null) {
             Map<String, dynamic> args = state.extra as Map<String, dynamic>;
             surveyData = args['surveyData']!;
