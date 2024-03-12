@@ -29,7 +29,7 @@ void main(List<String> arguments) async {
   final appID = arguments.isEmpty ? appIDLocal : arguments[0];
   final origin = arguments.isEmpty ? originLocal : arguments[1];
   final apiUrl = arguments.isEmpty ? apiUrlLocal : arguments[2];
-  final lang = arguments.isEmpty ? 'fr' : arguments[3];
+  final lang = arguments.isEmpty ? 'en' : arguments[3];
 
   providersContext()
       .read(envReaderProvider)
