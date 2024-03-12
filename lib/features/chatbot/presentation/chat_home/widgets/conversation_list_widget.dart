@@ -1,5 +1,6 @@
 import 'package:chatbot/features/chatbot/model/conversation_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/widgets/conversation_item.dart';
+import 'package:chatbot/i18n/app_localization.dart';
 import 'package:components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -33,12 +34,12 @@ class ConversationWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Continue the conversation',
-                style: context.textTheme.captionBold.copyWith(
-                  color: context.colorScheme.primary,
-                  fontSize: 18,
-                ),
-              ),
+              AppLocalizations.of(context).translate('continue_conversation'),
+              style: context.textTheme.captionBold.copyWith(
+                        color: context.colorScheme.primary,
+                        fontSize: 18,
+                      ),
+                    ),
               if (hasChatList)
                 IconButtons(
                   onPressed: () => showDeleteConversationConfirmationPopup(
@@ -69,7 +70,7 @@ class ConversationWidget extends StatelessWidget {
             InkWell(
               onTap: onSeeConversationListPressed,
               child: Text(
-                'View all conversations',
+                AppLocalizations.of(context).translate('view_all_conversations'),
                 style: context.textTheme.captionBold.copyWith(
                     color: context.secondaryColor.matterhorn, fontSize: 12),
               ),

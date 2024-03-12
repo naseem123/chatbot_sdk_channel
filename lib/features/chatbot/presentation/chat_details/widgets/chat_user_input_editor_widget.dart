@@ -1,3 +1,4 @@
+import 'package:chatbot/i18n/app_localization.dart';
 import 'package:components/components.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +41,7 @@ class ChatUserInputEditorWidget extends StatelessWidget {
                 decoration: InputDecoration(
                   filled: false,
                   fillColor: Colors.white,
-                  hintText: 'Type your message...',
+                  hintText: AppLocalizations.of(context).translate('type_your_message'),
                   suffixIcon: IconButton(
                     onPressed: () {
                       if (textEditingController.text.trim().isNotEmpty) {

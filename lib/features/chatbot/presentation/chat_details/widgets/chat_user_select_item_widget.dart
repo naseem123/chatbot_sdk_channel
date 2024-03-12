@@ -1,5 +1,6 @@
 import 'package:chatbot/core/extensions/string_extensions.dart';
 import 'package:chatbot/features/chatbot/model/block_model.dart';
+import 'package:chatbot/i18n/app_localization.dart';
 import 'package:components/components.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +63,7 @@ class _ChatUserSelectItemWidgetState extends State<ChatUserSelectItemWidget> {
                     showCupertinoModalPopup(
                       context: context,
                       builder: (BuildContext context) => CupertinoActionSheet(
-                        title: const Text('Select an Option'),
+                        title: Text(AppLocalizations.of(context).translate('select_an_option')),
                         actions: widget.buttons
                             .map(
                               (e) => CupertinoActionSheetAction(
@@ -92,7 +93,7 @@ class _ChatUserSelectItemWidgetState extends State<ChatUserSelectItemWidget> {
                         child: !_value.isNullOrEmpty
                             ? selectedItem(_value!, context)
                             : Text(
-                                'Select an option',
+                          AppLocalizations.of(context).translate('select_an_option'),
                           style: GoogleFonts.inter(
                                   color: context.secondaryColor.gray52,
                                   fontSize: 16,
