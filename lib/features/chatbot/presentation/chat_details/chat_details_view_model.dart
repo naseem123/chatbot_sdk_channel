@@ -25,6 +25,7 @@ class ChatDetailsViewModel extends ViewModel {
     required this.currentPage,
     required this.totalPages,
     required this.onSurveySubmitted,
+    required this.isAgentTyping,
   });
 
   final ChatDetailsUiState uiState;
@@ -46,6 +47,7 @@ class ChatDetailsViewModel extends ViewModel {
   final int idleTimeout;
   final int currentPage;
   final int totalPages;
+  final bool isAgentTyping;
 
   @override
   List<Object?> get props => [
@@ -61,5 +63,6 @@ class ChatDetailsViewModel extends ViewModel {
         idleTimeout,
         currentPage,
         totalPages,
+    isAgentTyping,
       ];
 }
