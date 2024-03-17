@@ -30,7 +30,8 @@ class ChatDetailsViewModel extends ViewModel {
 
   final ChatDetailsUiState uiState;
   final List<ChatMessage> chatList;
-  final Function(String message,  ChatMessageType chatMessageType) onMessageEntered;
+  final Function(String message, ChatMessageType chatMessageType)
+      onMessageEntered;
   final VoidCallback backButtonPressed;
   final VoidCallback loadMoreChats;
 
@@ -63,6 +64,6 @@ class ChatDetailsViewModel extends ViewModel {
         idleTimeout,
         currentPage,
         totalPages,
-    isAgentTyping,
+        isAgentTyping,
       ];
 }

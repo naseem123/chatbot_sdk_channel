@@ -41,7 +41,8 @@ class ChatUserInputEditorWidget extends StatelessWidget {
                 decoration: InputDecoration(
                   filled: false,
                   fillColor: Colors.white,
-                  hintText: AppLocalizations.of(context).translate('type_your_message'),
+                  hintText: AppLocalizations.of(context)
+                      .translate('type_your_message'),
                   suffixIcon: IconButton(
                     onPressed: () {
                       if (textEditingController.text.trim().isNotEmpty) {

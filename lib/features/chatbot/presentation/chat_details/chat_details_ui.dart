@@ -41,7 +41,6 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
     final chatBotUserState = viewModel.chatBotUserState;
     final userInputOptions = viewModel.userInputOptions;
     final chatBotAssignee = viewModel.chatAssignee;
-
     if (isLoading) {
       return const Scaffold(
         body: Center(
@@ -87,29 +86,33 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                   ),
                 ),
               ),
-              if(viewModel.isAgentTyping)...[
-              Row(
-                children: [
-                  const SizedBox(width: 10,),
-                  SpinKitThreeInOut(
-                    size: 20,
-                    color: viewModel.colorSecondary,
-                  ),
-                  Text(
-                    AppLocalizations.of(context).translate('agent_typing'),
-                    style: GoogleFonts.inter(
-                      color:  context.secondaryColor.mostlyBlack,
-                      fontSize: 13,
-                      height: 1.5,
+              if (viewModel.isAgentTyping) ...[
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 10,
                     ),
-                  ),
-                ],
-              ),
-                const SizedBox(height: 3,),
-
-              ]
-              else
-              const SizedBox(height: 23,),
+                    SpinKitThreeInOut(
+                      size: 20,
+                      color: viewModel.colorSecondary,
+                    ),
+                    Text(
+                      AppLocalizations.of(context).translate('agent_typing'),
+                      style: GoogleFonts.inter(
+                        color: context.secondaryColor.mostlyBlack,
+                        fontSize: 13,
+                        height: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 3,
+                ),
+              ] else
+                const SizedBox(
+                  height: 23,
+                ),
               if (chatBotUserState == ChatBotUserState.waitForInput &&
                   chatMessageType == ChatMessageType.askForInputButton &&
                   userInputOptions.length > 3) ...[
@@ -176,7 +179,6 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                         fontWeight: FontWeight.w800),
                   ),
                 ),
-
             ],
           ),
         ),

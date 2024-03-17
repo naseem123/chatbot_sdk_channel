@@ -16,13 +16,15 @@ class AppLocalizations {
   // Method to get the current instance of AppLocalizations
   static AppLocalizations of(BuildContext context) {
     // Try to get the localization for the current context, if not available, default to English
-    return Localizations.of<AppLocalizations>(context, AppLocalizations) ?? AppLocalizations(const Locale('en'));
+    return Localizations.of<AppLocalizations>(context, AppLocalizations) ??
+        AppLocalizations(const Locale('en'));
   }
 
   // Method to load the localized strings
   Future<bool> load() async {
     // Load the localization file from the assets
-    String jsonString = await rootBundle.loadString('assets/${locale.languageCode}.json');
+    String jsonString =
+        await rootBundle.loadString('assets/${locale.languageCode}.json');
     // Decode the JSON
     Map<String, dynamic> jsonMap = json.decode(jsonString);
 

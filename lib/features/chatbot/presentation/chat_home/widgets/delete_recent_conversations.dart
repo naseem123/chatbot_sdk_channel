@@ -29,7 +29,8 @@ void showDeleteConversationConfirmationPopup(
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14.0),
               child: Text(
-                AppLocalizations.of(context).translate('clear_conversations_description'),
+                AppLocalizations.of(context)
+                    .translate('clear_conversations_description'),
                 style: context.textTheme.captionRegular.copyWith(
                   color: context.secondaryColor.gray52,
                   fontSize: 13,

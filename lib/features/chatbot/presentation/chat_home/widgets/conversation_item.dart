@@ -84,7 +84,8 @@ class ConversationItem extends StatelessWidget {
                             ),
                             if (chatIsOpen)
                               Text(
-                                AppLocalizations.of(context).translate('waiting_for_reply'),
+                                AppLocalizations.of(context)
+                                    .translate('waiting_for_reply'),
                                 style: context.textTheme.captionRegular
                                     .copyWith(
                                         color: context.secondaryColor.gray18,
@@ -108,7 +109,8 @@ class ConversationItem extends StatelessWidget {
                               )
                             else
                               Text(
-                                AppLocalizations.of(context).translate('thanks_for_stopping_by'),
+                                AppLocalizations.of(context)
+                                    .translate('thanks_for_stopping_by'),
                                 style: context.textTheme.captionRegular
                                     .copyWith(
                                         color: context.secondaryColor.gray18,

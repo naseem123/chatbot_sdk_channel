@@ -10,17 +10,17 @@ import 'package:webview_flutter/webview_flutter.dart';
 class SurveyUi extends StatefulWidget {
   const SurveyUi({super.key, required, required this.surveyData});
 
-final Map<String, dynamic> surveyData;
+  final Map<String, dynamic> surveyData;
 
-@override
-State<SurveyUi> createState() => _SurveyUiState();
+  @override
+  State<SurveyUi> createState() => _SurveyUiState();
 }
 
 class _SurveyUiState extends State<SurveyUi> {
   final Completer<WebViewController> _controller =
-  Completer<WebViewController>();
+      Completer<WebViewController>();
   late WebViewController _mycontroller;
-  bool isLoading=true;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -38,43 +38,38 @@ class _SurveyUiState extends State<SurveyUi> {
       backgroundColor: Colors.white,
       appBar: AppBar(),
       body: SafeArea(
-        child:
-        Stack(
-          children:[
-            WebView(
-              backgroundColor: Colors.white,
-              javascriptMode: JavascriptMode.unrestricted,
-              initialUrl: url,
-              onWebViewCreated: (webviewcontroller) {
-                _controller.complete(_mycontroller = webviewcontroller);
-              },
-              onPageFinished: (string) {
-       setState(() {
-         isLoading = false;
-      });
-                _mycontroller.runJavascript('''
+          child: Stack(children: [
+        WebView(
+          backgroundColor: Colors.white,
+          javascriptMode: JavascriptMode.unrestricted,
+          initialUrl: url,
+          onWebViewCreated: (webviewcontroller) {
+            _controller.complete(_mycontroller = webviewcontroller);
+          },
+          onPageFinished: (string) {
+            setState(() {
+              isLoading = false;
+            });
+            _mycontroller.runJavascript('''
         window.addEventListener('message', function(event) {
           chatbotMessageChannel.postMessage(JSON.stringify(event.data));
           }); 
         ''');
+          },
+          javascriptChannels: {
+            JavascriptChannel(
+              name: 'chatbotMessageChannel',
+              onMessageReceived: (JavascriptMessage message) {
+                surveyMap = jsonDecode(message.message);
+                Future.delayed(const Duration(milliseconds: 400)).then((value) {
+                  context.pop(surveyMap);
+                });
               },
-              javascriptChannels: {
-                JavascriptChannel(
-                  name: 'chatbotMessageChannel',
-                  onMessageReceived: (JavascriptMessage message) {
-                    surveyMap = jsonDecode(message.message);
-                    Future.delayed(const Duration(milliseconds: 400)).then((value) {
-                      context.pop(surveyMap);
-                    });
-                  },
-                )
-              },
-            ),
-            if (isLoading) const Center(child: CircularProgressIndicator())
-          ]
-        )
-
-      ),
+            )
+          },
+        ),
+        if (isLoading) const Center(child: CircularProgressIndicator())
+      ])),
     );
   }
 }

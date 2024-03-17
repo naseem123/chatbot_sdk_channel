@@ -101,7 +101,7 @@ class APIExternalInterface extends ChatBotGraphQLExternalInterface {
       'session-id': sessionId,
       'origin': _origin,
       'content-type': "application/json",
-      'Lang' : _lang
+      'Lang': _lang
     };
   }
 

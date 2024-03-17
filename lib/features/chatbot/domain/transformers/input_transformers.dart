@@ -31,16 +31,16 @@ class ChatDetailsGetMessageInputTransformer
   @override
   ChatBotEntity transform(
       ChatBotEntity entity, WebsocketMessageSuccessInput input) {
-
-    if (input.data["type"] == "conversations:typing"){
-      Future.delayed(const Duration(milliseconds: 50), () {
-        chatBotUseCaseProvider
-            .getUseCaseFromContext(providersContext)
-            .toggleAgentTypingStatus();
-      });
+    if (input.data["type"] == "conversations:typing") {
+      if (input.data['data']['conversation'] == entity.conversationKey) {
+        Future.delayed(const Duration(milliseconds: 50), () {
+          chatBotUseCaseProvider
+              .getUseCaseFromContext(providersContext)
+              .toggleAgentTypingStatus();
+        });
+      }
       return entity;
-    }
-    else if (input.data["type"] == "confirm_subscription") {
+    } else if (input.data["type"] == "confirm_subscription") {
       Future.delayed(const Duration(milliseconds: 50), () {
         chatBotUseCaseProvider
             .getUseCaseFromContext(providersContext)
@@ -58,20 +58,25 @@ class ChatDetailsGetMessageInputTransformer
             triggerId.isNotEmpty ? ChatBotUiState.triggerReceived : null,
       );
     } else if (input.data["type"] == "conversations:update_state" &&
-        input.data['data']['state'] == 'closed') {
+        input.data['data']['state'] == 'closed' &&
+        entity.conversationKey == input.data['data']['key']) {
       return entity.merge(
         chatBotUserState: ChatBotUserState.conversationClosed,
       );
     } else if (input.data["type"] == "conversations:update_state" &&
         (input.data['data'] as Map).containsKey("assignee") &&
-        input.data['data']["assignee"]["display_name"] != null) {
+        input.data['data']["assignee"]["display_name"] != null &&
+        input.data['data']["key"] == entity.conversationKey) {
       final assigneeMap = input.data['data']["assignee"];
       final assignee = ChatAssignee(
           assignee: assigneeMap["display_name"],
           assigneeImage: assigneeMap["avatar_url"]);
       return entity = entity.merge(chatAssignee: assignee);
     } else if (input.data["type"] == "conversations:conversation_part") {
-
+      if (entity.conversationKey.isNotEmpty &&
+          input.data["data"]["conversation_key"] != entity.conversationKey) {
+        return entity;
+      }
       final conversationKey = input.data["data"]["conversation_key"];
       final messageKey = input.data["data"]["key"];
       Map<String, dynamic> messageData = input.data["data"]["message"];
@@ -160,7 +165,7 @@ class ChatDetailsGetMessageInputTransformer
                 messageType: MessageType.normalText);
 
             if (!entity.chatDetailList.contains(messageuiData)) {
-              if(messageuiData.messageSenderType != MessageSenderType.user) {
+              if (messageuiData.messageSenderType != MessageSenderType.user) {
                 Future.delayed(const Duration(milliseconds: 5), () {
                   chatBotUseCaseProvider
                       .getUseCaseFromContext(providersContext)
@@ -169,9 +174,10 @@ class ChatDetailsGetMessageInputTransformer
               }
               chatBotUseCaseProvider
                   .getUseCaseFromContext(providersContext)
-                  .updateEntityAfterDelay(conversationKey: conversationKey,
-                  messageKey: messageKey,
-                  chatDetailList: [
+                  .updateEntityAfterDelay(
+                      conversationKey: conversationKey,
+                      messageKey: messageKey,
+                      chatDetailList: [
                     messageuiData,
                     ...entity.chatDetailList,
                   ]);
@@ -184,13 +190,14 @@ class ChatDetailsGetMessageInputTransformer
                   .toggleAgentTypingStatus();
             });
             chatBotUseCaseProvider
-                .getUseCaseFromContext(providersContext).updateInputTypeAfterDelay(
-              conversationKey: conversationKey,
-              messageKey: messageKey,
-              userInputOptions: blockData.schema,
-              chatBotUserState: ChatBotUserState.waitForInput,
-              chatMessageType: ChatMessageType.askForInputButton,
-            );
+                .getUseCaseFromContext(providersContext)
+                .updateInputTypeAfterDelay(
+                  conversationKey: conversationKey,
+                  messageKey: messageKey,
+                  userInputOptions: blockData.schema,
+                  chatBotUserState: ChatBotUserState.waitForInput,
+                  chatMessageType: ChatMessageType.askForInputButton,
+                );
 
             return entity;
           }
@@ -213,6 +220,16 @@ class ChatDetailsGetMessageInputTransformer
                 chatMessageType: ChatMessageType.enterMessage);
           }
 
+          if (messageData["text_content"] != null &&
+              messageData["text_content"] != "--***--" &&
+              messageData["text_content"] != "") {
+            chatBotUseCaseProvider
+                .getUseCaseFromContext(providersContext)
+                .updateUSerStateAsEnterMessage(
+                    chatBotUserState: ChatBotUserState.waitForInput,
+                    chatMessageType: ChatMessageType.enterMessage);
+          }
+
           if (messageData.containsKey("action") &&
               messageData["action"] == "assigned") {
           } else {
@@ -233,18 +250,19 @@ class ChatDetailsGetMessageInputTransformer
                 : MessageSenderType.user,
           );
           if (!entity.chatDetailList.contains(messageuiData)) {
-            if(messageuiData.messageSenderType != MessageSenderType.user){
-            Future.delayed(const Duration(milliseconds: 5), () {
-              chatBotUseCaseProvider
-                  .getUseCaseFromContext(providersContext)
-                  .toggleAgentTypingStatus();
-            });
+            if (messageuiData.messageSenderType != MessageSenderType.user) {
+              Future.delayed(const Duration(milliseconds: 5), () {
+                chatBotUseCaseProvider
+                    .getUseCaseFromContext(providersContext)
+                    .toggleAgentTypingStatus();
+              });
             }
             chatBotUseCaseProvider
                 .getUseCaseFromContext(providersContext)
-                .updateEntityAfterDelay(conversationKey: conversationKey,
-                messageKey: messageKey,
-                chatDetailList: [
+                .updateEntityAfterDelay(
+                    conversationKey: conversationKey,
+                    messageKey: messageKey,
+                    chatDetailList: [
                   messageuiData,
                   ...entity.chatDetailList,
                 ]);

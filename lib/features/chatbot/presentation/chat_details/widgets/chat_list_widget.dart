@@ -57,7 +57,6 @@ class _ChatListWidgetState extends State<ChatListWidget>
 
   @override
   Widget build(BuildContext context) {
-
     return AnimatedList(
       reverse: true,
       physics: const AlwaysScrollableScrollPhysics(),
@@ -74,7 +73,6 @@ class _ChatListWidgetState extends State<ChatListWidget>
     );
   }
 
-
   Widget _buildItem(ChatMessage message, Animation<double> animation) {
     Widget child;
     if (message is MessageUiModel) {
@@ -87,23 +85,22 @@ class _ChatListWidgetState extends State<ChatListWidget>
         surveyModel: message,
         primaryColor: widget.colorPrimary,
         onSurveyStartClicked: (surveyMap) {
-          context.push('/survey', extra: {'surveyData': surveyMap}).then(
-                  (value) {
-                if (value != null && value is Map) {
-                  widget.onSurveyStartClicked(value);
-                }
-              });
+          context
+              .push('/survey', extra: {'surveyData': surveyMap}).then((value) {
+            if (value != null && value is Map) {
+              widget.onSurveyStartClicked(value);
+            }
+          });
         },
       );
-    }
-    else {
+    } else {
       child = const SizedBox.shrink();
     }
     return ScaleTransition(
       scale: CurvedAnimation(
-      curve: Curves.fastEaseInToSlowEaseOut,
-      parent: animation,
-    ),
+        curve: Curves.fastEaseInToSlowEaseOut,
+        parent: animation,
+      ),
       child: child,
     );
   }
@@ -131,27 +128,25 @@ class _ChatListWidgetState extends State<ChatListWidget>
     super.didUpdateWidget(oldWidget);
     if (widget.messages.length > oldWidget.messages.length) {
       final difference = widget.messages.length - oldWidget.messages.length;
-      if(difference ==1) {
+      if (difference == 1) {
         final messageFirst = widget.messages.first;
-        if(messageFirst is MessageUiModel){
-          if(messageFirst.messageSenderType == MessageSenderType.user){
-            _listKey.currentState?.insertItem(
-                0, duration: const Duration(milliseconds: 100));
+        if (messageFirst is MessageUiModel) {
+          if (messageFirst.messageSenderType == MessageSenderType.user) {
+            _listKey.currentState
+                ?.insertItem(0, duration: const Duration(milliseconds: 100));
+          } else {
+            _listKey.currentState
+                ?.insertItem(0, duration: const Duration(milliseconds: 450));
           }
-          else
-            {
-              _listKey.currentState?.insertItem(
-                  0, duration: const Duration(milliseconds: 450));
-            }
-        }
-        else {
-          _listKey.currentState?.insertItem(
-              0, duration: const Duration(milliseconds: 450));
+        } else {
+          _listKey.currentState
+              ?.insertItem(0, duration: const Duration(milliseconds: 450));
         }
         scrollToLast();
-      }else{
+      } else {
         _listKey.currentState?.insertAllItems(
-            oldWidget.messages.length-1,difference, duration: const Duration(milliseconds: 0));
+            oldWidget.messages.length - 1, difference,
+            duration: const Duration(milliseconds: 0));
       }
     }
   }

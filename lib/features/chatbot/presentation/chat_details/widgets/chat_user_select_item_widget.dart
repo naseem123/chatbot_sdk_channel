@@ -63,7 +63,8 @@ class _ChatUserSelectItemWidgetState extends State<ChatUserSelectItemWidget> {
                     showCupertinoModalPopup(
                       context: context,
                       builder: (BuildContext context) => CupertinoActionSheet(
-                        title: Text(AppLocalizations.of(context).translate('select_an_option')),
+                        title: Text(AppLocalizations.of(context)
+                            .translate('select_an_option')),
                         actions: widget.buttons
                             .map(
                               (e) => CupertinoActionSheetAction(
@@ -93,8 +94,9 @@ class _ChatUserSelectItemWidgetState extends State<ChatUserSelectItemWidget> {
                         child: !_value.isNullOrEmpty
                             ? selectedItem(_value!, context)
                             : Text(
-                          AppLocalizations.of(context).translate('select_an_option'),
-                          style: GoogleFonts.inter(
+                                AppLocalizations.of(context)
+                                    .translate('select_an_option'),
+                                style: GoogleFonts.inter(
                                   color: context.secondaryColor.gray52,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,

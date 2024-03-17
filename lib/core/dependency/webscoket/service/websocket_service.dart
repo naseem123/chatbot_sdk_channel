@@ -44,7 +44,7 @@ class WebsocketService {
         if (message['type'] != "ping" && message['type'] != "welcome") {
           if (message['type'] == "confirm_subscription") {
             messageController.add(message);
-          }else  {
+          } else {
             messageController.add(message['message']);
           }
         }
