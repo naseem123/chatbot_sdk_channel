@@ -17,8 +17,7 @@ class ChatUserInputEditorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
+    return SafeArea(
       child: Row(
         children: [
           /*  IconButton(
@@ -33,7 +32,7 @@ class ChatUserInputEditorWidget extends StatelessWidget {
               decoration: BoxDecoration(
                   color: context.secondaryColor.ligthRed,
                   borderRadius: BorderRadius.circular(32)),
-              margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+              margin: const EdgeInsets.symmetric(horizontal: 24),
               padding: const EdgeInsets.all(12),
               alignment: Alignment.center,
               child: TextFormField(

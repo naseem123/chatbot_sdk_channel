@@ -72,9 +72,11 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
           child: Column(
             children: [
               Expanded(
-                child: SafeArea(
-                  child: Align(
-                    alignment: Alignment.topCenter,
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: GestureDetector(
+                    onTap: () =>
+                        FocusManager.instance.primaryFocus?.unfocus(),
                     child: ChatListWidget(
                       currentPage: viewModel.currentPage,
                       totalPage: viewModel.totalPages,
@@ -87,29 +89,33 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                   ),
                 ),
               ),
-              if(viewModel.isAgentTyping)...[
-              Row(
-                children: [
-                  const SizedBox(width: 10,),
-                  SpinKitThreeInOut(
-                    size: 20,
-                    color: viewModel.colorSecondary,
-                  ),
-                  Text(
-                    AppLocalizations.of(context).translate('agent_typing'),
-                    style: GoogleFonts.inter(
-                      color:  context.secondaryColor.mostlyBlack,
-                      fontSize: 13,
-                      height: 1.5,
+              if (viewModel.isAgentTyping) ...[
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 10,
                     ),
-                  ),
-                ],
-              ),
-                const SizedBox(height: 3,),
-
-              ]
-              else
-              const SizedBox(height: 23,),
+                    SpinKitThreeInOut(
+                      size: 20,
+                      color: viewModel.colorSecondary,
+                    ),
+                    Text(
+                      AppLocalizations.of(context).translate('agent_typing'),
+                      style: GoogleFonts.inter(
+                        color: context.secondaryColor.mostlyBlack,
+                        fontSize: 13,
+                        height: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 3,
+                ),
+              ] else
+                const SizedBox(
+                  height: 23,
+                ),
               if (chatBotUserState == ChatBotUserState.waitForInput &&
                   chatMessageType == ChatMessageType.askForInputButton &&
                   userInputOptions.length > 3) ...[
@@ -176,7 +182,6 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                         fontWeight: FontWeight.w800),
                   ),
                 ),
-
             ],
           ),
         ),
