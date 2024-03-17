@@ -105,8 +105,11 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                   ),
                 ],
               ),
-              const SizedBox(height: 15,),
-              ],
+                const SizedBox(height: 3,),
+
+              ]
+              else
+              const SizedBox(height: 23,),
               if (chatBotUserState == ChatBotUserState.waitForInput &&
                   chatMessageType == ChatMessageType.askForInputButton &&
                   userInputOptions.length > 3) ...[

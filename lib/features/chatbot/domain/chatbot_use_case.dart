@@ -650,7 +650,6 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     Map<String, dynamic> messageData = data["message"];
     var message = "";
 
-    print(data);
     if (messageData.containsKey("blocks") && messageData["blocks"] != null) {
       MessageUiModel messageBlockLabel;
       final bool hasReplied =
@@ -887,9 +886,31 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
 
   void toggleAgentTypingStatus() {
     entity= entity.merge(isAgentTyping: true);
-      Future.delayed(const Duration(milliseconds: 1500), (){
+      Future.delayed(const Duration(milliseconds: 500), (){
         entity= entity.merge(isAgentTyping: false);
       });
+  }
+
+  void updateEntityAfterDelay({required conversationKey, required messageKey, required List<ChatMessage> chatDetailList}) {
+    Future.delayed(const Duration(milliseconds: 500),(){
+      entity = entity.merge(
+          conversationKey: conversationKey,
+          messageKey: messageKey,
+          chatDetailList: chatDetailList,
+      );
+    });
+  }
+
+  void updateInputTypeAfterDelay({required conversationKey, required messageKey, required List<Block> userInputOptions, required ChatBotUserState chatBotUserState, required ChatMessageType chatMessageType}) {
+    Future.delayed(const Duration(milliseconds: 500),(){
+      entity = entity.merge(
+        conversationKey: conversationKey,
+        messageKey: messageKey,
+        userInputOptions: userInputOptions,
+        chatBotUserState: chatBotUserState,
+        chatMessageType: chatMessageType,
+      );
+    });
   }
 }
 
