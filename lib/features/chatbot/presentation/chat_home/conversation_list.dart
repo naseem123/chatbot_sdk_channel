@@ -18,7 +18,7 @@ showConversationPage(context,
     useSafeArea: false,
     builder: (context) => IdleDetector(
       idleTime: idleTimeout,
-      onTick: (remaining) => context.pop(),
+      onSessionExpired: () => context.pop(),
       child: ConversationList(
           conversationList: conversationList,
           colorPrimary: colorPrimary,

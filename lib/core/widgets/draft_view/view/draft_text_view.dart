@@ -78,6 +78,8 @@ class DraftTextView extends StatelessWidget {
         textStyle = textTheme.displayLarge ?? defaultStyle;
         textStyle = textStyle.merge(const TextStyle(
           fontWeight: FontWeight.bold,
+          fontSize: 16,
+          height: 1.5,
         ));
         break;
       case BlockType.h2:
@@ -97,10 +99,14 @@ class DraftTextView extends StatelessWidget {
         break;
       case BlockType.code:
         textStyle = defaultStyle.copyWith(
-            fontWeight: FontWeight.w500, color: Colors.grey.shade700);
+          fontWeight: FontWeight.w500,
+          color: Colors.grey.shade700,
+          fontSize: 16,
+          height: 1.5,
+        );
         break;
       case BlockType.quote:
-        textStyle = TextStyle(
+        textStyle = GoogleFonts.inter(
           fontSize: 14,
           color: Colors.grey.shade600,
           fontStyle: FontStyle.italic,
@@ -108,7 +114,7 @@ class DraftTextView extends StatelessWidget {
         );
         break;
       default:
-        textStyle = textTheme.bodyMedium ?? defaultStyle;
+        textStyle = defaultStyle;
         break;
     }
     textStyle = textStyle.copyWith(
@@ -187,10 +193,12 @@ class DraftTextView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text.rich(
-            style: const TextStyle(
+            style: GoogleFonts.inter(
               fontWeight: FontWeight.bold,
             ),
             TextSpan(
+              style:
+                  GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16),
               children: [
                 for (int i = 0; i < ranges.length; i++) ...[
                   if (i == 0)

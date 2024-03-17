@@ -31,6 +31,7 @@ class MessageItemWidget extends StatelessWidget {
 
 
     if (message.message.contains("blocks")) {
+      print('MessageItemWidget.build ++ ${message.message}');
       messageWidget = SizedBox(
         width: MediaQuery.of(context).size.width - 30,
         child: Padding(
@@ -41,7 +42,7 @@ class MessageItemWidget extends StatelessWidget {
             secondaryColor: secondaryColor,
             defaultStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: context.secondaryColor.mostlyBlack,
-                  fontSize: 18,
+                  fontSize: 16,
                   height: 1.5,
                 ),
             onLinkTab: _launchUrl,
@@ -49,6 +50,8 @@ class MessageItemWidget extends StatelessWidget {
         ),
       ); //
     } else {
+      print('MessageItemWidget.build == ${message.message}');
+
       if (isBot) {
         messageWidget = Padding(
           padding: const EdgeInsets.all(12.0),

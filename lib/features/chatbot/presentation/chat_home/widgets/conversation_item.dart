@@ -101,7 +101,7 @@ class ConversationItem extends StatelessWidget {
                                       .bodyMedium!
                                       .copyWith(
                                         color: context.secondaryColor.gray18,
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         height: 1.5,
                                       ),
                                 ),

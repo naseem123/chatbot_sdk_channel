@@ -921,7 +921,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
 
   void toggleAgentTypingStatus() {
     entity= entity.merge(isAgentTyping: true);
-      Future.delayed(const Duration(milliseconds: 1500), (){
+      Future.delayed(const Duration(milliseconds: 700), (){
         entity= entity.merge(isAgentTyping: false);
       });
   }
