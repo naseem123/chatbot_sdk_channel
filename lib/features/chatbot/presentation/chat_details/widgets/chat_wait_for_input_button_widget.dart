@@ -19,8 +19,8 @@ class ChatWaitForInputButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        margin: EdgeInsets.symmetric(
-            horizontal: 24, vertical: isAndroid ? 16 : 0.0),
+        margin: EdgeInsets.only(
+            left: 24,right: 24, bottom: isAndroid ? 16 : 0.0),
         decoration: BoxDecoration(
           color: const Color(0xFFf6f6f6),
           borderRadius: BorderRadius.circular(12),

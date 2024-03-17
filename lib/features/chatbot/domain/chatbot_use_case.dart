@@ -921,9 +921,31 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
 
   void toggleAgentTypingStatus() {
     entity= entity.merge(isAgentTyping: true);
-      Future.delayed(const Duration(milliseconds: 700), (){
+      Future.delayed(const Duration(milliseconds: 500), (){
         entity= entity.merge(isAgentTyping: false);
       });
+  }
+
+  void updateEntityAfterDelay({required conversationKey, required messageKey, required List<ChatMessage> chatDetailList}) {
+    Future.delayed(const Duration(milliseconds: 500),(){
+      entity = entity.merge(
+          conversationKey: conversationKey,
+          messageKey: messageKey,
+          chatDetailList: chatDetailList,
+      );
+    });
+  }
+
+  void updateInputTypeAfterDelay({required conversationKey, required messageKey, required List<Block> userInputOptions, required ChatBotUserState chatBotUserState, required ChatMessageType chatMessageType}) {
+    Future.delayed(const Duration(milliseconds: 500),(){
+      entity = entity.merge(
+        conversationKey: conversationKey,
+        messageKey: messageKey,
+        userInputOptions: userInputOptions,
+        chatBotUserState: chatBotUserState,
+        chatMessageType: chatMessageType,
+      );
+    });
   }
 }
 

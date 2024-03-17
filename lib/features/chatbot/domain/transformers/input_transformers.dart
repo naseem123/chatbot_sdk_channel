@@ -32,7 +32,7 @@ class ChatDetailsGetMessageInputTransformer
   ChatBotEntity transform(
       ChatBotEntity entity, WebsocketMessageSuccessInput input) {
 
-    if (input.data["type"] == "conversations:unreads" || input.data["type"] == "conversations:typing"){
+    if (input.data["type"] == "conversations:typing"){
       Future.delayed(const Duration(milliseconds: 50), () {
         chatBotUseCaseProvider
             .getUseCaseFromContext(providersContext)
@@ -160,9 +160,18 @@ class ChatDetailsGetMessageInputTransformer
                         ? MessageSenderType.bot
                         : MessageSenderType.user,
                 messageType: MessageType.normalText);
+
             if (!entity.chatDetailList.contains(messageuiData)) {
-              entity = entity.merge(
-                  conversationKey: conversationKey,
+              if(messageuiData.messageSenderType != MessageSenderType.user) {
+                Future.delayed(const Duration(milliseconds: 5), () {
+                  chatBotUseCaseProvider
+                      .getUseCaseFromContext(providersContext)
+                      .toggleAgentTypingStatus();
+                });
+              }
+              chatBotUseCaseProvider
+                  .getUseCaseFromContext(providersContext)
+                  .updateEntityAfterDelay(conversationKey: conversationKey,
                   messageKey: messageKey,
                   chatDetailList: [
                     messageuiData,
@@ -171,13 +180,21 @@ class ChatDetailsGetMessageInputTransformer
             }
           }
           if (blockData.waitForInput && !isSameAPreviousInputs) {
-            return entity.merge(
+            Future.delayed(const Duration(milliseconds: 5), () {
+              chatBotUseCaseProvider
+                  .getUseCaseFromContext(providersContext)
+                  .toggleAgentTypingStatus();
+            });
+            chatBotUseCaseProvider
+                .getUseCaseFromContext(providersContext).updateInputTypeAfterDelay(
               conversationKey: conversationKey,
               messageKey: messageKey,
               userInputOptions: blockData.schema,
               chatBotUserState: ChatBotUserState.waitForInput,
               chatMessageType: ChatMessageType.askForInputButton,
             );
+
+            return entity;
           }
         } else {
           message = "";
@@ -218,13 +235,22 @@ class ChatDetailsGetMessageInputTransformer
                 : MessageSenderType.user,
           );
           if (!entity.chatDetailList.contains(messageuiData)) {
-            return entity.merge(
-                conversationKey: conversationKey,
+            if(messageuiData.messageSenderType != MessageSenderType.user){
+            Future.delayed(const Duration(milliseconds: 5), () {
+              chatBotUseCaseProvider
+                  .getUseCaseFromContext(providersContext)
+                  .toggleAgentTypingStatus();
+            });
+            }
+            chatBotUseCaseProvider
+                .getUseCaseFromContext(providersContext)
+                .updateEntityAfterDelay(conversationKey: conversationKey,
                 messageKey: messageKey,
                 chatDetailList: [
                   messageuiData,
                   ...entity.chatDetailList,
                 ]);
+            return entity;
           }
           if (messageData['data'] != null &&
               (messageData['data'] as Map).containsKey('next_step_uuid') &&
