@@ -10,7 +10,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 class SurveyUi extends StatefulWidget {
   const SurveyUi({super.key, required, required this.surveyData});
 
-  final Map<String, dynamic> surveyData;
+  final String surveyData;
 
   @override
   State<SurveyUi> createState() => _SurveyUiState();
