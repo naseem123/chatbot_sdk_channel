@@ -8,7 +8,7 @@ class ChatBubble extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = color ?? Colors.blue;
+    final paint = Paint()..color = color;
 
     Path paintBubbleTail() {
       Path? path;

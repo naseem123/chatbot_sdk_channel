@@ -20,7 +20,7 @@ class ChatDetailsViewModel extends ViewModel {
     required this.backButtonPressed,
     required this.chatAssignee,
     required this.idleTimeout,
-    required this.onIdleSessionTimeout,
+    required this.onTick,
     required this.loadMoreChats,
     required this.currentPage,
     required this.totalPages,
@@ -44,7 +44,7 @@ class ChatDetailsViewModel extends ViewModel {
   final Function(Block input) onUserInputTriggered;
   final void Function(Map input) onSurveySubmitted;
   final ChatAssignee chatAssignee;
-  final VoidCallback onIdleSessionTimeout;
+  final void Function(int remaining) onTick;
   final int idleTimeout;
   final int currentPage;
   final int totalPages;

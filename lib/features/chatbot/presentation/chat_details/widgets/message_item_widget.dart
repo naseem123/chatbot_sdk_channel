@@ -120,17 +120,18 @@ class MessageItemWidget extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
-            width: double.infinity,
-            child: Text(
-              message.createdAt.toDate.timeAgo,
-              textAlign: isBot ? TextAlign.start : TextAlign.end,
-              style: GoogleFonts.inter(
-                color: context.secondaryColor.gray52,
-                fontSize: 10,
+          if (message.createdAt.isNotEmpty)
+            SizedBox(
+              width: double.infinity,
+              child: Text(
+                message.createdAt.toDate.timeAgo,
+                textAlign: isBot ? TextAlign.start : TextAlign.end,
+                style: GoogleFonts.inter(
+                  color: context.secondaryColor.gray52,
+                  fontSize: 10,
+                ),
               ),
-            ),
-          )
+            )
         ],
       ),
     );
