@@ -87,24 +87,27 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                 ),
               ),
               if (viewModel.isAgentTyping) ...[
-                Row(
-                  children: [
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    SpinKitThreeInOut(
-                      size: 20,
-                      color: viewModel.colorSecondary,
-                    ),
-                    Text(
-                      AppLocalizations.of(context).translate('agent_typing'),
-                      style: GoogleFonts.inter(
-                        color: context.secondaryColor.mostlyBlack,
-                        fontSize: 13,
-                        height: 1.5,
+                SafeArea(
+                  child: Row(
+                    children: [
+                      const SizedBox(
+                        width: 10,
                       ),
-                    ),
-                  ],
+                      SpinKitThreeInOut(
+                        size: 20,
+                        color: viewModel.colorSecondary,
+                      ),
+                      Text(
+                        AppLocalizations.of(context).translate('agent_typing'),
+                        style: GoogleFonts.inter(
+                          color: context.secondaryColor.mostlyBlack,
+                          fontSize: 13,
+                          height: 1.5,
+                        ),
+                      ),
+
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: 3,
