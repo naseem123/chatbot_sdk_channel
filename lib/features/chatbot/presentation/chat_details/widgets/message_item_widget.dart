@@ -29,7 +29,6 @@ class MessageItemWidget extends StatelessWidget {
     Widget messageWidget;
     final isBot = message.messageSenderType == MessageSenderType.bot;
 
-
     if (message.message.contains("blocks")) {
       messageWidget = SizedBox(
         width: MediaQuery.of(context).size.width - 30,

@@ -49,6 +49,6 @@ class ChatDetailsUIOutput extends Output {
         chatSessionState,
         currentPage,
         totalPages,
-    isAgentTyping,
+        isAgentTyping,
       ];
 }

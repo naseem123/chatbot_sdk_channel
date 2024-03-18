@@ -13,9 +13,10 @@ class SpinKitThreeInOut extends StatefulWidget {
     this.delay = const Duration(milliseconds: 50),
     this.controller,
   })  : assert(
-  !(itemBuilder is IndexedWidgetBuilder && color is Color) && !(itemBuilder == null && color == null),
-  'You should specify either a itemBuilder or a color',
-  ),
+          !(itemBuilder is IndexedWidgetBuilder && color is Color) &&
+              !(itemBuilder == null && color == null),
+          'You should specify either a itemBuilder or a color',
+        ),
         super(key: key);
 
   final Color? color;
@@ -29,7 +30,8 @@ class SpinKitThreeInOut extends StatefulWidget {
   State<SpinKitThreeInOut> createState() => _SpinKitThreeInOutState();
 }
 
-class _SpinKitThreeInOutState extends State<SpinKitThreeInOut> with SingleTickerProviderStateMixin {
+class _SpinKitThreeInOutState extends State<SpinKitThreeInOut>
+    with SingleTickerProviderStateMixin {
   late AnimationController? _controller;
 
   late List<Widget> _widgets;
@@ -45,13 +47,14 @@ class _SpinKitThreeInOutState extends State<SpinKitThreeInOut> with SingleTicker
     // Create a extra element which is used for the show/hide animation.
     _widgets = List.generate(
       4,
-          (i) => SizedBox.fromSize(
+      (i) => SizedBox.fromSize(
         size: Size.square(widget.size * 0.5),
         child: _itemBuilder(i),
       ),
     );
 
-    _controller = widget.controller ?? AnimationController(vsync: this, duration: widget.duration);
+    _controller = widget.controller ??
+        AnimationController(vsync: this, duration: widget.duration);
 
     _controller!.forward();
 
@@ -67,7 +70,7 @@ class _SpinKitThreeInOutState extends State<SpinKitThreeInOut> with SingleTicker
       if (_controller!.isCompleted) {
         _forwardTimer = Timer(
           widget.delay,
-              () => _controller?.forward(from: 0),
+          () => _controller?.forward(from: 0),
         );
       }
     });
@@ -96,19 +99,19 @@ class _SpinKitThreeInOutState extends State<SpinKitThreeInOut> with SingleTicker
           children: _widgets
               .asMap()
               .map((index, value) {
-            Widget innerWidget = value;
+                Widget innerWidget = value;
 
-            if (index == 0) {
-              innerWidget = _wrapInAnimatedBuilder(innerWidget);
-            } else if (index == 3) {
-              innerWidget = _wrapInAnimatedBuilder(
-                innerWidget,
-                inverse: true,
-              );
-            }
+                if (index == 0) {
+                  innerWidget = _wrapInAnimatedBuilder(innerWidget);
+                } else if (index == 3) {
+                  innerWidget = _wrapInAnimatedBuilder(
+                    innerWidget,
+                    inverse: true,
+                  );
+                }
 
-            return MapEntry<int, Widget>(index, innerWidget);
-          })
+                return MapEntry<int, Widget>(index, innerWidget);
+              })
               .values
               .toList(),
         ),
@@ -117,9 +120,9 @@ class _SpinKitThreeInOutState extends State<SpinKitThreeInOut> with SingleTicker
   }
 
   AnimatedBuilder _wrapInAnimatedBuilder(
-      Widget innerWidget, {
-        bool inverse = false,
-      }) {
+    Widget innerWidget, {
+    bool inverse = false,
+  }) {
     return AnimatedBuilder(
       animation: _controller!,
       child: innerWidget,
@@ -136,12 +139,12 @@ class _SpinKitThreeInOutState extends State<SpinKitThreeInOut> with SingleTicker
   Widget _itemBuilder(int index) => widget.itemBuilder != null
       ? widget.itemBuilder!(context, index)
       : Padding(
-        padding: const EdgeInsets.only(right: 4.0),
-        child: DecoratedBox(
-    decoration: BoxDecoration(
-        color: widget.color,
-        shape: BoxShape.circle,
-    ),
-  ),
-      );
+          padding: const EdgeInsets.only(right: 4.0),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: widget.color,
+              shape: BoxShape.circle,
+            ),
+          ),
+        );
 }

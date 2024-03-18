@@ -610,6 +610,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       );
     });
   }
+
   InitCommandModel setUserInputCommandAsMap(Map inputData) {
     final sessionId = preference.get<String>(PreferenceKey.sessionId, "");
     return InitCommandModel(
@@ -630,7 +631,6 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       }),
     );
   }
-
 
   void parseConversationHistory(
       Map<String, dynamic> data, String conversationID) {
@@ -764,8 +764,6 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         );
       }
 
-
-
       if (messageData["state"] != null && messageData["state"] == "replied") {
         if (blockData.askForInput &&
             messageData["data"] != null &&
@@ -889,6 +887,8 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
 
   void resetData() {
     entity = entity.merge(
+      conversationKey: "",
+      messageKey: "",
       chatDetailList: [],
       chatBotUserState: ChatBotUserState.idle,
       chatMessageType: ChatMessageType.idle,
@@ -899,7 +899,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       chatStepId: "",
       chatPathId: "",
       chatNextStepUUID: "",
-      isAgentTyping : false,
+      isAgentTyping: false,
     );
     loadRecentConversationList();
   }
@@ -920,10 +920,49 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
   }
 
   void toggleAgentTypingStatus() {
-    entity= entity.merge(isAgentTyping: true);
-      Future.delayed(const Duration(milliseconds: 1500), (){
-        entity= entity.merge(isAgentTyping: false);
-      });
+    entity = entity.merge(isAgentTyping: true);
+    Future.delayed(const Duration(milliseconds: 500), () {
+      entity = entity.merge(isAgentTyping: false);
+    });
+  }
+
+  void updateEntityAfterDelay(
+      {required conversationKey,
+      required messageKey,
+      required List<ChatMessage> chatDetailList}) {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      entity = entity.merge(
+        conversationKey: conversationKey,
+        messageKey: messageKey,
+        chatDetailList: chatDetailList,
+      );
+    });
+  }
+
+  void updateInputTypeAfterDelay(
+      {required conversationKey,
+      required messageKey,
+      required List<Block> userInputOptions,
+      required ChatBotUserState chatBotUserState,
+      required ChatMessageType chatMessageType}) {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      entity = entity.merge(
+        conversationKey: conversationKey,
+        messageKey: messageKey,
+        userInputOptions: userInputOptions,
+        chatBotUserState: chatBotUserState,
+        chatMessageType: chatMessageType,
+      );
+    });
+  }
+
+  void updateUSerStateAsEnterMessage(
+      {required ChatBotUserState chatBotUserState,
+      required ChatMessageType chatMessageType}) {
+    Future.delayed(const Duration(milliseconds: 100), () {
+      entity = entity.merge(
+          chatBotUserState: chatBotUserState, chatMessageType: chatMessageType);
+    });
   }
 }
 

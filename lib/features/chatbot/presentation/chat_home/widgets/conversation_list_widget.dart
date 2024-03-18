@@ -34,12 +34,12 @@ class ConversationWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-              AppLocalizations.of(context).translate('continue_conversation'),
-              style: context.textTheme.captionBold.copyWith(
-                        color: context.colorScheme.primary,
-                        fontSize: 18,
-                      ),
-                    ),
+                AppLocalizations.of(context).translate('continue_conversation'),
+                style: context.textTheme.captionBold.copyWith(
+                  color: context.colorScheme.primary,
+                  fontSize: 18,
+                ),
+              ),
               if (hasChatList)
                 IconButtons(
                   onPressed: () => showDeleteConversationConfirmationPopup(
@@ -70,7 +70,8 @@ class ConversationWidget extends StatelessWidget {
             InkWell(
               onTap: onSeeConversationListPressed,
               child: Text(
-                AppLocalizations.of(context).translate('view_all_conversations'),
+                AppLocalizations.of(context)
+                    .translate('view_all_conversations'),
                 style: context.textTheme.captionBold.copyWith(
                     color: context.secondaryColor.matterhorn, fontSize: 12),
               ),

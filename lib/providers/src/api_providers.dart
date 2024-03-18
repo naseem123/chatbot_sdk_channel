@@ -11,7 +11,7 @@ final apiExternalInterfaceProvider = ExternalInterfaceProvider(
     link: providersContext().read(envReaderProvider).getApiUrl(),
     origin: providersContext().read(envReaderProvider).getBaseUrl(),
     lang: providersContext().read(envReaderProvider).getLang(),
-      gatewayConnections: [
+    gatewayConnections: [
       () => chatBotGatewayProvider.getGateway(providersContext),
       () => configurationGatewayProvider.getGateway(providersContext),
       () => initGuestUserGatewayProvider.getGateway(providersContext),

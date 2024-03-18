@@ -56,6 +56,20 @@ class StartNewConversationWidget extends StatelessWidget {
           ),
           Row(
             children: [
+              SizedBox(
+                height:
+                    providersContext().read(envReaderProvider).getLang() == 'fr'
+                        ? 50
+                        : 45,
+                width: 190,
+                child: Button.accent(
+                  onPressed: onStartConversationPressed,
+                  primaryColor: buttonColor,
+                  buttonRadius: Platform.isAndroid ? 24 : 12,
+                  child: Text(
+                    AppLocalizations.of(context)
+                        .translate('start_conversation'),
+                    style: tn.s16.c(context.secondaryColor.lightWhite),
               Expanded(
                 flex: 3,
                 child: SizedBox(
@@ -104,9 +118,9 @@ class StartNewConversationWidget extends StatelessWidget {
 Map<String, dynamic> replyTextMap(BuildContext context) {
   return {
     "auto": AppLocalizations.of(context).translate('reply_time_auto'),
-  "minutes": AppLocalizations.of(context).translate('reply_time_minutes'),
-  "hours": AppLocalizations.of(context).translate('reply_time_hours'),
-  "day": AppLocalizations.of(context).translate('reply_time_day'),
-  "off": "",
+    "minutes": AppLocalizations.of(context).translate('reply_time_minutes'),
+    "hours": AppLocalizations.of(context).translate('reply_time_hours'),
+    "day": AppLocalizations.of(context).translate('reply_time_day'),
+    "off": "",
   };
 }

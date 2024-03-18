@@ -42,7 +42,8 @@ class ChatBotAppState extends State<ChatBotApp> {
                 child: child!,
               );
             },
-            locale: Locale(providersContext().read(envReaderProvider).getLang(), 'CA'),
+            locale: Locale(
+                providersContext().read(envReaderProvider).getLang(), 'CA'),
             localizationsDelegates: const [
               AppLocalizationsDelegate(),
               GlobalMaterialLocalizations.delegate,
