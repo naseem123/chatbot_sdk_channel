@@ -70,6 +70,9 @@ class StartNewConversationWidget extends StatelessWidget {
                     AppLocalizations.of(context)
                         .translate('start_conversation'),
                     style: tn.s16.c(context.secondaryColor.lightWhite),
+                  ),
+                ),
+              ),
               Expanded(
                 flex: 3,
                 child: SizedBox(
