@@ -1,3 +1,9 @@
+import 'dart:io';
+
+import 'package:chatbot/chatbot_app.dart';
+import 'package:chatbot/core/env/env_reader.dart';
+import 'package:chatbot/core/extensions/text_style_extension.dart';
+import 'package:chatbot/i18n/app_localization.dart';
 import 'package:components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,7 +29,7 @@ class StartNewConversationWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.secondaryColor.whiteSmoke,
         borderRadius: BorderRadius.circular(4),
         boxShadow: [
           BoxShadow(
@@ -38,41 +44,52 @@ class StartNewConversationWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Start a conversation',
-            style: GoogleFonts.arimo(
-              color: context.colorScheme.primary,
-              fontSize: 19,
-              fontWeight: FontWeight.bold,
-              height: 1.5,
-            ),
+            AppLocalizations.of(context).translate('start_conversation'),
+            style: tn.w6.s18,
           ),
           Text(
-            replyTextMap[replyTime] ?? '',
-            style: GoogleFonts.arimo(
-              color: context.secondaryColor.gray52,
-              fontSize: 13,
-              fontWeight: FontWeight.normal,
-              height: 1.5,
-            ),
+            replyTextMap(context)[replyTime] ?? '',
+            style: tn.s12.c(context.secondaryColor.gray18),
           ),
           const SizedBox(
-            height: 15,
+            height: 16,
           ),
           Row(
             children: [
               SizedBox(
-                height: 42,
-                width: 200,
+                height:
+                    providersContext().read(envReaderProvider).getLang() == 'fr'
+                        ? 50
+                        : 45,
+                width: 190,
                 child: Button.accent(
                   onPressed: onStartConversationPressed,
                   primaryColor: buttonColor,
+                  buttonRadius: Platform.isAndroid ? 24 : 12,
                   child: Text(
-                    'Start a conversation',
-                    style: GoogleFonts.arimo(
-                      color: context.colorScheme.primary,
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal,
-                      height: 1.3,
+                    AppLocalizations.of(context)
+                        .translate('start_conversation'),
+                    style: tn.s16.c(context.secondaryColor.lightWhite),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: SizedBox(
+                  height:
+                      providersContext().read(envReaderProvider).getLang() ==
+                              'fr'
+                          ? 50
+                          : 45,
+                  child: Button.accent(
+                    onPressed: onStartConversationPressed,
+                    primaryColor: buttonColor,
+                    buttonRadius: Platform.isAndroid ? 24 : 12,
+                    child: Text(
+                      AppLocalizations.of(context)
+                          .translate('start_conversation'),
+                      textAlign: TextAlign.center,
+                      style: tn.s16.c(context.secondaryColor.lightWhite),
                     ),
                   ),
                 ),
@@ -82,8 +99,8 @@ class StartNewConversationWidget extends StatelessWidget {
                 child: InkWell(
                   onTap: onSeePreviousPressed,
                   child: Text(
-                    'See previous',
-                    style: GoogleFonts.arimo(
+                    AppLocalizations.of(context).translate('see_previous'),
+                    style: GoogleFonts.inter(
                       color: context.colorScheme.primary,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -95,19 +112,18 @@ class StartNewConversationWidget extends StatelessWidget {
               )
             ],
           ),
-          const SizedBox(
-            height: 5,
-          ),
         ],
       ),
     );
   }
 }
 
-Map<String, dynamic> get replyTextMap => {
-      "auto": "The team will respond as soon as possible",
-      "minutes": "The team usually responds in minutes",
-      "hours": "The team usually responds in a matter of hours",
-      "day": "The team usually responds in one day",
-      "off": "",
-    };
+Map<String, dynamic> replyTextMap(BuildContext context) {
+  return {
+    "auto": AppLocalizations.of(context).translate('reply_time_auto'),
+    "minutes": AppLocalizations.of(context).translate('reply_time_minutes'),
+    "hours": AppLocalizations.of(context).translate('reply_time_hours'),
+    "day": AppLocalizations.of(context).translate('reply_time_day'),
+    "off": "",
+  };
+}

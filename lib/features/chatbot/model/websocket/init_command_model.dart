@@ -83,6 +83,7 @@ class Data extends Equatable {
   final String? pathId;
   final String? step;
   final Block? reply;
+  final BlockInput? replyInput;
 
   const Data({
     required this.conversation,
@@ -99,6 +100,7 @@ class Data extends Equatable {
     this.pathId,
     this.step,
     this.reply,
+    this.replyInput,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) {
@@ -156,6 +158,9 @@ class Data extends Equatable {
     }
     if (reply != null) {
       data['reply'] = reply!.toJson();
+    }
+    if (replyInput != null) {
+      data['reply'] = replyInput!.toJson();
     }
     return data;
   }

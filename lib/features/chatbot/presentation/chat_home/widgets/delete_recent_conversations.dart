@@ -1,3 +1,4 @@
+import 'package:chatbot/i18n/app_localization.dart';
 import 'package:components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -18,7 +19,7 @@ void showDeleteConversationConfirmationPopup(
               child: ImageIcons(path: 'assets/icons/warning_icon.svg'),
             ),
             Text(
-              'Clear Conversations',
+              AppLocalizations.of(context).translate('clear_conversations'),
               style: context.textTheme.captionBold.copyWith(
                 color: context.colorScheme.primary,
                 fontSize: 19,
@@ -28,7 +29,8 @@ void showDeleteConversationConfirmationPopup(
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14.0),
               child: Text(
-                'This will clear your conversations, are you sure you want to proceed?',
+                AppLocalizations.of(context)
+                    .translate('clear_conversations_description'),
                 style: context.textTheme.captionRegular.copyWith(
                   color: context.secondaryColor.gray52,
                   fontSize: 13,
@@ -46,7 +48,7 @@ void showDeleteConversationConfirmationPopup(
                   onDeletePressed.call();
                 },
                 child: Text(
-                  'Clear Conversations',
+                  AppLocalizations.of(context).translate('clear_conversations'),
                   style: context.textTheme.captionBold.copyWith(
                     color: context.secondaryColor.lightWhite,
                     fontSize: 16,
@@ -61,7 +63,7 @@ void showDeleteConversationConfirmationPopup(
               child: Button.secondaryWhite(
                 onPressed: context.pop,
                 child: Text(
-                  'Cancel',
+                  AppLocalizations.of(context).translate('cancel'),
                   style: context.textTheme.captionBold.copyWith(
                     color: context.secondaryColor.mostlyBlack,
                     fontSize: 16,

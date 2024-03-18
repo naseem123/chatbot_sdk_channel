@@ -25,18 +25,25 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: colorPrimary,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.black.withOpacity(.1),
+            width: 1.0,
+          ),
+        ),
+      ),
       child: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Button.iconButton(
                 child: const Icon(
                   Icons.arrow_back_ios,
-                  size: 28,
-                  color: Colors.white,
+                  size: 22,
                 ),
                 onPressed: () {
                   backButtonPressed();
@@ -51,7 +58,7 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       buildLogo(),
-                      Gap(14),
+                      const Gap(14),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,20 +66,21 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
                           children: [
                             Text(
                               title,
-                              style: GoogleFonts.arimo(
-                                color: Colors.white,
-                                fontSize: 20,
+                              style: GoogleFonts.inter(
+                                color: context.secondaryColor.mostlyBlack,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Text(
-                              subTitle,
-                              style: GoogleFonts.arimo(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
+                            if (subTitle.isNotEmpty)
+                              Text(
+                                subTitle,
+                                style: GoogleFonts.inter(
+                                  color: context.secondaryColor.mostlyBlack,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
                           ],
                         ),
                       ),

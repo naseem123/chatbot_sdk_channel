@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 class IdleDetector extends StatefulWidget {
   final int idleTime;
   final Widget child;
-  final VoidCallback? onIdle;
+  final void Function(int remaining)? onTick;
 
   const IdleDetector({
     super.key,
     required this.idleTime,
     required this.child,
-    this.onIdle,
+    this.onTick,
   });
 
   @override
@@ -20,6 +20,7 @@ class IdleDetector extends StatefulWidget {
 
 class IdleDetectorState extends State<IdleDetector> {
   Timer? _timer;
+  late int _remainingSeconds;
 
   @override
   void initState() {
@@ -35,9 +36,16 @@ class IdleDetectorState extends State<IdleDetector> {
 
   void _resetTimer() {
     _timer?.cancel();
-    _timer = Timer(Duration(minutes: widget.idleTime), () {
-      if (widget.onIdle != null) {
-        widget.onIdle!.call();
+    _remainingSeconds = widget.idleTime * 60;
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _remainingSeconds--;
+      });
+      if (_remainingSeconds <= 0) {
+        _timer!.cancel();
+      }
+      if (widget.onTick != null) {
+        widget.onTick!(_remainingSeconds); // Pass remaining seconds to callback
       }
     });
   }

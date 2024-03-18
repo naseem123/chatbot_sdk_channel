@@ -8,11 +8,14 @@ class ChatBotUIOutputTransformer
   @override
   ChatBotUIOutput transform(ChatBotEntity entity) {
     return ChatBotUIOutput(
-        chatBotUiState: entity.chatBotUiState,
-        chatList: entity.chatList,
-        appSettings: entity.appSettings,
-        outBondUiState: entity.outBondUiState,
-        idleTimeout: entity.idleTimeout);
+      chatBotUiState: entity.chatBotUiState,
+      chatList: entity.chatList,
+      appSettings: entity.appSettings,
+      outBondUiState: entity.outBondUiState,
+      idleTimeout: entity.idleTimeout,
+      conversationsListUiState: entity.conversationsListUiState,
+      isInboundEnabled: entity.appSettings.app.inboundSettings.enabled,
+    );
   }
 }
 
@@ -21,16 +24,20 @@ class ChatDetailsUIOutputTransformer
   @override
   ChatDetailsUIOutput transform(ChatBotEntity entity) {
     return ChatDetailsUIOutput(
-        chatDetailsUiState: entity.chatDetailsUiState,
-        chatDetailList: entity.chatDetailList,
-        chatBotUserState: entity.chatBotUserState,
-        chatMessageType: entity.chatMessageType,
-        userInputOptions: entity.userInputOptions
-            .where((element) => element.label.isNotEmpty)
-            .toList(),
-        appSettings: entity.appSettings,
-        chatAssignee: entity.chatAssignee,
-        idleTimeout: entity.idleTimeout,
-        chatSessionState: entity.chatSessionState);
+      chatDetailsUiState: entity.chatDetailsUiState,
+      chatDetailList: entity.chatDetailList,
+      chatBotUserState: entity.chatBotUserState,
+      chatMessageType: entity.chatMessageType,
+      userInputOptions: entity.userInputOptions
+          .where((element) => element.label.isNotEmpty)
+          .toList(),
+      appSettings: entity.appSettings,
+      chatAssignee: entity.chatAssignee,
+      idleTimeout: entity.idleTimeout,
+      chatSessionState: entity.chatSessionState,
+      totalPages: entity.totalPages,
+      currentPage: entity.currentPage,
+      isAgentTyping: entity.isAgentTyping,
+    );
   }
 }

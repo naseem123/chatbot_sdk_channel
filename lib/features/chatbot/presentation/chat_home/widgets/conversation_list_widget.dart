@@ -1,7 +1,9 @@
 import 'package:chatbot/features/chatbot/model/conversation_model.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/widgets/conversation_item.dart';
+import 'package:chatbot/i18n/app_localization.dart';
 import 'package:components/components.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 import 'delete_recent_conversations.dart';
@@ -24,20 +26,7 @@ class ConversationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final hasChatList = chatList.isNotEmpty;
     return Container(
-      margin: const EdgeInsets.all(15),
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(4),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 2,
-            blurRadius: 3,
-            offset: const Offset(0, 2), // changes position of shadow
-          ),
-        ],
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -45,17 +34,20 @@ class ConversationWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Continue the conversation',
+                AppLocalizations.of(context).translate('continue_conversation'),
                 style: context.textTheme.captionBold.copyWith(
                   color: context.colorScheme.primary,
-                  fontSize: 19,
+                  fontSize: 18,
                 ),
               ),
               if (hasChatList)
                 IconButtons(
-                    onPressed: () => showDeleteConversationConfirmationPopup(
-                        context, onDeleteConversationPressed),
-                    path: 'assets/icons/reload_icon.svg'),
+                  onPressed: () => showDeleteConversationConfirmationPopup(
+                      context, onDeleteConversationPressed),
+                  path: 'assets/icons/reload_icon.svg',
+                  height: 14,
+                  width: 14,
+                ),
             ],
           ),
           ListView.builder(
@@ -74,17 +66,12 @@ class ConversationWidget extends StatelessWidget {
             itemCount: chatList.length,
           ),
           if (showViewAllConversation && hasChatList) ...[
-            Divider(
-              height: 1,
-              color: Colors.grey.withOpacity(0.5),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
+            const Gap(24),
             InkWell(
               onTap: onSeeConversationListPressed,
               child: Text(
-                'View all conversations',
+                AppLocalizations.of(context)
+                    .translate('view_all_conversations'),
                 style: context.textTheme.captionBold.copyWith(
                     color: context.secondaryColor.matterhorn, fontSize: 12),
               ),

@@ -1,6 +1,7 @@
 import 'package:chatbot/core/router/named_route.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_details/chat_details_ui.dart';
 import 'package:chatbot/features/chatbot/presentation/chat_home/chatbot_ui.dart';
+import 'package:chatbot/features/chatbot/presentation/survey/survey_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -47,6 +48,25 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             child: ChatDetailsUI(
               key: state.pageKey,
               conversationID: conversationId,
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        parentNavigatorKey: navigatorKey,
+        path: '/survey',
+        name: survey,
+        pageBuilder: (context, state) {
+          var surveyData = '';
+          if (state.extra != null) {
+            Map<String, dynamic> args = state.extra as Map<String, dynamic>;
+            surveyData = args['surveyData']!;
+          }
+          return NoTransitionPage(
+            key: state.pageKey,
+            child: SurveyUi(
+              key: state.pageKey,
+              surveyData: surveyData,
             ),
           );
         },

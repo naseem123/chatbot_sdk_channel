@@ -8,7 +8,9 @@ import 'package:clean_framework/clean_framework_legacy.dart';
 final apiExternalInterfaceProvider = ExternalInterfaceProvider(
   (_) => APIExternalInterface(
     appId: providersContext().read(envReaderProvider).getAppID(),
-    link: providersContext().read(envReaderProvider).getBaseUrl(),
+    link: providersContext().read(envReaderProvider).getApiUrl(),
+    origin: providersContext().read(envReaderProvider).getBaseUrl(),
+    lang: providersContext().read(envReaderProvider).getLang(),
     gatewayConnections: [
       () => chatBotGatewayProvider.getGateway(providersContext),
       () => configurationGatewayProvider.getGateway(providersContext),

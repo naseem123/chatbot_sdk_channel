@@ -20,7 +20,8 @@ class ConversationHistoryGateway extends APIGateway<
   ConversationHistoryRequest buildRequest(
     ConversationHistoryGatewayOutput output,
   ) {
-    return ConversationHistoryRequest(id: output.conversationID, page: 1);
+    return ConversationHistoryRequest(
+        id: output.conversationID, page: output.page);
   }
 
   @override
@@ -44,10 +45,17 @@ class ConversationHistoryGateway extends APIGateway<
 
 class ConversationHistoryGatewayOutput extends Output {
   final String conversationID;
-  const ConversationHistoryGatewayOutput({required this.conversationID});
+  final int page;
+  const ConversationHistoryGatewayOutput({
+    required this.conversationID,
+    required this.page,
+  });
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [
+        conversationID,
+        page,
+      ];
 }
 
 class ConversationHistorySuccessInput extends SuccessInput {

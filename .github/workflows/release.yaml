@@ -56,7 +56,7 @@ jobs:
       - name: 'Setup Flutter'
         uses: subosito/flutter-action@v1
         with:
-          flutter-version: '3.13.3'
+          flutter-version: '3.10.5'
 
       - name: 'Set up Java 17'
         uses: actions/setup-java@v3
@@ -74,9 +74,9 @@ jobs:
 
       - name: 'Set app/build.gradle versions'
         run: |
-          perl -i -p0e 's/compileSdkVersion 31/compileSdkVersion 33/g' .android/app/build.gradle
+          perl -i -p0e 's/compileSdkVersion 31/compileSdkVersion 34/g' .android/app/build.gradle
           perl -i -p0e 's/minSdkVersion 16/minSdkVersion 19/g' .android/app/build.gradle
-          perl -i -p0e 's/targetSdkVersion 31/targetSdkVersion 33/g' .android/app/build.gradle
+          perl -i -p0e 's/targetSdkVersion 31/targetSdkVersion 34/g' .android/app/build.gradle
 
       - name: 'Append publish.gradle script'
         run: |
@@ -88,61 +88,3 @@ jobs:
         env:
           GITHUB_USER: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-  xcframeworks:
-    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
-    runs-on: macos-latest
-    needs: release
-    steps:
-      - name: "Checkout TIKI SDK Flutter"
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Checkout current tag
-        run: |
-          git checkout ${{needs.release.outputs.tag}}
-
-      - name: "Setup Flutter"
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.13.3'
-
-      - name: "Setup XCode"
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
-
-      - name: 'Flutter pub get'
-        run: |
-          flutter pub get
-
-      - name: 'Change Deployment Target in Xcode Project'
-        run: |
-          cd .ios && perl -i -pe 's/IPHONEOS_DEPLOYMENT_TARGET = 11.0;/IPHONEOS_DEPLOYMENT_TARGET = 13.0;/g' Runner.xcodeproj/project.pbxproj && sed -i '' 's/platform :ios, '\''11.0'\''/platform :ios, '\''13.0'\''/g' Podfile
-
-      - name: 'Add embed script in Xcode Project Build phases'
-        run: |
-          cd .ios
-          perl -i -p0e 's/shellScript = "\/bin\/sh \\"\$FLUTTER_ROOT\/packages\/flutter_tools\/bin\/xcode_backend\.sh\\" build";/shellScript = "\/bin\/sh \\"\$FLUTTER_ROOT\/packages\/flutter_tools\/bin\/xcode_backend\.sh\\" build\\n\/bin\/sh \\"\$FLUTTER_ROOT\/packages\/flutter_tools\/bin\/xcode_backend\.sh\\" embed\\n";/s' ./Runner.xcodeproj/project.pbxproj
-
-      - name: "Build Frameworks"
-        run: |
-          flutter build ios-framework --output=Frameworks --no-profile
-
-      - name: "Update podspce file"
-        run: |
-          version=$(grep 'version:' pubspec.yaml | awk '{print $2}') awk -v new_version="$version" '  /s.version          =/ {$3 = "'"'"'" new_version "'"'"'"} 1' chatbot_sdk_channel_test.podspec > temp && mv temp chatbot_sdk_channel_test.podspec
-
-      - name: "Register session"
-        run: |
-          pod trunk register ShivMohan1889 'Shiv' --description='GitHub Actions'   
-
-      - name: "Create pod"
-        run: |
-          pod trunk push chatbot_sdk_channel.podspec --allow-warnings   
-
-      
-
-
