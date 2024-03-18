@@ -58,10 +58,11 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
                   title,
                   style: tn.w6.s20.c(context.secondaryColor.mostlyWhite),
                 ),
-                Text(
-                  subtitle,
-                  style: tn.s16.c(context.secondaryColor.mostlyWhite),
-                ),
+                if (subtitle.isNotEmpty)
+                  Text(
+                    subtitle,
+                    style: tn.s16.c(context.secondaryColor.mostlyWhite),
+                  ),
               ],
             ),
           ],

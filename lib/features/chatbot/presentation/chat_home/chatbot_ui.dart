@@ -93,7 +93,7 @@ class ChatBotUI extends UI<ChatBotViewModel> {
     }
     return IdleDetector(
       idleTime: viewModel.idleTimeout,
-      onIdle: viewModel.onIdleSessionTimeout,
+      onTick: viewModel.onTick,
       child: Scaffold(
         appBar: ChatBotAppbar(
           title: viewModel.title,

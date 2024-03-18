@@ -31,7 +31,16 @@ class ChatDetailsGetMessageInputTransformer
   @override
   ChatBotEntity transform(
       ChatBotEntity entity, WebsocketMessageSuccessInput input) {
-    if (input.data["type"] == "confirm_subscription") {
+    if (input.data["type"] == "conversations:typing") {
+      if (input.data['data']['conversation'] == entity.conversationKey) {
+        Future.delayed(const Duration(milliseconds: 50), () {
+          chatBotUseCaseProvider
+              .getUseCaseFromContext(providersContext)
+              .toggleAgentTypingStatus();
+        });
+      }
+      return entity;
+    } else if (input.data["type"] == "confirm_subscription") {
       Future.delayed(const Duration(milliseconds: 50), () {
         chatBotUseCaseProvider
             .getUseCaseFromContext(providersContext)
@@ -49,19 +58,25 @@ class ChatDetailsGetMessageInputTransformer
             triggerId.isNotEmpty ? ChatBotUiState.triggerReceived : null,
       );
     } else if (input.data["type"] == "conversations:update_state" &&
-        input.data['data']['state'] == 'closed') {
+        input.data['data']['state'] == 'closed' &&
+        entity.conversationKey == input.data['data']['key']) {
       return entity.merge(
         chatBotUserState: ChatBotUserState.conversationClosed,
       );
     } else if (input.data["type"] == "conversations:update_state" &&
         (input.data['data'] as Map).containsKey("assignee") &&
-        input.data['data']["assignee"]["display_name"] != null) {
+        input.data['data']["assignee"]["display_name"] != null &&
+        input.data['data']["key"] == entity.conversationKey) {
       final assigneeMap = input.data['data']["assignee"];
       final assignee = ChatAssignee(
           assignee: assigneeMap["display_name"],
           assigneeImage: assigneeMap["avatar_url"]);
       return entity = entity.merge(chatAssignee: assignee);
     } else if (input.data["type"] == "conversations:conversation_part") {
+      if (entity.conversationKey.isNotEmpty &&
+          input.data["data"]["conversation_key"] != entity.conversationKey) {
+        return entity;
+      }
       final conversationKey = input.data["data"]["conversation_key"];
       final messageKey = input.data["data"]["key"];
       Map<String, dynamic> messageData = input.data["data"]["message"];
@@ -86,6 +101,7 @@ class ChatDetailsGetMessageInputTransformer
           messageData["blocks"]["app_package"] == "Surveys") {
         String? sessionId = preference.get<String>(PreferenceKey.sessionId, "");
         final appId = providersContext().read(envReaderProvider).getAppID();
+        final baseUrl = providersContext().read(envReaderProvider).getBaseUrl();
 
         final surveyMessage = SurveyMessage.fromJson(
           messageData["blocks"]["schema"],
@@ -93,13 +109,11 @@ class ChatDetailsGetMessageInputTransformer
           conversationKey: conversationKey,
           appId: appId,
           sessionId: sessionId,
+          baseUrl: baseUrl,
         );
 
         // remove previous survey start text
         final currentChatList = List.of(entity.chatDetailList);
-
-        print(
-            '========  $conversationKey <-> $messageKey ${currentChatList.contains(surveyMessage)} ${surveyMessage.isSurveyStartMsg}');
 
         if (messageKey == entity.messageKey) {
           final itemIdx = currentChatList.indexWhere(
@@ -108,16 +122,9 @@ class ChatDetailsGetMessageInputTransformer
 
           if (itemIdx != -1) {
             currentChatList[itemIdx] = surveyMessage;
-
             return entity.merge(chatDetailList: currentChatList);
           }
         }
-        //
-        // final hasSurveyInputChatItem = currentChatList.where(
-        //     (element) => element is SurveyMessage && element.isSurveyStartMsg);
-        // if (hasSurveyInputChatItem.isNotEmpty) {
-        //   currentChatList.removeAt(0);
-        // }
 
         return entity.merge(
           conversationKey: conversationKey,
@@ -158,24 +165,43 @@ class ChatDetailsGetMessageInputTransformer
                         ? MessageSenderType.bot
                         : MessageSenderType.user,
                 messageType: MessageType.normalText);
+
             if (!entity.chatDetailList.contains(messageuiData)) {
-              entity = entity.merge(
-                  conversationKey: conversationKey,
-                  messageKey: messageKey,
-                  chatDetailList: [
+              if (messageuiData.messageSenderType != MessageSenderType.user) {
+                Future.delayed(const Duration(milliseconds: 5), () {
+                  chatBotUseCaseProvider
+                      .getUseCaseFromContext(providersContext)
+                      .toggleAgentTypingStatus();
+                });
+              }
+              chatBotUseCaseProvider
+                  .getUseCaseFromContext(providersContext)
+                  .updateEntityAfterDelay(
+                      conversationKey: conversationKey,
+                      messageKey: messageKey,
+                      chatDetailList: [
                     messageuiData,
                     ...entity.chatDetailList,
                   ]);
             }
           }
           if (blockData.waitForInput && !isSameAPreviousInputs) {
-            return entity.merge(
-              conversationKey: conversationKey,
-              messageKey: messageKey,
-              userInputOptions: blockData.schema,
-              chatBotUserState: ChatBotUserState.waitForInput,
-              chatMessageType: ChatMessageType.askForInputButton,
-            );
+            Future.delayed(const Duration(milliseconds: 5), () {
+              chatBotUseCaseProvider
+                  .getUseCaseFromContext(providersContext)
+                  .toggleAgentTypingStatus();
+            });
+            chatBotUseCaseProvider
+                .getUseCaseFromContext(providersContext)
+                .updateInputTypeAfterDelay(
+                  conversationKey: conversationKey,
+                  messageKey: messageKey,
+                  userInputOptions: blockData.schema,
+                  chatBotUserState: ChatBotUserState.waitForInput,
+                  chatMessageType: ChatMessageType.askForInputButton,
+                );
+
+            return entity;
           }
         } else {
           message = "";
@@ -194,6 +220,16 @@ class ChatDetailsGetMessageInputTransformer
             entity = entity.merge(
                 chatBotUserState: ChatBotUserState.waitForInput,
                 chatMessageType: ChatMessageType.enterMessage);
+          }
+
+          if (messageData["text_content"] != null &&
+              messageData["text_content"] != "--***--" &&
+              messageData["text_content"] != "") {
+            chatBotUseCaseProvider
+                .getUseCaseFromContext(providersContext)
+                .updateUSerStateAsEnterMessage(
+                    chatBotUserState: ChatBotUserState.waitForInput,
+                    chatMessageType: ChatMessageType.enterMessage);
           }
 
           if (messageData.containsKey("action") &&
@@ -216,13 +252,23 @@ class ChatDetailsGetMessageInputTransformer
                 : MessageSenderType.user,
           );
           if (!entity.chatDetailList.contains(messageuiData)) {
-            return entity.merge(
-                conversationKey: conversationKey,
-                messageKey: messageKey,
-                chatDetailList: [
+            if (messageuiData.messageSenderType != MessageSenderType.user) {
+              Future.delayed(const Duration(milliseconds: 5), () {
+                chatBotUseCaseProvider
+                    .getUseCaseFromContext(providersContext)
+                    .toggleAgentTypingStatus();
+              });
+            }
+            chatBotUseCaseProvider
+                .getUseCaseFromContext(providersContext)
+                .updateEntityAfterDelay(
+                    conversationKey: conversationKey,
+                    messageKey: messageKey,
+                    chatDetailList: [
                   messageuiData,
                   ...entity.chatDetailList,
                 ]);
+            return entity;
           }
           if (messageData['data'] != null &&
               (messageData['data'] as Map).containsKey('next_step_uuid') &&

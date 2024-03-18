@@ -29,10 +29,11 @@ void main(List<String> arguments) async {
   final appID = arguments.isEmpty ? appIDLocal : arguments[0];
   final origin = arguments.isEmpty ? originLocal : arguments[1];
   final apiUrl = arguments.isEmpty ? apiUrlLocal : arguments[2];
+  final lang = arguments.isEmpty ? 'en' : arguments[3];
 
   providersContext()
       .read(envReaderProvider)
-      .init(appID: appID, origin: origin, apiUrl: apiUrl);
+      .init(appID: appID, origin: origin, apiUrl: apiUrl, lang: lang);
 
   loadProviders();
   await preference.init();

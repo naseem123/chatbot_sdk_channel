@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatbot/core/extensions/string_extensions.dart';
 import 'package:chatbot/core/widgets/draft_view/view/draft_text_view.dart';
 import 'package:chatbot/features/chatbot/model/conversation_model.dart';
+import 'package:chatbot/i18n/app_localization.dart';
 import 'package:components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -83,7 +84,8 @@ class ConversationItem extends StatelessWidget {
                             ),
                             if (chatIsOpen)
                               Text(
-                                'is waiting for your reply',
+                                AppLocalizations.of(context)
+                                    .translate('waiting_for_reply'),
                                 style: context.textTheme.captionRegular
                                     .copyWith(
                                         color: context.secondaryColor.gray18,
@@ -107,7 +109,8 @@ class ConversationItem extends StatelessWidget {
                               )
                             else
                               Text(
-                                'Thanks for stopping by!',
+                                AppLocalizations.of(context)
+                                    .translate('thanks_for_stopping_by'),
                                 style: context.textTheme.captionRegular
                                     .copyWith(
                                         color: context.secondaryColor.gray18,

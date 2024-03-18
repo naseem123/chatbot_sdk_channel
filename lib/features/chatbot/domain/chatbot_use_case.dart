@@ -58,12 +58,18 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         // Assigning session Idle Time
         final clearSessionAfter =
             input.initData.app.inboundSettings.visitors.idleSessionsAfter;
+
         entity = entity.merge(
             idleTimeout: clearSessionAfter,
             chatSessionState: ChatSessionState.sessionActive);
-        loadConfigurations();
-        loadRecentConversationList(perPage: 100, page: 1);
-        initialiseWebSocket();
+        //Hanlde last interaction time and expires previous session
+        if (isLastInteractionTimeExpired) {
+          clearSession();
+        } else {
+          loadConfigurations();
+          loadRecentConversationList(perPage: 100, page: 1);
+          initialiseWebSocket();
+        }
       });
 
       return entity;
@@ -72,6 +78,21 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
         chatBotUiState: ChatBotUiState.setupFailure,
       );
     });
+  }
+
+  bool get isLastInteractionTimeExpired {
+    final lastInteractionTime =
+        preference.get(PreferenceKey.lastSessionUpdate, -1);
+    if (lastInteractionTime == -1) return false;
+    // Convert session timeout from minutes to milliseconds
+    int sessionTimeoutMillis = entity.idleTimeout * 60 * 1000;
+
+    // Calculate the difference between current time and last interaction time
+    int timeElapsedSinceLastInteraction =
+        DateTime.now().millisecondsSinceEpoch - lastInteractionTime!;
+
+    // Check if the time elapsed since last interaction exceeds the session timeout
+    return timeElapsedSinceLastInteraction >= sessionTimeoutMillis;
   }
 
   void loadConfigurations() {
@@ -89,8 +110,19 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     });
   }
 
-  Future<void> clearSession() async {
+  void onTick(int remaining) {
+    if (remaining == 0) {
+      clearSession();
+    }
+    if (entity.idleTimeout * 60 == remaining + 1) {
+      preference.putInt(PreferenceKey.lastSessionUpdate,
+          DateTime.now().millisecondsSinceEpoch);
+    }
+  }
+
+  void clearSession() async {
     await preference.remove(PreferenceKey.sessionId);
+    await preference.remove(PreferenceKey.lastSessionUpdate);
     entity = entity.merge(chatList: []);
     initUserSession();
   }
@@ -578,6 +610,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       );
     });
   }
+
   InitCommandModel setUserInputCommandAsMap(Map inputData) {
     final sessionId = preference.get<String>(PreferenceKey.sessionId, "");
     return InitCommandModel(
@@ -598,7 +631,6 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       }),
     );
   }
-
 
   void parseConversationHistory(
       Map<String, dynamic> data, String conversationID) {
@@ -650,7 +682,6 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     Map<String, dynamic> messageData = data["message"];
     var message = "";
 
-    print(data);
     if (messageData.containsKey("blocks") && messageData["blocks"] != null) {
       MessageUiModel messageBlockLabel;
       final bool hasReplied =
@@ -702,7 +733,8 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
           messageData["blocks"]['app_package'] == 'Surveys') {
         String? sessionId = preference.get<String>(PreferenceKey.sessionId, "");
         final appId = providersContext().read(envReaderProvider).getAppID();
-
+        final base_url =
+            providersContext().read(envReaderProvider).getBaseUrl();
         entity = entity.merge(
           chatDetailList: curPage == 1
               ? [
@@ -711,6 +743,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
                     messageKey: messageKey,
                     conversationKey: conversationKey,
                     appId: appId,
+                    baseUrl: base_url,
                     sessionId: sessionId,
                   ),
                   ...entity.chatDetailList,
@@ -722,6 +755,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
                     messageKey: messageKey,
                     conversationKey: conversationKey,
                     appId: appId,
+                    baseUrl: base_url,
                     sessionId: sessionId,
                   ),
                 ],
@@ -729,8 +763,6 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
           chatBotUserState: curPage == 1 ? ChatBotUserState.survey : null,
         );
       }
-
-
 
       if (messageData["state"] != null && messageData["state"] == "replied") {
         if (blockData.askForInput &&
@@ -855,6 +887,8 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
 
   void resetData() {
     entity = entity.merge(
+      conversationKey: "",
+      messageKey: "",
       chatDetailList: [],
       chatBotUserState: ChatBotUserState.idle,
       chatMessageType: ChatMessageType.idle,
@@ -865,6 +899,7 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       chatStepId: "",
       chatPathId: "",
       chatNextStepUUID: "",
+      isAgentTyping: false,
     );
     loadRecentConversationList();
   }
@@ -881,6 +916,52 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
       return entity;
     }, onFailure: (_) {
       return entity;
+    });
+  }
+
+  void toggleAgentTypingStatus() {
+    entity = entity.merge(isAgentTyping: true);
+    Future.delayed(const Duration(milliseconds: 500), () {
+      entity = entity.merge(isAgentTyping: false);
+    });
+  }
+
+  void updateEntityAfterDelay(
+      {required conversationKey,
+      required messageKey,
+      required List<ChatMessage> chatDetailList}) {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      entity = entity.merge(
+        conversationKey: conversationKey,
+        messageKey: messageKey,
+        chatDetailList: chatDetailList,
+      );
+    });
+  }
+
+  void updateInputTypeAfterDelay(
+      {required conversationKey,
+      required messageKey,
+      required List<Block> userInputOptions,
+      required ChatBotUserState chatBotUserState,
+      required ChatMessageType chatMessageType}) {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      entity = entity.merge(
+        conversationKey: conversationKey,
+        messageKey: messageKey,
+        userInputOptions: userInputOptions,
+        chatBotUserState: chatBotUserState,
+        chatMessageType: chatMessageType,
+      );
+    });
+  }
+
+  void updateUSerStateAsEnterMessage(
+      {required ChatBotUserState chatBotUserState,
+      required ChatMessageType chatMessageType}) {
+    Future.delayed(const Duration(milliseconds: 100), () {
+      entity = entity.merge(
+          chatBotUserState: chatBotUserState, chatMessageType: chatMessageType);
     });
   }
 }

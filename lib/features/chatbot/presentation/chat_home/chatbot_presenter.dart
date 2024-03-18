@@ -44,9 +44,7 @@ class ChatBotPresenter
         useCase.clearSession();
       },
       idleTimeout: output.idleTimeout,
-      onIdleSessionTimeout: () {
-        useCase.clearSession();
-      },
+      onTick: useCase.onTick,
       replyTime: output.appSettings.app.replyTime,
       isInboundEnabled: output.isInboundEnabled,
       conversationsListUiState: output.conversationsListUiState,

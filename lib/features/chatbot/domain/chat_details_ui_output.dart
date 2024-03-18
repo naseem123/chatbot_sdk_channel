@@ -19,6 +19,7 @@ class ChatDetailsUIOutput extends Output {
     required this.chatSessionState,
     required this.currentPage,
     required this.totalPages,
+    required this.isAgentTyping,
   });
 
   final ChatDetailsUiState chatDetailsUiState;
@@ -33,6 +34,7 @@ class ChatDetailsUIOutput extends Output {
   final int currentPage;
   final int totalPages;
   final ChatSessionState chatSessionState;
+  final bool isAgentTyping;
 
   @override
   List<Object?> get props => [
@@ -47,5 +49,6 @@ class ChatDetailsUIOutput extends Output {
         chatSessionState,
         currentPage,
         totalPages,
+        isAgentTyping,
       ];
 }

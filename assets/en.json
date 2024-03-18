@@ -1,0 +1,20 @@
+{
+  "continue_conversation": "Continue the conversation",
+  "start_conversation": "Start a conversation",
+  "view_all_conversations": "View all conversations",
+  "see_previous": "See previous",
+  "reply_time_auto": "The team will respond as soon as possible",
+  "reply_time_minutes": "The team usually responds in minutes",
+  "reply_time_hours": "The team usually responds in a matter of hours",
+  "reply_time_day": "The team usually responds in one day",
+  "select_an_option": "Select an option",
+  "reply_above": "Reply above",
+  "type_your_message": "Type your message...",
+  "clear_conversations": "Clear Conversations",
+  "clear_conversations_description": "This will clear your conversations, are you sure you want to proceed?",
+  "cancel": "Cancel",
+  "agent_typing": "agent is typing",
+  "waiting_for_reply": "is waiting for your reply",
+  "conversation_end": "This conversation has ended",
+  "thanks_for_stopping_by": "Thanks for stopping by!"
+}
