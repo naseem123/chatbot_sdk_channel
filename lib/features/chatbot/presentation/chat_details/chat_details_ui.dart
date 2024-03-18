@@ -71,9 +71,11 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
           child: Column(
             children: [
               Expanded(
-                child: SafeArea(
-                  child: Align(
-                    alignment: Alignment.topCenter,
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: GestureDetector(
+                    onTap: () =>
+                        FocusManager.instance.primaryFocus?.unfocus(),
                     child: ChatListWidget(
                       currentPage: viewModel.currentPage,
                       totalPage: viewModel.totalPages,
@@ -105,7 +107,6 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                           height: 1.5,
                         ),
                       ),
-
                     ],
                   ),
                 ),
@@ -182,6 +183,7 @@ class ChatDetailsUI extends UI<ChatDetailsViewModel> {
                         fontWeight: FontWeight.w800),
                   ),
                 ),
+
             ],
           ),
         ),
