@@ -38,7 +38,7 @@ class ModalSheet<T> extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: DefaultTextStyle(
-                style: context.textTheme.subtitle1!,
+                style: context.textTheme.titleMedium!,
                 child: title!,
               ),
             ),
@@ -67,7 +67,7 @@ class ModalSheet<T> extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8),
               child: TextButton(
                 style: TextButton.styleFrom(
-                  textStyle: context.textTheme.subtitle1,
+                  textStyle: context.textTheme.titleMedium,
                 ),
                 onPressed: action.state == ButtonState.active
                     ? secondaryAction!.onPressed
