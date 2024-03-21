@@ -30,7 +30,6 @@ class MessageItemWidget extends StatelessWidget {
     final isBot = message.messageSenderType == MessageSenderType.bot;
 
     if (message.message.contains("blocks")) {
-      print('MessageItemWidget.build ++ ${message.message}');
       messageWidget = SizedBox(
         width: MediaQuery.of(context).size.width - 30,
         child: Padding(
@@ -49,7 +48,6 @@ class MessageItemWidget extends StatelessWidget {
         ),
       ); //
     } else {
-      print('MessageItemWidget.build == ${message.message}');
 
       if (isBot) {
         messageWidget = Padding(

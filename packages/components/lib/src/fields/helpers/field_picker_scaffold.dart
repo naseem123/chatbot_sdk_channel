@@ -28,7 +28,7 @@ class FieldPickerScaffold extends StatelessWidget {
                 TextButton(
                   style: TextButton.styleFrom(
                     foregroundColor: const Color(0xFF007AFF),
-                    textStyle: context.textTheme.button!.copyWith(
+                    textStyle: context.textTheme.labelLarge!.copyWith(
                       fontSize: 15,
                     ),
                   ),

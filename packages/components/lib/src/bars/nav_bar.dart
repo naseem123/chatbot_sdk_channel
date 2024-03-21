@@ -91,7 +91,7 @@ class _HighNavBar extends NavBar {
           child: Align(
             alignment: Alignment.centerLeft,
             child: DefaultTextStyle(
-              style: context.textTheme.headline2!.copyWith(
+              style: context.textTheme.displayMedium!.copyWith(
                 color: Theme.of(context).appBarTheme.titleTextStyle!.color,
               ),
               child: title ?? const SizedBox.shrink(),
