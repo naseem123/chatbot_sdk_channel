@@ -30,7 +30,7 @@ class ChatBubble extends CustomPainter {
     }
 
     final RRect bubbleBody = RRect.fromRectAndRadius(
-        Rect.fromLTWH(0, 0, size.width, size.height), Radius.circular(24));
+        Rect.fromLTWH(0, 0, size.width, size.height), const Radius.circular(24));
     final Path bubbleTail = paintBubbleTail();
 
     canvas.drawRRect(bubbleBody, paint);

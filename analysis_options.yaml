@@ -1,8 +1,5 @@
-include: package:flutter_lints/flutter.yaml
-
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
-linter:
-  rules:
-    depend_on_referenced_packages: false
-    implementation_imports: false
+analyzer:
+  errors:
+    deprecated_member_use: ignore
+    depend_on_referenced_packages: ignore
+    invalid_dependency: ignore
