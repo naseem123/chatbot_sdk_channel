@@ -3,6 +3,7 @@ import 'package:chatbot/core/env/env_reader.dart';
 import 'package:chatbot/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 const String novScotiaAppID = "XnA6d2mEejaov78UETAzM5uj";
 const String novScotiaOrigin =
@@ -37,5 +38,26 @@ void main(List<String> arguments) async {
 
   loadProviders();
   await preference.init();
-  runApp(const ChatBotApp());
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://462ac91485b700cae584f4e26a61fecf@o4506949343641600.ingest.us.sentry.io/4506949344821248';
+      options.tracesSampleRate = 1.0;
+      options.attachScreenshot = true;
+      options.attachViewHierarchy = true;
+      options.attachStacktrace = true;
+      options.sampleRate = 1;
+      options.enableUserInteractionTracing = true;
+      options.sendDefaultPii = true;
+      options.enableAutoPerformanceTracing = true;
+      options.tracesSampleRate = 1.0;
+    },
+    appRunner: () => runApp(
+      SentryScreenshotWidget(
+        child: SentryUserInteractionWidget(
+          child: const ChatBotApp(),
+        ),
+      ),
+    ),
+  );
 }

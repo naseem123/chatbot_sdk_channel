@@ -5,6 +5,7 @@ import 'package:clean_framework/clean_framework.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:resources/resources.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 ProvidersContext get providersContext => _providersContext;
 
@@ -23,6 +24,15 @@ class ChatBotAppState extends State<ChatBotApp> {
   @override
   void initState() {
     super.initState();
+    processOrderBatch(2);
+  }
+
+  Future<void> processOrderBatch(n) async {
+    try {
+      throw ";";
+    } catch (exception) {
+      Sentry.captureException(exception);
+    }
   }
 
   @override
