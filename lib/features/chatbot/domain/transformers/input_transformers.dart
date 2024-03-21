@@ -126,13 +126,17 @@ class ChatDetailsGetMessageInputTransformer
           }
         }
 
-        return entity.merge(
+        chatBotUseCaseProvider
+            .getUseCaseFromContext(providersContext)
+            .updateSurveyInputTypeAfterDelay(
           conversationKey: conversationKey,
           messageKey: messageKey,
           chatBotUserState: ChatBotUserState.survey,
           chatMessageType: ChatMessageType.survey,
           chatDetailList: [surveyMessage, ...currentChatList],
         );
+
+        return entity;
       } else {
         chatBotUseCaseProvider
             .getUseCaseFromContext(providersContext)

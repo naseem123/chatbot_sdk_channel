@@ -956,6 +956,19 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     });
   }
 
+  void updateSurveyInputTypeAfterDelay(
+      {required conversationKey, required messageKey, required ChatBotUserState chatBotUserState, required ChatMessageType chatMessageType, required List<ChatMessage> chatDetailList}) {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      entity = entity.merge(
+        conversationKey: conversationKey,
+        messageKey: messageKey,
+        chatBotUserState: chatBotUserState,
+        chatMessageType: chatMessageType,
+        chatDetailList: chatDetailList,
+      );
+    });
+  }
+
   void updateUSerStateAsEnterMessage(
       {required ChatBotUserState chatBotUserState,
       required ChatMessageType chatMessageType}) {

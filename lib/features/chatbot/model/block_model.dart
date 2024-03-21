@@ -8,7 +8,7 @@ class Block extends Equatable {
   final String pathId;
   final List<Rule>? rules;
 
-  Block({
+  const Block({
     required this.element,
     required this.id,
     required this.label,
@@ -78,7 +78,7 @@ class Rule extends Equatable {
   final String target;
   final List<String> value;
 
-  Rule({
+  const Rule({
     required this.action,
     required this.attribute,
     required this.target,
@@ -95,7 +95,7 @@ class BlocksData extends Equatable {
   final bool waitForInput;
   final String? label;
 
-  BlocksData({
+  const BlocksData({
     required this.schema,
     required this.type,
     required this.waitForInput,
