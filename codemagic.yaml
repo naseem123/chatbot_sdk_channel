@@ -119,7 +119,7 @@ workflows:
           cd think-research-android-sdk/
           chmod +x ./gradlew
           ./gradlew assembleRelease
-          mv app/build/outputs/aar/app-release.aar app/build/outputs/aar/ChatbotSdk_V${$VERSION}.aar
+          mv app/build/outputs/aar/app-release.aar app/build/outputs/aar/ChatbotSdk_V${VERSION}.aar
 
     artifacts:
       - think-research-android-sdk/app/build/outputs/aar/*.aar
