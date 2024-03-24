@@ -91,7 +91,10 @@ workflows:
           jf rt upload "./$VERSION/*.aar" chatbot-gradle-dev-local/io/flutter/plugins/webviewflutter/webview_flutter_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
           jf rt upload "./$VERSION/*.pom" chatbot-gradle-dev-local/io/flutter/plugins/webviewflutter/webview_flutter_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
 
-        # You can add more scripts or steps as needed
+    artifacts:
+      - think-research-android-sdk/app/build/outputs/aar/*.aar
+
+      # You can add more scripts or steps as needed
       # - name: Publish to Google Cloud
       #  script: |
       #     echo $GCLOUD_STORAGE_KEY > $CM_BUILD_DIR/gcloud_storage_key.json
