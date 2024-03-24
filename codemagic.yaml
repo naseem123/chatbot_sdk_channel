@@ -91,6 +91,25 @@ workflows:
           jf rt upload "./$VERSION/*.aar" chatbot-gradle-dev-local/io/flutter/plugins/webviewflutter/webview_flutter_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
           jf rt upload "./$VERSION/*.pom" chatbot-gradle-dev-local/io/flutter/plugins/webviewflutter/webview_flutter_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
 
+      - name: 'Clone Android SDK Folder'
+        script: |
+          git clone https://x-token-auth:ATCTT3xFfGN0m7GWjct_leJ3PRyWd5RuTDjRrhXYVn13D_iYvhlPiVIQZRtCv5XP-ulijjxLfwpI3bq5te7YRoVgbt5INR4H4IcPkDN7iQHUsFEb5Se_iXVsCAugEuTEeoDkReLVI-SO6hX_ACazDcg0AwsxvPIwh9UElHnBNQiMVo63M3bK8VA=A8CD3D15@bitbucket.org/architech/think-research-android-sdk.git
+
+      - name : 'Change the sdk version in build.gradle'
+        script: |
+          
+          perl -i -pe "s/ext\.sdkVersion = \"[^\"]*\"/ext.sdkVersion = \"$VERSION\"/g" think-research-android-sdk/app/build.gradle
+
+      - name : 'Building final AAR'
+        script: |
+          
+          cd think-research-android-sdk/
+          chmod +x ./gradlew
+          ./gradlew assembleRelease
+          ./gradlew artifactoryPublish
+          mv app/build/outputs/aar/app-release.aar app/build/outputs/aar/ChatbotSdk_V${VERSION}.aar
+
+
     artifacts:
       - think-research-android-sdk/app/build/outputs/aar/*.aar
 
