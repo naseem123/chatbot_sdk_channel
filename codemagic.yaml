@@ -39,7 +39,7 @@ workflows:
       - name: 'Publish sqflite_release aar to Jfrog'
         script: |
           curl -fL "https://install-cli.jfrog.io" | sh;
-          jf config add --password=$JF_PASSWORD  --artifactory-url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
+          jf config add --password=$JF_PASSWORD  --artifactory-url=$JF_URL --interactive=false trc1-gradle-dev-local --user=$JF_USER_NAME
           jf project init
           echo $CM_BUILD_DIR
           cd build/host/outputs/repo/com/tekartik/sqflite/sqflite_release  
@@ -50,7 +50,7 @@ workflows:
       - name: 'Publish chatbot aar to Jfrog'
         script: |
           curl -fL "https://install-cli.jfrog.io" | sh;
-          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
+          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev-local --user=$JF_USER_NAME
           echo $CM_BUILD_DIR
           cd build/host/outputs/repo/com/thinkresearch/chatbot_native/flutter_release  
           jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/com/thinkresearch/chatbot/flutter_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
@@ -60,7 +60,7 @@ workflows:
       - name: 'Publish pathprovider aar to Jfrog'
         script: |
           curl -fL "https://install-cli.jfrog.io" | sh;
-          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
+          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev-local --user=$JF_USER_NAME
           echo $CM_BUILD_DIR
           cd build/host/outputs/repo/io/flutter/plugins/pathprovider/path_provider_android_release
           jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/io/flutter/plugins/pathprovider/path_provider_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
@@ -70,7 +70,7 @@ workflows:
       - name: 'Publish sharedpreferences aar to Jfrog'
         script: |
           curl -fL "https://install-cli.jfrog.io" | sh;
-          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
+          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev-local --user=$JF_USER_NAME
           echo $CM_BUILD_DIR
           cd build/host/outputs/repo/io/flutter/plugins/sharedpreferences/shared_preferences_android_release
           jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/io/flutter/plugins/sharedpreferences/shared_preferences_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
@@ -80,7 +80,7 @@ workflows:
       - name: 'Publish urllauncher aar to Jfrog'
         script: |
           curl -fL "https://install-cli.jfrog.io" | sh;
-          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
+          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev-local --user=$JF_USER_NAME
           echo $CM_BUILD_DIR
           cd build/host/outputs/repo/io/flutter/plugins/urllauncher/url_launcher_android_release
           jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/io/flutter/plugins/urllauncher/url_launcher_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
@@ -90,7 +90,7 @@ workflows:
       - name: 'Publish webviewflutter aar to Jfrog'
         script: |
           curl -fL "https://install-cli.jfrog.io" | sh;
-          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
+          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev-local --user=$JF_USER_NAME
           echo $CM_BUILD_DIR
           cd build/host/outputs/repo/io/flutter/plugins/webviewflutter/webview_flutter_android_release
           jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/io/flutter/plugins/webviewflutter/webview_flutter_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
