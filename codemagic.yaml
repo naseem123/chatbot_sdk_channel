@@ -100,7 +100,7 @@ workflows:
           
           perl -i -pe "s/ext\.sdkVersion = \"[^\"]*\"/ext.sdkVersion = \"$VERSION\"/g" think-research-android-sdk/app/build.gradle
 
-      - name : 'Building final AAR'
+      - name : 'Building final AAR and Publishing'
         script: |
           
           cd think-research-android-sdk/
@@ -109,6 +109,20 @@ workflows:
           ./gradlew artifactoryPublish
           mv app/build/outputs/aar/app-release.aar app/build/outputs/aar/ChatbotSdk_V${VERSION}.aar
 
+      - name: Cloning Skelton app
+        script: |
+          git clone https://x-token-auth:ATCTT3xFfGN03qa1pfa54IiWbQtsqdjdPpKxPv1yEUB3Gj0hyA9Ywj1GxEmzabpSLaO0vDtuOWnf2flyDHEctZzd8sXQ0HaKyOTFn1Fk5aYMQpwtp1JgrIXLajaOUuN82tXQDKQa8n5a5vjTkrbuwMW9iPJPSPN_YzkSR6evbil14rkkrucLxns=F6419E33@bitbucket.org/architech/think-research-android-skelton-app.git
+          cp -r think-research-android-sdk/app/build/outputs/aar/ChatbotSdk_V${VERSION}.aar  think-research-android-skelton-app/app/libs/
+          
+          cd think-research-android-skelton-app/app
+          
+          perl -i -pe 's/libs\/ChatbotSdk_V[0-9]+\.[0-9]+\.[0-9]+\.aar/libs\/ChatbotSdk_V${VERSION}.aar/g' build.gradle.kts
+          
+          git tag $VERSION
+          
+          git status
+          git config user.email "sts@architech.ca" && git config user.name "Suhail T S"
+          git add . && git commit -m "New libs updated from pipline" && git push --tag
 
     artifacts:
       - think-research-android-sdk/app/build/outputs/aar/*.aar
