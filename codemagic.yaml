@@ -4,24 +4,12 @@ workflows:
 
     environment:
       flutter: 3.13.0
+      java: 17
+
       groups:
         - jf
 
     scripts:
-      - name: Check a new tag
-        script: |
-          TAG_VERSION=$(grep version pubspec.yaml |  awk -F  ': ' '{print $2}'| awk '{print substr($0, 1, 4)}'| awk -v build="$PROJECT_BUILD_NUMBER" '{printf "%s%s\n", $0, build}')
-          echo $TAG_VERSION
-          echo "VERSION=$TAG_VERSION" >> $CM_ENV
-      #              git tag $TAG_VERSION
-      #              git push origin $TAG_VERSION
-
-      - name: Install Java 17
-        script: |
-          echo $VERSION
-          brew update
-          brew install openjdk-17-jdk
-          export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 
       #          - name: Install Google Cloud CLI
       #            script: |
@@ -31,9 +19,6 @@ workflows:
 
       - name: 'Flutter Pub Get'
         script: flutter pub get
-
-#      - name: 'Flutter Build AAR'
-#        script: flutter build aar
 
       - name: 'Set app/build.gradlemulti versions'
         script: |
