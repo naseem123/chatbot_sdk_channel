@@ -116,7 +116,7 @@ workflows:
           
           cd think-research-android-skelton-app/app
           
-          perl -i -pe 's/libs\/ChatbotSdk_V[0-9]+\.[0-9]+\.[0-9]+\.aar/libs\/ChatbotSdk_V${VERSION}.aar/g' build.gradle.kts
+          perl -i -pe "s/libs\/ChatbotSdk_V[0-9]+\.[0-9]+\.[0-9]+\.aar/libs\/ChatbotSdk_V$VERSION.aar/g" build.gradle.kts
           
           git tag $VERSION
           
