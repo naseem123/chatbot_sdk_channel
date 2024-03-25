@@ -36,23 +36,29 @@ workflows:
         script: |
           flutter build aar --no-debug --no-profile --build-number $VERSION
 
-      - name: 'Publish Artifacts to JFrog'
+      - name: 'Publish Artifacts to Jfrog'
         script: |
-          upload_to_jfrog() {
-              curl -fL "https://install-cli.jfrog.io" | sh;
-              jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false chatbot-gradle-dev-local --user=$JF_USER_NAME
-              cd build/host/outputs/repo/$1
-              ls
-              jf rt upload "./$VERSION/*.aar" chatbot-gradle-dev-local/$2/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-              jf rt upload "./$VERSION/*.pom" chatbot-gradle-dev-local/$2/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+          
+          curl -fL "https://install-cli.jfrog.io" | sh
+          
+          publish_to_jfrog() {
+            local plugin_name="$1"
+            local plugin_path="$2"
+            local group_name="$3"
+            
+            echo "$plugin_path/$VERSION/*.aar"
+            echo  "chatbot-gradle-dev-local/$group_name/$plugin_name/"
+          
+            jf rt upload "$plugin_path/$VERSION/*.aar" "chatbot-gradle-dev-local/$group_name/$plugin_name/" --user "$JF_USER_NAME" --password "$JF_PASSWORD" --url "$JF_URL"
+            jf rt upload "$plugin_path/$VERSION/*.pom" "chatbot-gradle-dev-local/$group_name/$plugin_name/" --user "$JF_USER_NAME" --password "$JF_PASSWORD" --url "$JF_URL"
           }
           
-          upload_to_jfrog "com/tekartik/sqflite/sqflite_release" "com/tekartik/sqflite/sqflite_release"
-          upload_to_jfrog "com/thinkresearch/chatbot_native/flutter_release" "com/thinkresearch/chatbot_native/flutter_release"
-          upload_to_jfrog "io/flutter/plugins/pathprovider/path_provider_android_release" "io/flutter/plugins/pathprovider/path_provider_android_release"
-          upload_to_jfrog "io/flutter/plugins/sharedpreferences/shared_preferences_android_release" "io/flutter/plugins/sharedpreferences/shared_preferences_android_release"
-          upload_to_jfrog "io/flutter/plugins/urllauncher/url_launcher_android_release" "io/flutter/plugins/urllauncher/url_launcher_android_release"
-          upload_to_jfrog "io/flutter/plugins/webviewflutter/webview_flutter_android_release" "io/flutter/plugins/webviewflutter/webview_flutter_android_release"
+          publish_to_jfrog "sqflite_release" "build/host/outputs/repo/com/tekartik/sqflite/sqflite_release" "com/tekartik/sqflite"
+          publish_to_jfrog "flutter_release" "build/host/outputs/repo/com/thinkresearch/chatbot_native/flutter_release" "com/thinkresearch/chatbot_native"
+          publish_to_jfrog "path_provider_android_release" "build/host/outputs/repo/io/flutter/plugins/pathprovider/path_provider_android_release" "io/flutter/plugins/pathprovider"
+          publish_to_jfrog "shared_preferences_android_release" "build/host/outputs/repo/io/flutter/plugins/sharedpreferences/shared_preferences_android_release" "io/flutter/plugins/sharedpreferences"
+          publish_to_jfrog "url_launcher_android_release" "build/host/outputs/repo/io/flutter/plugins/urllauncher/url_launcher_android_release" "io/flutter/plugins/urllauncher"
+          publish_to_jfrog "webview_flutter_android_release" "build/host/outputs/repo/io/flutter/plugins/webviewflutter/webview_flutter_android_release" "io/flutter/plugins/webviewflutter"
 
       - name: 'Clone Android SDK Folder'
         script: |
@@ -79,7 +85,7 @@ workflows:
           
           cd think-research-android-skelton-app/app
           
-          perl -i -pe "s/libs\/ChatbotSdk_V[0-9]+\.[0-9]+\.[0-9]+\.aar/libs\/ChatbotSdk_V$VERSION.aar/g" build.gradle.kts
+          perl -i -pe 's/libs\/ChatbotSdk_V[0-9]+\.[0-9]+\.[0-9]+\.aar/libs\/ChatbotSdk_V${VERSION}.aar/g' build.gradle.kts
           
           git tag $VERSION
           
