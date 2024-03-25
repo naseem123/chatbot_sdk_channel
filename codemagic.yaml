@@ -36,60 +36,23 @@ workflows:
         script: |
           flutter build aar --no-debug --no-profile --build-number $VERSION
 
-      - name: 'Publish sqflite_release aar to Jfrog'
+      - name: 'Publish Artifacts to JFrog'
         script: |
-          curl -fL "https://install-cli.jfrog.io" | sh;
-          jf config add --password=$JF_PASSWORD  --artifactory-url=$JF_URL --interactive=false chatbot-gradle-dev-local --user=$JF_USER_NAME
-          jf project init
-          cd build/host/outputs/repo/com/tekartik/sqflite/sqflite_release
-          ls
-          jf rt upload "./$VERSION/*.aar" chatbot-gradle-dev-local/com/tekartik/sqflite/sqflite_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-          jf rt upload "./$VERSION/*.pom" chatbot-gradle-dev-local/com/tekartik/sqflite/sqflite_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-
-      - name: 'Publish chatbot aar to Jfrog'
-        script: |
-          curl -fL "https://install-cli.jfrog.io" | sh;
-          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false chatbot-gradle-dev-local --user=$JF_USER_NAME
-          cd build/host/outputs/repo/com/thinkresearch/chatbot_native/flutter_release
-          ls
-          jf rt upload "./$VERSION/*.aar" chatbot-gradle-dev-local/com/thinkresearch/chatbot_native/flutter_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-          jf rt upload "./$VERSION/*.pom" chatbot-gradle-dev-local/com/thinkresearch/chatbot_native/flutter_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-
-      - name: 'Publish pathprovider aar to Jfrog'
-        script: |
-          curl -fL "https://install-cli.jfrog.io" | sh;
-          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false chatbot-gradle-dev-local --user=$JF_USER_NAME
-          cd build/host/outputs/repo/io/flutter/plugins/pathprovider/path_provider_android_release
-          ls
-          jf rt upload "./$VERSION/*.aar" chatbot-gradle-dev-local/io/flutter/plugins/pathprovider/path_provider_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-          jf rt upload "./$VERSION/*.pom" chatbot-gradle-dev-local/io/flutter/plugins/pathprovider/path_provider_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-
-      - name: 'Publish sharedpreferences aar to Jfrog'
-        script: |
-          curl -fL "https://install-cli.jfrog.io" | sh;
-          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false chatbot-gradle-dev-local --user=$JF_USER_NAME
-          cd build/host/outputs/repo/io/flutter/plugins/sharedpreferences/shared_preferences_android_release
-          ls
-          jf rt upload "./$VERSION/*.aar" chatbot-gradle-dev-local/io/flutter/plugins/sharedpreferences/shared_preferences_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-          jf rt upload "./$VERSION/*.pom" chatbot-gradle-dev-local/io/flutter/plugins/sharedpreferences/shared_preferences_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-
-      - name: 'Publish urllauncher aar to Jfrog'
-        script: |
-          curl -fL "https://install-cli.jfrog.io" | sh;
-          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false chatbot-gradle-dev-local --user=$JF_USER_NAME
-          cd build/host/outputs/repo/io/flutter/plugins/urllauncher/url_launcher_android_release
-          ls
-          jf rt upload "./$VERSION/*.aar" chatbot-gradle-dev-local/io/flutter/plugins/urllauncher/url_launcher_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-          jf rt upload "./$VERSION/*.pom" chatbot-gradle-dev-local/io/flutter/plugins/urllauncher/url_launcher_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-
-      - name: 'Publish webviewflutter aar to Jfrog'
-        script: |
-          curl -fL "https://install-cli.jfrog.io" | sh;
-          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false chatbot-gradle-dev-local --user=$JF_USER_NAME
-          cd build/host/outputs/repo/io/flutter/plugins/webviewflutter/webview_flutter_android_release
-          ls
-          jf rt upload "./$VERSION/*.aar" chatbot-gradle-dev-local/io/flutter/plugins/webviewflutter/webview_flutter_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-          jf rt upload "./$VERSION/*.pom" chatbot-gradle-dev-local/io/flutter/plugins/webviewflutter/webview_flutter_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+          upload_to_jfrog() {
+              curl -fL "https://install-cli.jfrog.io" | sh;
+              jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false chatbot-gradle-dev-local --user=$JF_USER_NAME
+              cd build/host/outputs/repo/$1
+              ls
+              jf rt upload "./$VERSION/*.aar" chatbot-gradle-dev-local/$2/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+              jf rt upload "./$VERSION/*.pom" chatbot-gradle-dev-local/$2/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+          }
+          
+          upload_to_jfrog "com/tekartik/sqflite/sqflite_release" "com/tekartik/sqflite/sqflite_release"
+          upload_to_jfrog "com/thinkresearch/chatbot_native/flutter_release" "com/thinkresearch/chatbot_native/flutter_release"
+          upload_to_jfrog "io/flutter/plugins/pathprovider/path_provider_android_release" "io/flutter/plugins/pathprovider/path_provider_android_release"
+          upload_to_jfrog "io/flutter/plugins/sharedpreferences/shared_preferences_android_release" "io/flutter/plugins/sharedpreferences/shared_preferences_android_release"
+          upload_to_jfrog "io/flutter/plugins/urllauncher/url_launcher_android_release" "io/flutter/plugins/urllauncher/url_launcher_android_release"
+          upload_to_jfrog "io/flutter/plugins/webviewflutter/webview_flutter_android_release" "io/flutter/plugins/webviewflutter/webview_flutter_android_release"
 
       - name: 'Clone Android SDK Folder'
         script: |
