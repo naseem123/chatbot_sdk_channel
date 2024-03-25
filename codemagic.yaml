@@ -40,6 +40,7 @@ workflows:
         script: |
           
           curl -fL "https://install-cli.jfrog.io" | sh
+          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false chatbot-gradle-dev-local --user=$JF_USER_NAME
           
           publish_to_jfrog() {
             local plugin_name="$1"
