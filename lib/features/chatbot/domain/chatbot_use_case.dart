@@ -977,6 +977,21 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
           chatBotUserState: chatBotUserState, chatMessageType: chatMessageType);
     });
   }
+
+  void updateWaitForInputTypeAfterDelay({required conversationKey, required ChatBotUserState chatBotUserState, required messageKey, required ChatMessageType chatMessageType, required chatTriggerId, required chatStepId, required chatNextStepUUID, required chatPathId}) {
+    Future.delayed(const Duration(milliseconds: 300), () {
+      entity = entity.merge(
+        conversationKey: conversationKey,
+        messageKey: messageKey,
+        chatBotUserState: chatBotUserState,
+        chatMessageType: chatMessageType,
+        chatTriggerId: chatTriggerId,
+        chatStepId: chatStepId,
+        chatNextStepUUID: chatNextStepUUID,
+        chatPathId: chatPathId,
+      );
+    });
+  }
 }
 
 const sentMessageHead = '';
