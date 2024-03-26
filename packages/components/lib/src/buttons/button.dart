@@ -267,7 +267,7 @@ class _SecondaryWhiteButton extends Button {
 
   @override
   Widget build(BuildContext context) {
-    final primary = context.secondaryColor.gray87;
+    final primary = Colors.grey.shade400;
 
     return IgnorePointer(
       ignoring: isInactive,

@@ -38,7 +38,10 @@ class ChatBotAppState extends State<ChatBotApp> {
             builder: (context, child) {
               final data = MediaQuery.of(context);
               return MediaQuery(
-                data: data.copyWith(textScaleFactor: 1, boldText: false),
+                data: data.copyWith(
+                    textScaleFactor:
+                        data.textScaleFactor > 2.0 ? 2.0 : data.textScaleFactor,
+                    boldText: false),
                 child: child!,
               );
             },

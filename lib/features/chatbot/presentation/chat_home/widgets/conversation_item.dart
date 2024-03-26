@@ -34,7 +34,6 @@ class ConversationItem extends StatelessWidget {
               Expanded(
                 child: Container(
                   margin: const EdgeInsets.symmetric(vertical: 4),
-                  height: 64,
                   child: Row(
                     children: [
                       Stack(

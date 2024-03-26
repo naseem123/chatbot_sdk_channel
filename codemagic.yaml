@@ -3,7 +3,7 @@ workflows:
     name: Publish Workflow Android
 
     environment:
-      flutter: '3.13.0'
+      flutter: '3.10.5'
       java: 17
       groups:
         - jf
