@@ -18,48 +18,37 @@ class ChatUserInputEditorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Row(
-        children: [
-          /*  IconButton(
-            onPressed: () {
-// TODO: Send an image
-            },
-            icon: const Icon(Icons.attach_file),
-          ),*/
-          Expanded(
-            child: Container(
-              height: 64,
-              decoration: BoxDecoration(
-                  color: context.secondaryColor.ligthRed,
-                  borderRadius: BorderRadius.circular(32)),
-              margin: const EdgeInsets.symmetric(horizontal: 24),
-              padding: const EdgeInsets.all(12),
-              alignment: Alignment.center,
-              child: TextFormField(
-                controller: textEditingController,
-                decoration: InputDecoration(
-                  filled: false,
-                  fillColor: Colors.white,
-                  hintText: AppLocalizations.of(context)
-                      .translate('type_your_message'),
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      if (textEditingController.text.trim().isNotEmpty) {
-                        onMessageEntered(textEditingController.text.trim());
-                      }
-                    },
-                    padding: EdgeInsets.zero,
-                    icon: Icon(
-                      Icons.send,
-                      size: 26,
-                      color: colorSecondary,
-                    ),
-                  ),
-                ),
+      child: Container(
+        decoration: BoxDecoration(
+            color: context.secondaryColor.ligthRed,
+            borderRadius: BorderRadius.circular(32)),
+        margin: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.all(12),
+        alignment: Alignment.center,
+        child: TextFormField(
+          controller: textEditingController,
+          minLines: 1,
+          maxLines: 4,
+          decoration: InputDecoration(
+            filled: false,
+            fillColor: Colors.white,
+            hintText: AppLocalizations.of(context)
+                .translate('type_your_message'),
+            suffixIcon: IconButton(
+              onPressed: () {
+                if (textEditingController.text.trim().isNotEmpty) {
+                  onMessageEntered(textEditingController.text.trim());
+                }
+              },
+              padding: EdgeInsets.zero,
+              icon: Icon(
+                Icons.send,
+                size: 26,
+                color: colorSecondary,
               ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }

@@ -3,7 +3,8 @@ workflows:
     name: Publish Workflow Android
 
     environment:
-      flutter: stable
+      flutter: '3.13.0'
+      java: 17
       groups:
         - jf
 
@@ -16,13 +17,6 @@ workflows:
       #              git tag $TAG_VERSION
       #              git push origin $TAG_VERSION
 
-      - name: Install Java 17
-        script: |
-          echo $VERSION
-          brew update
-          brew install openjdk-17-jdk
-          export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-
       #          - name: Install Google Cloud CLI
       #            script: |
       #              curl https://sdk.cloud.google.com | bash
@@ -32,85 +26,78 @@ workflows:
       - name: 'Flutter Pub Get'
         script: flutter pub get
 
-      - name: 'Flutter Build AAR'
-        script: flutter build aar
-
       - name: 'Set app/build.gradlemulti versions'
         script: |
           perl -i -p0e 's/compileSdkVersion 31/compileSdkVersion 33/g' .android/app/build.gradle
           perl -i -p0e 's/minSdkVersion 16/minSdkVersion 19/g' .android/app/build.gradle
           perl -i -p0e 's/targetSdkVersion 31/targetSdkVersion 33/g' .android/app/build.gradle
 
-      #          - name: 'Append build.gradlemulti script'
-      #            script: |
-      #              cat publish.gradle >> .android/build.gradle
-
       - name: 'Flutter Build AAR'
         script: |
           flutter build aar --no-debug --no-profile --build-number $VERSION
 
-      - name: 'Publish sqflite_release aar to Jfrog'
+      - name: 'Publish Artifacts to Jfrog'
         script: |
-          curl -fL "https://install-cli.jfrog.io" | sh;
-          jf config add --password=$JF_PASSWORD  --artifactory-url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
-          jf project init
-          echo $CM_BUILD_DIR
-          cd build/host/outputs/repo/com/tekartik/sqflite/sqflite_release  
-          jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/com/tekartik/sqflite/sqflite_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-          jf rt upload "./$VERSION/*.pom" trc1-gradle-dev-local/com/tekartik/sqflite/sqflite_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-          jf rt upload "./$VERSION/*.module" trc1-gradle-dev-local/com/tekartik/sqflite/sqflite_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+          
+          curl -fL "https://install-cli.jfrog.io" | sh
+          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false chatbot-gradle-dev-local --user=$JF_USER_NAME
+          
+          publish_to_jfrog() {
+            local plugin_name="$1"
+            local plugin_path="$2"
+            local group_name="$3"
+            
+            echo "$plugin_path/$VERSION/*.aar"
+            echo  "chatbot-gradle-dev-local/$group_name/$plugin_name/"
+          
+            jf rt upload "$plugin_path/$VERSION/*.aar" "chatbot-gradle-dev-local/$group_name/$plugin_name/" --user "$JF_USER_NAME" --password "$JF_PASSWORD" --url "$JF_URL"
+            jf rt upload "$plugin_path/$VERSION/*.pom" "chatbot-gradle-dev-local/$group_name/$plugin_name/" --user "$JF_USER_NAME" --password "$JF_PASSWORD" --url "$JF_URL"
+          }
+          
+          publish_to_jfrog "sqflite_release" "build/host/outputs/repo/com/tekartik/sqflite/sqflite_release" "com/tekartik/sqflite"
+          publish_to_jfrog "flutter_release" "build/host/outputs/repo/com/thinkresearch/chatbot_native/flutter_release" "com/thinkresearch/chatbot_native"
+          publish_to_jfrog "path_provider_android_release" "build/host/outputs/repo/io/flutter/plugins/pathprovider/path_provider_android_release" "io/flutter/plugins/pathprovider"
+          publish_to_jfrog "shared_preferences_android_release" "build/host/outputs/repo/io/flutter/plugins/sharedpreferences/shared_preferences_android_release" "io/flutter/plugins/sharedpreferences"
+          publish_to_jfrog "url_launcher_android_release" "build/host/outputs/repo/io/flutter/plugins/urllauncher/url_launcher_android_release" "io/flutter/plugins/urllauncher"
+          publish_to_jfrog "webview_flutter_android_release" "build/host/outputs/repo/io/flutter/plugins/webviewflutter/webview_flutter_android_release" "io/flutter/plugins/webviewflutter"
 
-      - name: 'Publish chatbot aar to Jfrog'
+      - name: 'Clone Android SDK Folder'
         script: |
-          curl -fL "https://install-cli.jfrog.io" | sh;
-          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
-          echo $CM_BUILD_DIR
-          cd build/host/outputs/repo/com/thinkresearch/chatbot_native/flutter_release  
-          jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/com/thinkresearch/chatbot/flutter_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-          jf rt upload "./$VERSION/*.pom" trc1-gradle-dev-local/com/thinkresearch/chatbot/flutter_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-          jf rt upload "./$VERSION/*.module" trc1-gradle-dev-local/com/thinkresearch/chatbot/flutter_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL              
+          git clone https://x-token-auth:ATCTT3xFfGN0m7GWjct_leJ3PRyWd5RuTDjRrhXYVn13D_iYvhlPiVIQZRtCv5XP-ulijjxLfwpI3bq5te7YRoVgbt5INR4H4IcPkDN7iQHUsFEb5Se_iXVsCAugEuTEeoDkReLVI-SO6hX_ACazDcg0AwsxvPIwh9UElHnBNQiMVo63M3bK8VA=A8CD3D15@bitbucket.org/architech/think-research-android-sdk.git
 
-      - name: 'Publish pathprovider aar to Jfrog'
+      - name : 'Change the sdk version in build.gradle'
         script: |
-          curl -fL "https://install-cli.jfrog.io" | sh;
-          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
-          echo $CM_BUILD_DIR
-          cd build/host/outputs/repo/io/flutter/plugins/pathprovider/path_provider_android_release
-          jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/io/flutter/plugins/pathprovider/path_provider_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-          jf rt upload "./$VERSION/*.pom" trc1-gradle-dev-local/io/flutter/plugins/pathprovider/path_provider_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-          jf rt upload "./$VERSION/*.module" trc1-gradle-dev-local/io/flutter/plugins/pathprovider/path_provider_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL              
+          
+          perl -i -pe "s/ext\.sdkVersion = \"[^\"]*\"/ext.sdkVersion = \"$VERSION\"/g" think-research-android-sdk/app/build.gradle
 
-      - name: 'Publish sharedpreferences aar to Jfrog'
+      - name : 'Building final AAR and Publishing'
         script: |
-          curl -fL "https://install-cli.jfrog.io" | sh;
-          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
-          echo $CM_BUILD_DIR
-          cd build/host/outputs/repo/io/flutter/plugins/sharedpreferences/shared_preferences_android_release
-          jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/io/flutter/plugins/sharedpreferences/shared_preferences_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-          jf rt upload "./$VERSION/*.pom" trc1-gradle-dev-local/io/flutter/plugins/sharedpreferences/shared_preferences_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-          jf rt upload "./$VERSION/*.module" trc1-gradle-dev-local/io/flutter/plugins/sharedpreferences/shared_preferences_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL              
+          
+          cd think-research-android-sdk/
+          chmod +x ./gradlew
+          ./gradlew assembleRelease
+          ./gradlew artifactoryPublish
+          mv app/build/outputs/aar/app-release.aar app/build/outputs/aar/ChatbotSdk_V${VERSION}.aar
 
-      - name: 'Publish urllauncher aar to Jfrog'
+      - name: Cloning Skelton app
         script: |
-          curl -fL "https://install-cli.jfrog.io" | sh;
-          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
-          echo $CM_BUILD_DIR
-          cd build/host/outputs/repo/io/flutter/plugins/urllauncher/url_launcher_android_release
-          jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/io/flutter/plugins/urllauncher/url_launcher_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-          jf rt upload "./$VERSION/*.pom" trc1-gradle-dev-local/io/flutter/plugins/urllauncher/url_launcher_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-          jf rt upload "./$VERSION/*.module" trc1-gradle-dev-local/io/flutter/plugins/urllauncher/url_launcher_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL              
+          git clone https://x-token-auth:ATCTT3xFfGN03qa1pfa54IiWbQtsqdjdPpKxPv1yEUB3Gj0hyA9Ywj1GxEmzabpSLaO0vDtuOWnf2flyDHEctZzd8sXQ0HaKyOTFn1Fk5aYMQpwtp1JgrIXLajaOUuN82tXQDKQa8n5a5vjTkrbuwMW9iPJPSPN_YzkSR6evbil14rkkrucLxns=F6419E33@bitbucket.org/architech/think-research-android-skelton-app.git
+          cp -r think-research-android-sdk/app/build/outputs/aar/ChatbotSdk_V${VERSION}.aar  think-research-android-skelton-app/app/libs/
+          
+          cd think-research-android-skelton-app/app
+          
+          perl -i -pe 's/libs\/ChatbotSdk_V[0-9]+\.[0-9]+\.[0-9]+\.aar/libs\/ChatbotSdk_V${VERSION}.aar/g' build.gradle.kts
+          
+          git tag $VERSION
+          
+          git status
+          git config user.email "sts@architech.ca" && git config user.name "Suhail T S"
+          git add . && git commit -m "New libs updated from pipline" && git push && git push --tag 
 
-      - name: 'Publish webviewflutter aar to Jfrog'
-        script: |
-          curl -fL "https://install-cli.jfrog.io" | sh;
-          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false trc1-gradle-dev3 --user=$JF_USER_NAME
-          echo $CM_BUILD_DIR
-          cd build/host/outputs/repo/io/flutter/plugins/webviewflutter/webview_flutter_android_release
-          jf rt upload "./$VERSION/*.aar" trc1-gradle-dev-local/io/flutter/plugins/webviewflutter/webview_flutter_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-          jf rt upload "./$VERSION/*.pom" trc1-gradle-dev-local/io/flutter/plugins/webviewflutter/webview_flutter_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
-          jf rt upload "./$VERSION/*.module" trc1-gradle-dev-local/io/flutter/plugins/webviewflutter/webview_flutter_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL              
+    artifacts:
+      - think-research-android-sdk/app/build/outputs/aar/*.aar
 
-        # You can add more scripts or steps as needed
+      # You can add more scripts or steps as needed
       # - name: Publish to Google Cloud
       #  script: |
       #     echo $GCLOUD_STORAGE_KEY > $CM_BUILD_DIR/gcloud_storage_key.json
