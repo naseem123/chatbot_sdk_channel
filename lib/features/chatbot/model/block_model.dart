@@ -8,7 +8,7 @@ class Block extends Equatable {
   final String pathId;
   final List<Rule>? rules;
 
-    const Block({
+  const Block({
     required this.element,
     required this.id,
     required this.label,

@@ -85,7 +85,11 @@ class ChatDetailsGetMessageInputTransformer
           messageData["blocks"]["type"] != null &&
           messageData["blocks"]["type"] != null &&
           messageData["blocks"]["type"] == "wait_for_reply") {
-        return entity.merge(
+        print("heree10");
+      //  updateWaitForInputTypeAfterDelay
+        chatBotUseCaseProvider
+            .getUseCaseFromContext(providersContext)
+            .updateWaitForInputTypeAfterDelay(
           conversationKey: conversationKey,
           messageKey: messageKey,
           chatBotUserState: ChatBotUserState.waitForInput,
@@ -95,6 +99,7 @@ class ChatDetailsGetMessageInputTransformer
           chatNextStepUUID: messageData["next_step_uuid"],
           chatPathId: messageData["path_id"],
         );
+        return entity;
       } else if (messageData.containsKey("blocks") &&
           messageData["blocks"]["type"] != null &&
           messageData["blocks"]["type"] == "app_package" &&
@@ -126,13 +131,17 @@ class ChatDetailsGetMessageInputTransformer
           }
         }
 
-        return entity.merge(
+        chatBotUseCaseProvider
+            .getUseCaseFromContext(providersContext)
+            .updateSurveyInputTypeAfterDelay(
           conversationKey: conversationKey,
           messageKey: messageKey,
           chatBotUserState: ChatBotUserState.survey,
           chatMessageType: ChatMessageType.survey,
           chatDetailList: [surveyMessage, ...currentChatList],
         );
+
+        return entity;
       } else {
         chatBotUseCaseProvider
             .getUseCaseFromContext(providersContext)
@@ -270,6 +279,7 @@ class ChatDetailsGetMessageInputTransformer
                 ]);
             return entity;
           }
+          print("heree1");
           if (messageData['data'] != null &&
               (messageData['data'] as Map).containsKey('next_step_uuid') &&
               messageData['data']['next_step_uuid'] == null) {

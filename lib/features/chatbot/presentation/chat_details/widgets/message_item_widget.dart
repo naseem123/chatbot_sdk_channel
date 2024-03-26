@@ -8,6 +8,7 @@ import 'package:chatbot/features/chatbot/domain/chatbot_util_enums.dart';
 import 'package:chatbot/features/chatbot/model/mesasge_ui_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:resources/resources.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -53,7 +54,7 @@ class MessageItemWidget extends StatelessWidget {
         messageWidget = Padding(
           padding: const EdgeInsets.all(12.0),
           child: Text(
-            message.message,
+            HtmlUnescape().convert(message.message),
             style: GoogleFonts.inter(
               color: isBot
                   ? context.secondaryColor.mostlyBlack

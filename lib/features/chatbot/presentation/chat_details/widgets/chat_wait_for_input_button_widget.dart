@@ -28,6 +28,7 @@ class ChatWaitForInputButtonWidget extends StatelessWidget {
         child: ListView.separated(
           shrinkWrap: true,
           itemCount: buttons.length,
+          physics: NeverScrollableScrollPhysics(),
           separatorBuilder: (context, index) => Divider(
             color: Colors.black.withOpacity(.1),
             thickness: 1.0,
