@@ -32,7 +32,7 @@ dependencies:
   collection: ^1.17.1
   webview_flutter: 3.0.4
   intl: ^0.18.0
-  sentry_flutter: ^7.18.0
+#  sentry_flutter: ^7.18.0
   html_unescape: ^2.0.0
 dev_dependencies:
   flutter_test:
