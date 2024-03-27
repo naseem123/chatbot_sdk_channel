@@ -14,9 +14,9 @@ const String stagingAppID = "yB9BJmrcH3bM4CShtMKB5qrw";
 const String stagingOrigin = "test.ca.digital-front-door.stg.gcp.trchq.com";
 const String stagingApiUrl = "test.ca.digital-front-door.stg.gcp.trchq.com";
 
-const String appIDLocal = /*stagingAppID*/ novScotiaAppID;
-const String originLocal = /*stagingOrigin*/ novScotiaOrigin;
-const String apiUrlLocal = /*stagingApiUrl*/ novScotiaApiUrl;
+const String appIDLocal = stagingAppID;// novScotiaAppID;
+const String originLocal = stagingOrigin;// novScotiaOrigin;
+const String apiUrlLocal = stagingApiUrl;// novScotiaApiUrl;
 
 void main(List<String> arguments) async {
   WidgetsFlutterBinding.ensureInitialized();
