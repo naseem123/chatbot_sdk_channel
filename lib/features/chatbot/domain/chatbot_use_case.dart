@@ -956,12 +956,40 @@ class ChatBotUseCase extends UseCase<ChatBotEntity> {
     });
   }
 
+  void updateSurveyInputTypeAfterDelay(
+      {required conversationKey, required messageKey, required ChatBotUserState chatBotUserState, required ChatMessageType chatMessageType, required List<ChatMessage> chatDetailList}) {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      entity = entity.merge(
+        conversationKey: conversationKey,
+        messageKey: messageKey,
+        chatBotUserState: chatBotUserState,
+        chatMessageType: chatMessageType,
+        chatDetailList: chatDetailList,
+      );
+    });
+  }
+
   void updateUSerStateAsEnterMessage(
       {required ChatBotUserState chatBotUserState,
       required ChatMessageType chatMessageType}) {
     Future.delayed(const Duration(milliseconds: 100), () {
       entity = entity.merge(
           chatBotUserState: chatBotUserState, chatMessageType: chatMessageType);
+    });
+  }
+
+  void updateWaitForInputTypeAfterDelay({required conversationKey, required ChatBotUserState chatBotUserState, required messageKey, required ChatMessageType chatMessageType, required chatTriggerId, required chatStepId, required chatNextStepUUID, required chatPathId}) {
+    Future.delayed(const Duration(milliseconds: 300), () {
+      entity = entity.merge(
+        conversationKey: conversationKey,
+        messageKey: messageKey,
+        chatBotUserState: chatBotUserState,
+        chatMessageType: chatMessageType,
+        chatTriggerId: chatTriggerId,
+        chatStepId: chatStepId,
+        chatNextStepUUID: chatNextStepUUID,
+        chatPathId: chatPathId,
+      );
     });
   }
 }

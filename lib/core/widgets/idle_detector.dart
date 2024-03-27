@@ -6,12 +6,14 @@ class IdleDetector extends StatefulWidget {
   final int idleTime;
   final Widget child;
   final void Function(int remaining)? onTick;
+  final VoidCallback? onSessionExpired;
 
   const IdleDetector({
     super.key,
     required this.idleTime,
     required this.child,
     this.onTick,
+    this.onSessionExpired,
   });
 
   @override
@@ -43,6 +45,7 @@ class IdleDetectorState extends State<IdleDetector> {
       });
       if (_remainingSeconds <= 0) {
         _timer!.cancel();
+        if (widget.onSessionExpired != null) widget.onSessionExpired!.call();
       }
       if (widget.onTick != null) {
         widget.onTick!(_remainingSeconds); // Pass remaining seconds to callback

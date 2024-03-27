@@ -25,7 +25,7 @@ class MessageResponseModel extends Equatable {
   final String triggerId;
   final String updatedAt;
 
-  MessageResponseModel({
+  const MessageResponseModel({
     required this.appUser,
     required this.appUserId,
     required this.authorableId,
@@ -114,7 +114,7 @@ class AppUser extends Equatable {
   final int id;
   final String kind;
 
-  AppUser({
+  const AppUser({
     required this.avatarUrl,
     required this.displayName,
     required this.email,
@@ -144,7 +144,7 @@ class Message extends Equatable {
   final dynamic state;
   final String updatedAt;
 
-  Message({
+  const Message({
     required this.blocks,
     required this.createdAt,
     required this.data,

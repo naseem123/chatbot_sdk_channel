@@ -43,12 +43,27 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             Map<String, String> args = state.extra as Map<String, String>;
             conversationId = args['conversationId']!;
           }
-          return NoTransitionPage(
+          return CustomTransitionPage(
             key: state.pageKey,
             child: ChatDetailsUI(
               key: state.pageKey,
               conversationID: conversationId,
             ),
+            transitionsBuilder: (BuildContext context,
+                Animation<double> animation,
+                Animation<double> secondaryAnimation,
+                Widget child) {
+              return SlideTransition(
+                position: new Tween<Offset>(
+                  begin: const Offset(1.0, 0.0),
+                  end: Offset.zero,
+                ).animate( CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.easeInOut, // You can adjust the curve as needed
+                ),),
+                child: child,
+              );
+            },
           );
         },
       ),

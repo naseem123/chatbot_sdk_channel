@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:chatbot/chatbot_app.dart';
-import 'package:chatbot/core/env/env_reader.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -31,9 +29,6 @@ class _SurveyUiState extends State<SurveyUi> {
 
   @override
   Widget build(BuildContext context) {
-    final surveyData = Uri.encodeComponent(jsonEncode(widget.surveyData));
-    final url =
-        '${providersContext().read(envReaderProvider).getBaseUrl()}/package_iframe/surveys?data=$surveyData';
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(),
@@ -42,7 +37,7 @@ class _SurveyUiState extends State<SurveyUi> {
         WebView(
           backgroundColor: Colors.white,
           javascriptMode: JavascriptMode.unrestricted,
-          initialUrl: url,
+          initialUrl: widget.surveyData,
           onWebViewCreated: (webviewcontroller) {
             _controller.complete(_mycontroller = webviewcontroller);
           },

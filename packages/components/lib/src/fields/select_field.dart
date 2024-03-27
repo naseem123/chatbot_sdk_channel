@@ -4,7 +4,7 @@ import 'package:components/src/fields/helpers/field_picker_scaffold.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-typedef _SelectFieldItemBuilder<T extends Object> = SelectFieldItem<T> Function(
+typedef SelectFieldItemBuilder<T extends Object> = SelectFieldItem<T> Function(
   BuildContext,
   int,
 );
@@ -23,7 +23,7 @@ class SelectField<T extends Object> extends StatefulWidget {
     required this.selectedIndex,
   });
 
-  final _SelectFieldItemBuilder<T> itemBuilder;
+  final SelectFieldItemBuilder<T> itemBuilder;
   final int itemCount;
   final ValueChanged<T> onChanged;
   final String? labelText;

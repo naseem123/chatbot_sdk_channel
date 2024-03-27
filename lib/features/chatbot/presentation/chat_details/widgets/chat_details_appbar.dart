@@ -41,6 +41,7 @@ class ChatBotAppbar extends StatelessWidget implements PreferredSizeWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Button.iconButton(
+                key: Key('appBackButton'),
                 child: const Icon(
                   Icons.arrow_back_ios,
                   size: 22,

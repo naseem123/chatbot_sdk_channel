@@ -34,7 +34,6 @@ class ConversationItem extends StatelessWidget {
               Expanded(
                 child: Container(
                   margin: const EdgeInsets.symmetric(vertical: 4),
-                  height: 64,
                   child: Row(
                     children: [
                       Stack(
@@ -102,7 +101,7 @@ class ConversationItem extends StatelessWidget {
                                       .bodyMedium!
                                       .copyWith(
                                         color: context.secondaryColor.gray18,
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         height: 1.5,
                                       ),
                                 ),

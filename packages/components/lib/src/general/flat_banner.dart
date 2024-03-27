@@ -117,7 +117,7 @@ class BannerAction extends StatelessWidget {
 
     return TextButton(
       style: TextButton.styleFrom(
-        textStyle: context.textTheme.subtitle2,
+        textStyle: context.textTheme.titleSmall,
         foregroundColor: mode == BannerMode.error
             ? context.theme.isDarkMode
                 ? const Color(0xFFFF8F87)

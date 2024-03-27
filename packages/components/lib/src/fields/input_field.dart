@@ -87,7 +87,7 @@ class InputField extends StatelessWidget {
       hasError: state == FieldState.error,
       fillColor: actualFillColor,
       builder: (context, data) {
-        final floatingLabelStyle = context.textTheme.overline!.copyWith(
+        final floatingLabelStyle = context.textTheme.labelSmall!.copyWith(
           color: data.showError
               ? context.colorScheme.error
               : const Color(0xFF8E8E8E),
@@ -137,7 +137,7 @@ class InputDecorationBuilder extends StatefulWidget {
     this.focusNode,
   });
 
-  final Widget Function(BuildContext, _DecorationData) builder;
+  final Widget Function(BuildContext, DecorationData) builder;
   final bool hasError;
   final String value;
   final TextEditingController? controller;
@@ -194,7 +194,7 @@ class _InputDecorationBuilderState extends State<InputDecorationBuilder> {
         ),
         child: widget.builder(
           context,
-          _DecorationData(
+          DecorationData(
             controller: _controller,
             showError: _hasError,
           ),
@@ -240,8 +240,8 @@ class _InputDecorationBuilderState extends State<InputDecorationBuilder> {
   }
 }
 
-class _DecorationData {
-  const _DecorationData({
+class DecorationData {
+  const DecorationData({
     required this.controller,
     required this.showError,
   });
