@@ -88,12 +88,15 @@ class App extends Equatable {
       intro: data.getString('intro'),
       tagline: data.getString('tagline'),
       name: data.getString('name'),
-      activeMessenger: data.getBool('activeMessenger'),
-      privacyConsentRequired: data.getBool('privacyConsentRequired'),
-      inlineNewConversations: data.getBool('inlineNewConversations'),
-      enableMessengerBranding: data.getBool('enableMessengerBranding'),
-      displayLogo: data.getBool('displayLogo'),
-      inBusinessHours: data.getBool('inBusinessHours'),
+      activeMessenger: data.getBool('activeMessenger', defaultValue: false),
+      privacyConsentRequired:
+          data.getBool('privacyConsentRequired', defaultValue: false),
+      inlineNewConversations:
+          data.getBool('inlineNewConversations', defaultValue: false),
+      enableMessengerBranding:
+          data.getBool('enableMessengerBranding', defaultValue: false),
+      displayLogo: data.getBool('displayLogo', defaultValue: false),
+      inBusinessHours: data.getBool('inBusinessHours', defaultValue: false),
       replyTime: data.getString('replyTime'),
       logo: data.getString('logo'),
       inboundSettings: InboundSettings.fromJson(data.getMap('inboundSettings')),
