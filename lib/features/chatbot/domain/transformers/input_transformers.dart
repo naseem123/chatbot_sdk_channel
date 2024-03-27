@@ -85,7 +85,6 @@ class ChatDetailsGetMessageInputTransformer
           messageData["blocks"]["type"] != null &&
           messageData["blocks"]["type"] != null &&
           messageData["blocks"]["type"] == "wait_for_reply") {
-        print("heree10");
       //  updateWaitForInputTypeAfterDelay
         chatBotUseCaseProvider
             .getUseCaseFromContext(providersContext)
@@ -279,7 +278,6 @@ class ChatDetailsGetMessageInputTransformer
                 ]);
             return entity;
           }
-          print("heree1");
           if (messageData['data'] != null &&
               (messageData['data'] as Map).containsKey('next_step_uuid') &&
               messageData['data']['next_step_uuid'] == null) {

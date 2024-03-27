@@ -3,7 +3,7 @@ import 'package:chatbot/core/env/env_reader.dart';
 import 'package:chatbot/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
+// import 'package:sentry_flutter/sentry_flutter.dart';
 
 const String novScotiaAppID = "XnA6d2mEejaov78UETAzM5uj";
 const String novScotiaOrigin =
@@ -14,9 +14,9 @@ const String stagingAppID = "yB9BJmrcH3bM4CShtMKB5qrw";
 const String stagingOrigin = "test.ca.digital-front-door.stg.gcp.trchq.com";
 const String stagingApiUrl = "test.ca.digital-front-door.stg.gcp.trchq.com";
 
-const String appIDLocal = stagingAppID; // novScotiaAppID; //;
-const String originLocal = stagingOrigin; // novScotiaOrigin; //
-const String apiUrlLocal = stagingApiUrl; // novScotiaApiUrl;//
+const String appIDLocal = stagingAppID;// novScotiaAppID;
+const String originLocal = stagingOrigin;// novScotiaOrigin;
+const String apiUrlLocal = stagingApiUrl;// novScotiaApiUrl;
 
 void main(List<String> arguments) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +27,7 @@ void main(List<String> arguments) async {
     ),
   );
 
+  print('Arguments $arguments');
   final appID = arguments.isEmpty ? appIDLocal : arguments[0];
   final origin = arguments.isEmpty ? originLocal : arguments[1];
   final apiUrl = arguments.isEmpty ? apiUrlLocal : arguments[2];
@@ -38,26 +39,29 @@ void main(List<String> arguments) async {
 
   loadProviders();
   await preference.init();
-  await SentryFlutter.init(
-    (options) {
-      options.dsn =
-          'https://462ac91485b700cae584f4e26a61fecf@o4506949343641600.ingest.us.sentry.io/4506949344821248';
-      options.tracesSampleRate = 1.0;
-      options.attachScreenshot = true;
-      options.attachViewHierarchy = true;
-      options.attachStacktrace = true;
-      options.sampleRate = 1;
-      options.enableUserInteractionTracing = true;
-      options.sendDefaultPii = true;
-      options.enableAutoPerformanceTracing = true;
-      options.tracesSampleRate = 1.0;
-    },
-    appRunner: () => runApp(
-      SentryScreenshotWidget(
-        child: SentryUserInteractionWidget(
-          child: const ChatBotApp(),
-        ),
-      ),
-    ),
-  );
+  // await SentryFlutter.init(
+  //   (options) {
+  //     options.dsn =
+  //         'https://462ac91485b700cae584f4e26a61fecf@o4506949343641600.ingest.us.sentry.io/4506949344821248';
+  //     options.tracesSampleRate = 1.0;
+  //     options.attachScreenshot = true;
+  //     options.attachViewHierarchy = true;
+  //     options.attachStacktrace = true;
+  //     options.sampleRate = 1;
+  //     options.enableUserInteractionTracing = true;
+  //     options.sendDefaultPii = true;
+  //     options.enableAutoPerformanceTracing = true;
+  //     options.tracesSampleRate = 1.0;
+  //   },
+  //   appRunner: () => runApp(
+  //     SentryScreenshotWidget(
+  //       child: SentryUserInteractionWidget(
+  //         child: const ChatBotApp(),
+  //       ),
+  //     ),
+  //   ),
+  // );
+
+  runApp(const ChatBotApp());
+
 }
