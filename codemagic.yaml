@@ -91,6 +91,24 @@ workflows:
           jf rt upload "./$VERSION/*.aar" chatbot-gradle-dev-local/io/flutter/plugins/webviewflutter/webview_flutter_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
           jf rt upload "./$VERSION/*.pom" chatbot-gradle-dev-local/io/flutter/plugins/webviewflutter/webview_flutter_android_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
 
+      - name: 'Publish Package info aar to Jfrog'
+        script: |
+          curl -fL "https://install-cli.jfrog.io" | sh;
+          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false chatbot-gradle-dev-local --user=$JF_USER_NAME
+          cd build/host/outputs/repo/dev/fluttercommunity/plus/packageinfo/package_info_plus_release
+          ls
+          jf rt upload "./$VERSION/*.aar" chatbot-gradle-dev-local/dev/fluttercommunity/plus/packageinfo/package_info_plus_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+          jf rt upload "./$VERSION/*.pom" chatbot-gradle-dev-local/dev/fluttercommunity/plus/packageinfo/package_info_plus_release/ --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+
+      - name: 'Publish Sentry aar to Jfrog'
+        script: |
+          curl -fL "https://install-cli.jfrog.io" | sh;
+          jf config add --password=$JF_PASSWORD --url=$JF_URL --interactive=false chatbot-gradle-dev-local --user=$JF_USER_NAME
+          cd build/host/outputs/repo/android_generated/sentry_flutter_release
+          ls
+          jf rt upload "./$VERSION/*.aar" chatbot-gradle-dev-local/android_generated/sentry_flutter_release --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+          jf rt upload "./$VERSION/*.pom" chatbot-gradle-dev-local/android_generated/sentry_flutter_release --user $JF_USER_NAME --password $JF_PASSWORD --url $JF_URL
+
       - name: 'Clone Android SDK Folder'
         script: |
           git clone https://x-token-auth:ATCTT3xFfGN0m7GWjct_leJ3PRyWd5RuTDjRrhXYVn13D_iYvhlPiVIQZRtCv5XP-ulijjxLfwpI3bq5te7YRoVgbt5INR4H4IcPkDN7iQHUsFEb5Se_iXVsCAugEuTEeoDkReLVI-SO6hX_ACazDcg0AwsxvPIwh9UElHnBNQiMVo63M3bK8VA=A8CD3D15@bitbucket.org/architech/think-research-android-sdk.git
