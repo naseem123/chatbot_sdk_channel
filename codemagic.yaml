@@ -124,7 +124,10 @@ workflows:
           cd think-research-android-sdk/
           chmod +x ./gradlew
           ./gradlew assembleRelease
-          ./gradlew artifactoryPublish
+          git status
+          git commit -m "$VERSION"
+          git tag "$VERSION"
+          git push && git push --tag
           mv app/build/outputs/aar/app-release.aar app/build/outputs/aar/ChatbotSdk_V${VERSION}.aar
 
       - name: Cloning Skelton app
